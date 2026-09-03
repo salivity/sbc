@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libre Computer Renegade Video Decoding Explained - sbc</title>
+    <meta name="description" content="The Libre Computer Renegade (ROC-RK3328-CC) manages high-definition and ultra-high-definition digital video decoding primarily through the dedicated hardware Video Processing Unit (VPU) integrated into its Rockchip RK3328 system-on-chip (SoC). Instead of">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/libre-computer-renegade-video-decoding-explained">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Libre Computer Renegade Video Decoding Explained - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/libre-computer-renegade-video-decoding-explained" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Libre Computer Renegade (ROC-RK3328-CC) manages high-definition and ultra-high-definition digital video decoding primarily through the dedicated hardware Video Processing Unit (VPU) integrated into its Rockchip RK3328 system-on-chip (SoC). Instead of" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="libre-computer-renegade-video-decoding-explained">Libre Computer
+Renegade Video Decoding Explained</h1>
+<p>The Libre Computer Renegade (ROC-RK3328-CC) manages high-definition
+and ultra-high-definition digital video decoding primarily through the
+dedicated hardware Video Processing Unit (VPU) integrated into its
+Rockchip RK3328 system-on-chip (SoC). Instead of relying on its
+quad-core ARM Cortex-A53 CPU to process complex video streams, the board
+offloads computational decoding workloads directly to fixed-function
+silicon blocks. This architecture allows the board to efficiently
+playback 4K video at 60 frames per second with low power consumption and
+minimal CPU utilization.</p>
+<h3 id="hardware-level-video-processing-unit-vpu">Hardware-Level Video
+Processing Unit (VPU)</h3>
+<p>At the core of the Renegade's decoding capability is the RK3328 VPU,
+a specialized hardware accelerator engineered specifically for digital
+media decompression. The VPU features dedicated hardware engines for
+modern codecs, including:</p>
+<ul>
+<li><strong>H.265 / HEVC:</strong> Main/Main10 profile up to
+4K@60fps</li>
+<li><strong>VP9:</strong> Profile 0 and Profile 2 (10-bit) up to
+4K@60fps</li>
+<li><strong>H.264 / AVC:</strong> High Profile up to 4K@30fps</li>
+<li><strong>Legacy Codecs:</strong> VC-1, MPEG-1/2/4, and VP8 at 1080p
+resolutions</li>
+</ul>
+<p>Because tasks such as entropy decoding, inverse quantization, inverse
+discrete cosine transform (IDCT), and motion compensation are handled by
+fixed-function logic circuits, video decoding bypasses the
+general-purpose CPU cores entirely.</p>
+<h3 id="memory-architecture-and-zero-copy-pipeline">Memory Architecture
+and Zero-Copy Pipeline</h3>
+<p>Efficient video playback requires high-bandwidth memory management.
+The Renegade utilizes up to 4GB of high-speed DDR4 memory shared
+dynamically between the CPU, GPU, and VPU.</p>
+<p>During decoding, the operating system allocates memory buffers using
+direct memory access (DMA-BUF). The VPU decodes the compressed bitstream
+and writes the uncompressed YUV video frames directly into these shared
+memory buffers. This approach enables a "zero-copy" pipeline: the
+decoded video frame is passed straight to the display controller without
+being copied repeatedly across memory partitions, drastically reducing
+memory bandwidth saturation and preventing thermal throttling.</p>
+<h3 id="software-stack-and-linux-kernel-integration">Software Stack and
+Linux Kernel Integration</h3>
+<p>The hardware decoding pipeline functions through standard Linux
+multimedia frameworks:</p>
+<ul>
+<li><strong>Stateless V4L2 API:</strong> Upstream Linux kernels interact
+with the Rockchip VPU via the Video4Linux2 (V4L2) Request API. The CPU
+parses the container format (such as MKV or MP4) and passes raw slice
+data and metadata to the driver, which instructs the VPU to decode each
+frame.</li>
+<li><strong>Rockchip Media Process Platform (MPP):</strong> In legacy or
+vendor-optimized environments, Rockchip’s proprietary MPP user-space
+library provides a direct interface to the hardware decoders.</li>
+<li><strong>Media Players and Frameworks:</strong> Applications such as
+FFmpeg, mpv, and Kodi leverage these APIs to achieve
+hardware-accelerated playback under both X11 and Wayland display
+servers.</li>
+</ul>
+<h3 id="display-output-engine">Display Output Engine</h3>
+<p>Once the video frames are decoded, they are routed through the RK3328
+display processing pipeline to the HDMI 2.0a transmitter. The display
+controller supports features such as hardware-based color space
+conversion (YUV to RGB), scaling, High Dynamic Range (HDR10) tone
+mapping, and 10-bit color depth, delivering up to 4K resolution output
+at 60Hz directly to connected displays.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

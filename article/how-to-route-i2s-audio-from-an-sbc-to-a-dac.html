@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Route I2S Audio from an SBC to a DAC - sbc</title>
+    <meta name="description" content="This article explains how digital audio data is routed from a Single Board Computer (SBC) to an external Digital-to-Analog Converter (DAC) using the Integrated Inter-IC Sound (I2S) protocol. It details the essential physical connections, clock synchroniz">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-route-i2s-audio-from-an-sbc-to-a-dac">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Route I2S Audio from an SBC to a DAC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-route-i2s-audio-from-an-sbc-to-a-dac" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how digital audio data is routed from a Single Board Computer (SBC) to an external Digital-to-Analog Converter (DAC) using the Integrated Inter-IC Sound (I2S) protocol. It details the essential physical connections, clock synchroniz" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-route-i2s-audio-from-an-sbc-to-a-dac">How to Route I2S
+Audio from an SBC to a DAC</h1>
+<p>This article explains how digital audio data is routed from a Single
+Board Computer (SBC) to an external Digital-to-Analog Converter (DAC)
+using the Integrated Inter-IC Sound (I2S) protocol. It details the
+essential physical connections, clock synchronization roles, operating
+system configurations, and the step-by-step data path from raw digital
+PCM audio to an analog signal.</p>
+<h3 id="what-is-the-i2s-protocol">What is the I2S Protocol?</h3>
+<p>Integrated Inter-IC Sound (I2S) is a synchronous serial communication
+protocol designed specifically for transferring digital audio data
+between integrated circuits. Unlike general-purpose buses like SPI or
+I2C, I2S separates clock and data signals to eliminate jitter and timing
+discrepancies that can degrade audio quality.</p>
+<h3 id="physical-wiring-and-signal-lines">Physical Wiring and Signal
+Lines</h3>
+<p>To establish an I2S connection between an SBC (such as a Raspberry Pi
+or Rock Pi) and an external DAC, specific hardware pins must be
+connected:</p>
+<ul>
+<li><strong>Bit Clock (BCLK / SCK):</strong> Synchronizes individual
+data bits. Each audio bit transmitted across the data line corresponds
+to one cycle of BCLK.</li>
+<li><strong>Word Select / Left-Right Clock (WS / LRCLK):</strong>
+Determines whether the transmitted data belongs to the left or right
+audio channel. The frequency of LRCLK corresponds directly to the sample
+rate of the audio (e.g., 44.1 kHz or 48 kHz).</li>
+<li><strong>Serial Data Out (SDATA / DOUT):</strong> The line that
+carries the serialized Pulse Code Modulation (PCM) audio bits from the
+SBC to the DAC.</li>
+<li><strong>Master Clock (MCLK):</strong> An optional high-frequency
+reference clock (typically 128x, 256x, or 512x the sample rate) required
+by some DAC architectures to drive internal delta-sigma modulators. Many
+modern DACs generate this internally via Phase-Locked Loops (PLLs) if
+MCLK is not provided.</li>
+<li><strong>Ground (GND):</strong> A shared reference ground is required
+to maintain signal integrity and avoid ground loop noise.</li>
+</ul>
+<h3 id="master-and-slave-configurations">Master and Slave
+Configurations</h3>
+<p>I2S systems rely on a defined relationship between the clock master
+and the clock slave:</p>
+<ul>
+<li><strong>SBC as Master:</strong> The SBC generates the BCLK and LRCLK
+signals using its internal crystal oscillators and sends both the clock
+signals and data to the DAC.</li>
+<li><strong>DAC as Master:</strong> The DAC board features
+high-precision dedicated oscillators that generate BCLK and LRCLK,
+sending them back to the SBC. The SBC acts as a slave, syncing its data
+output to the incoming clocks. This configuration provides lower jitter
+and superior audio quality.</li>
+</ul>
+<h3 id="software-configuration-and-driver-layer">Software Configuration
+and Driver Layer</h3>
+<p>Before data can flow over the hardware pins, the SBC operating system
+(typically Linux) must be configured:</p>
+<ol type="1">
+<li><strong>Device Tree Overlays (DTO):</strong> The SBC needs a device
+tree overlay enabled (via config files like <code>config.txt</code> or
+<code>extlinux.conf</code>) to map the generic GPIO pins to the
+processor's internal I2S controller.</li>
+<li><strong>ALSA Driver:</strong> The Advanced Linux Sound Architecture
+(ALSA) loads a specific audio machine driver matching the DAC chip
+(e.g., PCM5102A, ES9038, or a generic <code>i2s-mmap</code> driver).
+This exposes the DAC as a valid output endpoint
+(<code>hw:X,Y</code>).</li>
+</ol>
+<h3 id="the-end-to-end-routing-process">The End-to-End Routing
+Process</h3>
+<p>Once configured, the path of audio data follows these sequential
+steps:</p>
+<ol type="1">
+<li><strong>Audio Generation:</strong> An application (such as a media
+player) decodes an audio file into raw, uncompressed PCM data.</li>
+<li><strong>ALSA Sound Subsystem:</strong> The application hands the PCM
+stream to ALSA, which handles bit depth, channel mapping, and sample
+rate conversion if needed.</li>
+<li><strong>Direct Memory Access (DMA):</strong> The CPU transfers the
+PCM data buffers to the SBC's I2S controller memory via DMA without
+consuming excessive CPU cycles.</li>
+<li><strong>Serialization:</strong> The I2S hardware controller reads
+the parallel PCM words from its FIFO buffer and serializes them into a
+single-bit stream.</li>
+<li><strong>Transmission:</strong> The controller transmits the
+serialized bits across the SDATA line in sync with the BCLK, switching
+channels according to the LRCLK.</li>
+<li><strong>Digital-to-Analog Conversion:</strong> The external DAC
+reads the data stream based on the clock edges, reconstructs the
+discrete digital values, and passes them through an internal low-pass
+reconstruction filter to produce the continuous analog audio waveform
+for speakers or headphones.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

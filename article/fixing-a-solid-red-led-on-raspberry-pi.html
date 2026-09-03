@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixing a Solid Red LED on Raspberry Pi - sbc</title>
+    <meta name="description" content="When a Raspberry Pi boots, a solid red LED typically indicates that the board is receiving power, but if it refuses to boot further and the green ACT LED remains unlit, it signals a critical hardware or software issue. This article provides a quick overv">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/fixing-a-solid-red-led-on-raspberry-pi">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Fixing a Solid Red LED on Raspberry Pi - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/fixing-a-solid-red-led-on-raspberry-pi" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a Raspberry Pi boots, a solid red LED typically indicates that the board is receiving power, but if it refuses to boot further and the green ACT LED remains unlit, it signals a critical hardware or software issue. This article provides a quick overv" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="fixing-a-solid-red-led-on-raspberry-pi">Fixing a Solid Red LED
+on Raspberry Pi</h1>
+<p>When a Raspberry Pi boots, a solid red LED typically indicates that
+the board is receiving power, but if it refuses to boot further and the
+green ACT LED remains unlit, it signals a critical hardware or software
+issue. This article provides a quick overview of what the solid red
+light means, explains how to interpret it alongside the green status
+LED, and delivers a step-by-step troubleshooting guide to help you
+resolve common boot failures like corrupted SD cards, insufficient power
+supplies, or improper cable connections.</p>
+<h2 id="the-meaning-of-the-red-led">The Meaning of the Red LED</h2>
+<p>On almost all Raspberry Pi models, the red LED serves as the
+<strong>PWR (Power) indicator</strong>. Under normal operating
+conditions, a steady, solid red light is actually a good sign—it means
+the Pi is successfully receiving stable power of at least 4.65V (for
+older models) or the required threshold for newer boards like the
+Raspberry Pi 4 and 5.</p>
+<p>However, the red LED only tells half the story. To understand why
+your Pi is stuck and not booting, you must look at the red LED in
+combination with the <strong>green ACT (Activity) LED</strong>:</p>
+<ul>
+<li><strong>Red LED is Solid, Green LED is Dead:</strong> This is the
+most common failure state. The Pi has power, but the processor cannot
+read the boot code from the SD card or EEPROM.</li>
+<li><strong>Red LED Flashes or Turns Off:</strong> This indicates a
+power drop. Your power supply is failing to provide enough voltage or
+current to the board.</li>
+</ul>
+<h2 id="common-causes-and-solutions">Common Causes and Solutions</h2>
+<p>If your Raspberry Pi is sitting with a solid red light and showing no
+signs of life on the screen, work through these common culprits to fix
+the issue.</p>
+<h3 id="1-corrupted-or-improperly-flashed-sd-card">1. Corrupted or
+Improperly Flashed SD Card</h3>
+<p>The Raspberry Pi does not have a traditional BIOS. Instead, it relies
+entirely on the files in the boot partition of your microSD card to
+start up. If these files are missing or corrupted, the green light will
+not flash.</p>
+<ul>
+<li><strong>The Fix:</strong> Remove the microSD card, insert it into
+your computer, and use the official Raspberry Pi Imager to re-flash the
+latest version of Raspberry Pi OS. Ensure the card is pushed firmly all
+the way into the Pi's slot.</li>
+</ul>
+<h3 id="2-inadequate-power-supply">2. Inadequate Power Supply</h3>
+<p>While a solid red light means power is present, it does not guarantee
+the power is stable enough under load. If you are using a standard phone
+charger or a low-quality USB cable, the voltage can drop the moment the
+processor tries to initialize.</p>
+<ul>
+<li><strong>The Fix:</strong> Always use the official Raspberry Pi power
+supply designed for your specific model (e.g., a 15W USB-C supply for
+the Pi 4, or a 27W supply for the Pi 5). Avoid powering the Pi from a
+computer's USB port or unrated charging bricks.</li>
+</ul>
+<h3 id="3-corrupted-eeprom-raspberry-pi-4-and-5">3. Corrupted EEPROM
+(Raspberry Pi 4 and 5)</h3>
+<p>Newer Raspberry Pi models use an onboard SPI EEPROM chip to store
+bootloader code. If this firmware becomes corrupted due to an abrupt
+power outage, the Pi will refuse to boot even with a perfect SD
+card.</p>
+<ul>
+<li><strong>The Fix:</strong> You can restore the bootloader using the
+Raspberry Pi Imager. Open the software, click "Choose OS", navigate to
+"Misc utility images", select "Raspberry Pi EEPROM Boot Recovery", and
+flash it to a spare SD card. Insert it into the Pi and power it on until
+the green LED blinks rapidly, signaling a successful recovery.</li>
+</ul>
+<h3 id="4-display-and-cable-issues">4. Display and Cable Issues</h3>
+<p>Sometimes the Raspberry Pi actually boots fine, but it fails to
+detect the monitor, leading you to believe it is stuck. This is
+especially common with the micro-HDMI ports on the Pi 4 and Pi 5.</p>
+<ul>
+<li><strong>The Fix:</strong> Ensure your monitor is turned on and set
+to the correct input <em>before</em> you plug in the Raspberry Pi. If
+you are using a Pi 4 or 5, ensure your primary monitor is plugged into
+the HDMI port closest to the power jack (labeled HDMI0).</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

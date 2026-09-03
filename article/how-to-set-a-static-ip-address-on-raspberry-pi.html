@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Set a Static IP Address on Raspberry Pi - sbc</title>
+    <meta name="description" content="Assigning a static IP address to a Raspberry Pi ensures it maintains the same network location every time it boots, which is essential for hosting servers, SSH access, or running home automation. This guide covers the two most reliable methods for lockin">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-set-a-static-ip-address-on-raspberry-pi">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Set a Static IP Address on Raspberry Pi - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-set-a-static-ip-address-on-raspberry-pi" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Assigning a static IP address to a Raspberry Pi ensures it maintains the same network location every time it boots, which is essential for hosting servers, SSH access, or running home automation. This guide covers the two most reliable methods for lockin" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-set-a-static-ip-address-on-raspberry-pi">How to Set a
+Static IP Address on Raspberry Pi</h1>
+<p>Assigning a static IP address to a Raspberry Pi ensures it maintains
+the same network location every time it boots, which is essential for
+hosting servers, SSH access, or running home automation. This guide
+covers the two most reliable methods for locking in your Pi's IP
+address: configuring your local router's DHCP reservation settings or
+directly editing the configuration files within the Raspberry Pi OS.</p>
+<h3 id="why-you-need-a-static-ip">Why You Need a Static IP</h3>
+<p>By default, routers assign dynamic IP addresses to devices using DHCP
+(Dynamic Host Configuration Protocol). This means your Raspberry Pi's IP
+address can change whenever the router reboots or the lease expires. If
+you are running a headless setup, a media server like Plex, or a
+Pi-hole, a shifting IP address will break your connections and require
+you to hunt for the new address every time.</p>
+<h3 id="method-1-router-dhcp-reservation-recommended">Method 1: Router
+DHCP Reservation (Recommended)</h3>
+<p>The cleanest way to assign a static IP is through your router. This
+prevents IP conflicts by telling the router to always reserve a specific
+IP address for your Raspberry Pi's unique MAC address.</p>
+<ol type="1">
+<li>Log into your router’s web admin portal by typing its IP address
+(usually <code>192.168.1.1</code> or <code>192.168.0.1</code>) into a
+web browser.</li>
+<li>Locate the <strong>DHCP Server</strong>, <strong>Static
+Lease</strong>, or <strong>IP Reservation</strong> settings page.</li>
+<li>Find your Raspberry Pi in the list of connected devices.</li>
+<li>Note its <strong>MAC address</strong> (a 12-character alphanumeric
+code like <code>aa:bb:cc:dd:ee:ff</code>).</li>
+<li>Add a new reservation rule linking that MAC address to your desired
+static IP address. Ensure the chosen IP is outside the main pool of
+dynamically assigned addresses to avoid future overlaps.</li>
+</ol>
+<h3 id="method-2-configuring-raspberry-pi-os-bookworm-and-newer">Method
+2: Configuring Raspberry Pi OS (Bookworm and Newer)</h3>
+<p>If you are using the latest Raspberry Pi OS (Bookworm), the operating
+system handles networking via <strong>NetworkManager</strong>. You can
+easily set a static IP using the built-in terminal tool.</p>
+<ol type="1">
+<li>Open a terminal window on your Raspberry Pi or connect via SSH.</li>
+<li>Run the NetworkManager text user interface tool:
+<code>sudo nmtui</code></li>
+<li>Use the arrow keys to select <strong>Edit a connection</strong> and
+press Enter.</li>
+<li>Select your active connection (usually
+<code>Wired connection 1</code> for Ethernet or your Wi-Fi network name)
+and choose <strong>Edit</strong>.</li>
+<li>Scroll down to <strong>IPv4 CONFIGURATION</strong>, change it from
+<code>&lt;Automatic&gt;</code> to <code>&lt;Manual&gt;</code>, and
+select <code>&lt;Show&gt;</code>.</li>
+<li>Next to <strong>Addresses</strong>, select <code>&lt;Add&gt;</code>
+and type your desired static IP followed by the network prefix (for
+example, <code>192.168.1.100/24</code>).</li>
+<li>Enter your router's IP address in the <strong>Gateway</strong> field
+and your preferred DNS servers (such as <code>8.8.8.8</code> for Google
+DNS).</li>
+<li>Scroll down, select <code>&lt;OK&gt;</code>, and exit the
+utility.</li>
+<li>Restart the network connection to apply changes:
+<code>sudo nmcli connection up [Connection Name]</code></li>
+</ol>
+<h3
+id="method-3-configuring-older-raspberry-pi-os-bullseye-and-earlier">Method
+3: Configuring Older Raspberry Pi OS (Bullseye and Earlier)</h3>
+<p>Legacy versions of Raspberry Pi OS rely on <code>dhcpcd</code> to
+manage network interfaces. If you are running an older operating system
+version, you must modify the configuration file manually.</p>
+<ol type="1">
+<li>Open the configuration file in the nano text editor:
+<code>sudo nano /etc/dhcpcd.conf</code></li>
+<li>Scroll to the bottom of the file and append the following lines,
+substituting <code>eth0</code> for Ethernet or <code>wlan0</code> for
+Wi-Fi depending on your connection type:</li>
+</ol>
+<pre class="text"><code>interface eth0
+static ip_address=192.168.1.100/24
+static routers=192.168.1.1
+static domain_name_servers=192.168.1.1 8.8.8.8
+</code></pre>
+<ol start="3" type="1">
+<li>Save and close the file by pressing <code>Ctrl+O</code>,
+<code>Enter</code>, and then <code>Ctrl+X</code>.</li>
+<li>Reboot your Raspberry Pi to finalize the network adjustment:
+<code>sudo reboot</code></li>
+</ol>
+<h3 id="verifying-the-setup">Verifying the Setup</h3>
+<p>Once your Raspberry Pi reboots, you can confirm that the network
+settings applied successfully. Open the terminal and type
+<code>hostname -I</code>. The output should display the exact static IP
+address you configured, confirming your Raspberry Pi is now permanently
+reachable at that destination.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

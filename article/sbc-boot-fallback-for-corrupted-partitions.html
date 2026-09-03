@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBC Boot Fallback for Corrupted Partitions - sbc</title>
+    <meta name="description" content="This article details how embedded systems engineers design and implement software fallbacks for corrupted boot partitions on Single Board Computers (SBCs). It covers the fundamental architecture of redundant A/B partitioning, configuring bootloader state">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/sbc-boot-fallback-for-corrupted-partitions">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SBC Boot Fallback for Corrupted Partitions - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/sbc-boot-fallback-for-corrupted-partitions" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article details how embedded systems engineers design and implement software fallbacks for corrupted boot partitions on Single Board Computers (SBCs). It covers the fundamental architecture of redundant A/B partitioning, configuring bootloader state" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="sbc-boot-fallback-for-corrupted-partitions">SBC Boot Fallback
+for Corrupted Partitions</h1>
+<p>This article details how embedded systems engineers design and
+implement software fallbacks for corrupted boot partitions on Single
+Board Computers (SBCs). It covers the fundamental architecture of
+redundant A/B partitioning, configuring bootloader state machines,
+utilizing hardware watchdog timers, and automating rollback routines
+using tools like U-Boot, Mender, or RAUC to guarantee reliable system
+recovery in headless or remote environments.</p>
+<h3 id="1-dual-partition-architecture-ab-redundancy">1. Dual-Partition
+Architecture (A/B Redundancy)</h3>
+<p>The foundation of automated boot recovery is the A/B partition
+layout. Instead of relying on a single boot and root filesystem, the
+storage media (eMMC, SD card, or NVMe) is split into distinct, redundant
+slots:</p>
+<ul>
+<li><strong>Bootloader Storage:</strong> A dedicated, read-only sector
+containing the primary bootloader stage (SPL/TPL and main U-Boot
+binary).</li>
+<li><strong>Environment Sector:</strong> A shared, non-volatile
+configuration block storing boot state flags and variables.</li>
+<li><strong>Slot A:</strong> Kernel image, device tree blobs (DTB),
+initial ramdisk (initramfs), and root filesystem.</li>
+<li><strong>Slot B:</strong> Identical copy or alternative version of
+Slot A.</li>
+</ul>
+<p>By isolating the system into active and passive slots, corrupted
+updates or filesystem decay on one slot do not prevent the device from
+booting the alternate healthy slot.</p>
+<h3 id="2-bootloader-state-logic-with-u-boot">2. Bootloader State Logic
+with U-Boot</h3>
+<p>Bootloaders such as U-Boot manage the switching logic using state
+variables. Engineers configure the bootloader environment with specific
+parameters:</p>
+<ul>
+<li><code>bootcount</code>: An integer that increments each time a boot
+attempt begins.</li>
+<li><code>bootlimit</code>: The maximum allowed boot attempts (typically
+set between 2 and 4) before declaring a slot corrupt.</li>
+<li><code>upgrade_available</code>: A flag set to <code>1</code> when a
+new software version is under trial.</li>
+<li><code>active_slot</code>: Indicates whether Slot A or Slot B should
+be initialized.</li>
+</ul>
+<p>When the device powers on, U-Boot evaluates <code>bootcount</code>.
+If <code>bootcount</code> exceeds <code>bootlimit</code>, U-Boot
+modifies <code>active_slot</code> to point to the alternate partition
+and resets <code>bootcount</code>.</p>
+<pre class="text"><code># Example U-Boot fallback logic
+if test ${bootcount} -gt ${bootlimit}; then
+    echo &quot;Boot limit exceeded. Switching to fallback slot...&quot;
+    if test ${active_slot} = &quot;a&quot;; then
+        setenv active_slot &quot;b&quot;
+    else
+        setenv active_slot &quot;a&quot;
+    fi
+    setenv bootcount 0
+    saveenv
+fi</code></pre>
+<h3 id="3-image-integrity-verification-with-fit-images">3. Image
+Integrity Verification with FIT Images</h3>
+<p>Before executing the kernel, the bootloader must verify that the
+target partition is not corrupt at the data layer. Engineers bundle the
+Linux kernel, device tree, and ramdisk into a <strong>Flattened Image
+Tree (FIT)</strong>.</p>
+<ul>
+<li><strong>Hashing:</strong> The FIT format includes cryptographic
+SHA-256 hashes for each component.</li>
+<li><strong>Signatures:</strong> Hardware cryptographic engines or
+public-key verification can be enforced to ensure images are both intact
+and authentic.</li>
+<li><strong>Action on Failure:</strong> If the bootloader calculates a
+checksum mismatch due to partition corruption or partial writes, it
+halts execution on that slot immediately, triggers the counter limit,
+and falls back to the secondary partition.</li>
+</ul>
+<h3 id="4-hardware-watchdog-integration">4. Hardware Watchdog
+Integration</h3>
+<p>Filesystem corruption can manifest after the bootloader passes
+control to the kernel, causing the operating system to freeze during
+early userspace initialization. To recover from this state, engineers
+deploy a hardware watchdog timer:</p>
+<ol type="1">
+<li><strong>U-Boot Activation:</strong> The bootloader arms the SBC’s
+hardware watchdog timer (e.g., a 60-second timeout) before jumping to
+the Linux kernel.</li>
+<li><strong>Kernel Handoff:</strong> The Linux kernel initializes the
+hardware watchdog driver (<code>/dev/watchdog</code>) and inherits the
+timer.</li>
+<li><strong>Userspace Daemon:</strong> A system daemon (such as
+<code>systemd</code> or <code>watchdogd</code>) periodically "pets" or
+clears the timer.</li>
+<li><strong>Automatic Reset:</strong> If kernel panics, system hangs, or
+critical dependency failures prevent the userspace daemon from pinging
+the timer, the hardware automatically reboots the SBC, incrementing the
+<code>bootcount</code> in the bootloader environment.</li>
+</ol>
+<h3 id="5-userspace-health-checks-and-slot-confirmation">5. Userspace
+Health Checks and Slot Confirmation</h3>
+<p>A boot cycle is only marked successful once userspace validation
+checks complete.</p>
+<ol type="1">
+<li><strong>Validation Services:</strong> A dedicated
+<code>systemd</code> service runs at the end of the boot sequence to
+verify essential application layers, network connectivity, and storage
+integrity.</li>
+<li><strong>Clearing the Counter:</strong> Upon passing all checks, the
+validation script invokes userspace tools like <code>fw_setenv</code> to
+reset <code>bootcount</code> to <code>0</code> and set
+<code>upgrade_available</code> to <code>0</code>.</li>
+<li><strong>Automated OTA Frameworks:</strong> Embedded frameworks such
+as <strong>RAUC</strong> or <strong>Mender</strong> automate this
+process by managing slot status via D-Bus and systemd units, formally
+marking the currently booted slot as <code>good</code> or issuing an
+immediate reboot if assertions fail.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

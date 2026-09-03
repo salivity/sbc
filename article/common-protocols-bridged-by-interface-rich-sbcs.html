@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common Protocols Bridged by Interface-Rich SBCs - sbc</title>
+    <meta name="description" content="Interface-rich single board computers (SBCs) frequently serve as multi-protocol gateways, translating data streams between isolated hardware layers, legacy systems, and modern networks. This article outlines the most common communication protocols bridge">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/common-protocols-bridged-by-interface-rich-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Common Protocols Bridged by Interface-Rich SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/common-protocols-bridged-by-interface-rich-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interface-rich single board computers (SBCs) frequently serve as multi-protocol gateways, translating data streams between isolated hardware layers, legacy systems, and modern networks. This article outlines the most common communication protocols bridge" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="common-protocols-bridged-by-interface-rich-sbcs">Common
+Protocols Bridged by Interface-Rich SBCs</h1>
+<p>Interface-rich single board computers (SBCs) frequently serve as
+multi-protocol gateways, translating data streams between isolated
+hardware layers, legacy systems, and modern networks. This article
+outlines the most common communication protocols bridged by
+interface-rich SBCs, examining how these embedded platforms convert
+low-level, industrial, automotive, and wireless standards into modern,
+network-accessible data.</p>
+<h2 id="1-modbus-rtu-rs-485-to-modbus-tcp-or-mqtt">1. Modbus RTU
+(RS-485) to Modbus TCP or MQTT</h2>
+<p>Industrial automation systems heavily rely on RS-485 serial
+communication running the Modbus RTU protocol. Interface-rich SBCs
+bridge these legacy field devices (such as PLCs, power meters, and
+environmental sensors) to modern IP-based infrastructures.</p>
+<ul>
+<li><strong>The Bridge:</strong> Translates serial Modbus RTU frames
+into Modbus TCP packets over Ethernet or encapsulates payload data into
+lightweight MQTT topics for cloud analytics.</li>
+<li><strong>Primary Use Case:</strong> Connecting legacy factory-floor
+machinery to modern SCADA systems and Industrial Internet of Things
+(IIoT) platforms.</li>
+</ul>
+<h2 id="2-can-bus-to-ethernet-and-ip-networks">2. CAN Bus to Ethernet
+and IP Networks</h2>
+<p>Controller Area Network (CAN) bus is the standard for robust,
+real-time communication in automotive, aerospace, and robotics
+applications. SBCs equipped with native CAN controllers or SPI-based CAN
+transceivers act as diagnostic and telemetry bridges.</p>
+<ul>
+<li><strong>The Bridge:</strong> Translates raw CAN frames (including
+CANopen and J1939 protocols) into UDP/TCP packets, WebSockets, or HTTP
+REST endpoints over Wi-Fi or Ethernet.</li>
+<li><strong>Primary Use Case:</strong> Real-time vehicle telemetry,
+robotic fleet monitoring, and remote diagnostics.</li>
+</ul>
+<h2 id="3-low-level-bus-protocols-i2c-spi-uart-to-ip-based-apis">3.
+Low-Level Bus Protocols (I2C, SPI, UART) to IP-Based APIs</h2>
+<p>Microcontrollers, raw sensors, and edge peripherals communicate using
+bare-metal synchronous and asynchronous serial interfaces. SBCs provide
+onboard GPIO, hardware UART, I2C buses, and SPI channels to aggregate
+this low-level data.</p>
+<ul>
+<li><strong>The Bridge:</strong> Collects raw data from I2C/SPI sensors
+or UART-connected microcontrollers, processes the data, and exposes it
+over standard web protocols (HTTP, WebSockets, gRPC) or publishes it via
+MQTT.</li>
+<li><strong>Primary Use Case:</strong> Sensor hubs, edge data
+processing, and rapid hardware-in-the-loop prototyping.</li>
+</ul>
+<h2 id="4-wireless-iot-zigbee-ble-lorawan-to-local-area-networks">4.
+Wireless IoT (Zigbee, BLE, LoRaWAN) to Local Area Networks</h2>
+<p>Many environmental and edge sensors operate over low-power wireless
+standards that cannot directly connect to standard IP networks.
+Interface-rich SBCs equipped with onboard radios, HATs, or USB dongles
+serve as central base stations.</p>
+<ul>
+<li><strong>The Bridge:</strong> Bridges short-range wireless protocols
+(Bluetooth Low Energy, Zigbee, Z-Wave) or long-range low-bandwidth
+protocols (LoRaWAN) to Ethernet, Wi-Fi, or cellular (LTE-M/NB-IoT)
+networks.</li>
+<li><strong>Primary Use Case:</strong> Smart building management,
+agriculture monitoring, and automated asset tracking.</li>
+</ul>
+<h2 id="5-legacy-rs-232-serial-to-telnet-or-secure-shell-ssh">5. Legacy
+RS-232 Serial to Telnet or Secure Shell (SSH)</h2>
+<p>Legacy laboratory equipment, network switches, and medical hardware
+often feature only an RS-232 serial interface for configuration and data
+export.</p>
+<ul>
+<li><strong>The Bridge:</strong> Maps RS-232 serial streams to virtual
+COM ports, raw TCP sockets, or secure web consoles over Ethernet.</li>
+<li><strong>Primary Use Case:</strong> Remote console management, server
+rack administration, and extending the operational lifespan of legacy
+infrastructure.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

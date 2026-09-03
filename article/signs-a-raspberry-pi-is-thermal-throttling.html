@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signs a Raspberry Pi Is Thermal Throttling - sbc</title>
+    <meta name="description" content="This article provides a quick overview of how to detect thermal throttling on a Raspberry Pi, a protective mechanism that reduces processor speed to prevent overheating. It covers the primary visual indicators in the operating system, command-line tools">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/signs-a-raspberry-pi-is-thermal-throttling">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Signs a Raspberry Pi Is Thermal Throttling - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/signs-a-raspberry-pi-is-thermal-throttling" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a quick overview of how to detect thermal throttling on a Raspberry Pi, a protective mechanism that reduces processor speed to prevent overheating. It covers the primary visual indicators in the operating system, command-line tools" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="signs-a-raspberry-pi-is-thermal-throttling">Signs a Raspberry Pi
+Is Thermal Throttling</h1>
+<p>This article provides a quick overview of how to detect thermal
+throttling on a Raspberry Pi, a protective mechanism that reduces
+processor speed to prevent overheating. It covers the primary visual
+indicators in the operating system, command-line tools to check
+throttling status, and the physical symptoms of a Pi running too
+hot.</p>
+<h2 id="visual-indicators-in-raspberry-pi-os">Visual Indicators in
+Raspberry Pi OS</h2>
+<p>The easiest way to spot thermal throttling is through the graphical
+user interface of Raspberry Pi OS. When the processor temperature
+crosses specific safety thresholds, the system displays warning icons in
+the top-right corner of the screen:</p>
+<ul>
+<li><strong>Thermometer Icon:</strong> A half-full thermometer icon
+appears when the temperature reaches 80°C, indicating that the Pi is
+arming its thermal management. If the temperature hits 85°C, a full
+thermometer icon appears, signaling that heavy throttling is actively
+occurring.</li>
+<li><strong>Lightning Bolt Icon:</strong> While usually indicative of
+under-voltage, a flashing or solid icon in older OS versions sometimes
+coincided with system instability caused by extreme heat and power draw
+fluctuations.</li>
+</ul>
+<h2 id="performance-degradation-and-system-behavior">Performance
+Degradation and System Behavior</h2>
+<p>When thermal throttling engages, the Raspberry Pi deliberately lowers
+its CPU clock speed to cool down. This results in distinct performance
+issues:</p>
+<ul>
+<li><strong>Sudden Performance Drops:</strong> Applications that were
+running smoothly will suddenly stutter, lag, or freeze. This is highly
+noticeable during CPU-intensive tasks like web browsing, video playback,
+or compiling code.</li>
+<li><strong>Audio and Video Stuttering:</strong> Media streams may drop
+frames, and audio might crackle or fall out of sync as the underclocked
+processor struggles to keep up with real-time decoding.</li>
+<li><strong>Unresponsive Interface:</strong> The desktop environment
+might become sluggish, with mouse movements lagging or windows taking
+several seconds to respond to clicks.</li>
+</ul>
+<h2 id="checking-throttling-status-via-command-line">Checking Throttling
+Status via Command Line</h2>
+<p>For headless setups or precise diagnostics, the command line provides
+definitive proof of thermal throttling. You can use the
+<code>vcgencmd</code> utility to check the current temperature and
+system state.</p>
+<p>Running <code>vcgencmd measure_temp</code> returns the exact CPU
+temperature. If this value is fluctuating right around 80°C to 85°C,
+throttling is likely active.</p>
+<p>To get absolute confirmation, the command
+<code>vcgencmd get_throttled</code> returns a hexadecimal value. This
+value represents a series of status bits. If the output is anything
+other than <code>0x0</code>, the system has either throttled in the past
+or is currently throttling. For example, a value of <code>0x20000</code>
+indicates that the Pi is currently under-clocked due to heat, while
+<code>0x2</code> indicates that an under-voltage event occurred.</p>
+<h2 id="physical-symptoms">Physical Symptoms</h2>
+<p>Aside from software warnings and slowdowns, the physical state of the
+hardware can give away an overheating issue. The System on a Chip
+(SoC)—the large square chip in the center of the board—will be extremely
+hot to the touch. If the board is enclosed in a plastic case without
+ventilation, heat sinks, or a fan, the trapped air will cause the entire
+enclosure to feel remarkably warm, trapping the heat and forcing the Pi
+into a continuous loop of thermal throttling under load.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

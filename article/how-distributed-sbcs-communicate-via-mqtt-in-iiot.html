@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Distributed SBCs Communicate via MQTT in IIoT - sbc</title>
+    <meta name="description" content="In an Industrial Internet of Things (IIoT) architecture, distributed Single Board Computers (SBCs) act as intelligent edge nodes that gather, process, and exchange telemetry data with central systems or other devices. By leveraging the MQTT (Message Queu">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-distributed-sbcs-communicate-via-mqtt-in-iiot">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Distributed SBCs Communicate via MQTT in IIoT - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-distributed-sbcs-communicate-via-mqtt-in-iiot" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In an Industrial Internet of Things (IIoT) architecture, distributed Single Board Computers (SBCs) act as intelligent edge nodes that gather, process, and exchange telemetry data with central systems or other devices. By leveraging the MQTT (Message Queu" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-distributed-sbcs-communicate-via-mqtt-in-iiot">How
+Distributed SBCs Communicate via MQTT in IIoT</h1>
+<p>In an Industrial Internet of Things (IIoT) architecture, distributed
+Single Board Computers (SBCs) act as intelligent edge nodes that gather,
+process, and exchange telemetry data with central systems or other
+devices. By leveraging the MQTT (Message Queuing Telemetry Transport)
+protocol, these SBCs communicate efficiently through a central broker
+using a lightweight publish-subscribe messaging pattern. This setup
+optimizes bandwidth, ensures reliable message delivery in challenging
+industrial environments, and enables scalable, decoupled device
+communication.</p>
+<h3 id="the-role-of-single-board-computers-sbcs-at-the-edge">The Role of
+Single Board Computers (SBCs) at the Edge</h3>
+<p>SBCs, such as Raspberry Pi, BeagleBone, or industrial-grade
+equivalents, are deployed close to machinery, sensors, and actuators.
+Their primary responsibilities include:</p>
+<ul>
+<li><strong>Data Acquisition:</strong> Interfacing directly with sensors
+and legacy industrial hardware via protocols like Modbus, OPC UA, CAN
+bus, or GPIO.</li>
+<li><strong>Edge Computing:</strong> Filtering, aggregating, or running
+analytics on raw data locally to minimize network payload.</li>
+<li><strong>MQTT Client Operation:</strong> Translating processed edge
+data into standardized MQTT payloads and managing connections to the
+broker.</li>
+</ul>
+<h3 id="the-mqtt-publish-subscribe-model">The MQTT Publish-Subscribe
+Model</h3>
+<p>MQTT relies on an event-driven architecture centered around an MQTT
+broker (such as Eclipse Mosquitto, EMQX, or HiveMQ). SBCs do not
+establish direct peer-to-peer links with each other; instead, they
+operate as clients communicating through the broker.</p>
+<ol type="1">
+<li><strong>Publishers:</strong> An SBC reads local sensor metrics,
+packages the data (typically in JSON, Protocol Buffers, or Sparkplug B
+format), and publishes the message to a specific topic on the
+broker.</li>
+<li><strong>Subscribers:</strong> Other SBCs, Human-Machine Interfaces
+(HMIs), or cloud platforms subscribe to specific topics to receive
+real-time updates or control instructions.</li>
+<li><strong>Broker Routing:</strong> The broker receives published
+messages and filters, manages, and forwards them instantly to all
+clients subscribed to the relevant topics.</li>
+</ol>
+<h3 id="topic-hierarchies-for-iiot-scalability">Topic Hierarchies for
+IIoT Scalability</h3>
+<p>Communication is organized using hierarchical topic structures
+separated by forward slashes. This enables granular access control and
+efficient routing. A standard IIoT topic structure might look like:</p>
+<p><code>enterprise/facility_location/production_line/sbc_id/sensor_type</code></p>
+<ul>
+<li><strong>Publishing Telemetry:</strong> An SBC on Line 2 might
+publish to <code>factory_a/line_2/sbc_04/vibration</code>.</li>
+<li><strong>Receiving Commands:</strong> The same SBC can subscribe to
+<code>factory_a/line_2/sbc_04/commands/#</code> to listen for remote
+operational parameters or firmware triggers.</li>
+<li><strong>Wildcard Subscriptions:</strong> Central monitoring
+dashboards can subscribe to <code>factory_a/+/+/vibration</code> to
+aggregate vibration data from all SBCs across the plant
+simultaneously.</li>
+</ul>
+<h3 id="ensuring-reliability-in-industrial-environments">Ensuring
+Reliability in Industrial Environments</h3>
+<p>Industrial networks frequently face intermittent connectivity and
+harsh electrical interference. MQTT addresses these challenges through
+built-in mechanisms configured on the SBC clients:</p>
+<ul>
+<li><strong>Quality of Service (QoS) Levels:</strong>
+<ul>
+<li><em>QoS 0 (At most once):</em> Minimal overhead, best-effort
+delivery without confirmation.</li>
+<li><em>QoS 1 (At least once):</em> Ensures delivery with
+acknowledgment; suitable for critical operational alerts.</li>
+<li><em>QoS 2 (Exactly once):</em> Highest guarantee with a four-step
+handshake, preventing duplicate data for critical transaction or state
+changes.</li>
+</ul></li>
+<li><strong>Persistent Sessions and Retained Messages:</strong> The
+broker stores messages for offline SBCs and delivers the latest known
+good value immediately when a disconnected SBC reconnects.</li>
+<li><strong>Last Will and Testament (LWT):</strong> An SBC registers an
+LWT message upon connection. If the device unexpectedly disconnects or
+loses power, the broker automatically publishes an alert to a status
+topic (e.g., <code>factory_a/sbc_04/status</code> -&gt;
+<code>OFFLINE</code>), alerting operators to node failure.</li>
+<li><strong>Keep-Alive Signals:</strong> SBCs send periodic heartbeat
+pings to the broker to maintain open TCP connections and proactively
+detect network drops.</li>
+</ul>
+<h3 id="security-implementation">Security Implementation</h3>
+<p>To safeguard industrial networks, communication between SBCs and the
+MQTT broker is secured through:</p>
+<ul>
+<li><strong>Transport Layer Security (TLS/SSL):</strong> Encrypting all
+data in transit to prevent eavesdropping and man-in-the-middle
+attacks.</li>
+<li><strong>Mutual Authentication (mTLS):</strong> Requiring X.509
+client certificates on each SBC to verify device identity before
+granting broker access.</li>
+<li><strong>Access Control Lists (ACLs):</strong> Restricting each SBC's
+permissions so it can only publish and subscribe to its authorized topic
+namespaces.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

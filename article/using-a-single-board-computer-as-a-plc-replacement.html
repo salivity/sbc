@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using a Single Board Computer as a PLC Replacement - sbc</title>
+    <meta name="description" content="Using a single-board computer (SBC) as a programmable logic controller (PLC) replacement offers cost savings, immense computational power, and flexible software options for modern industrial automation. However, transitioning from a hardened industrial P">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/using-a-single-board-computer-as-a-plc-replacement">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using a Single Board Computer as a PLC Replacement - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/using-a-single-board-computer-as-a-plc-replacement" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Using a single-board computer (SBC) as a programmable logic controller (PLC) replacement offers cost savings, immense computational power, and flexible software options for modern industrial automation. However, transitioning from a hardened industrial P" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="using-a-single-board-computer-as-a-plc-replacement">Using a
+Single Board Computer as a PLC Replacement</h1>
+<p>Using a single-board computer (SBC) as a programmable logic
+controller (PLC) replacement offers cost savings, immense computational
+power, and flexible software options for modern industrial automation.
+However, transitioning from a hardened industrial PLC to a consumer or
+commercial-grade SBC requires addressing fundamental differences in
+hardware robustness, electrical standards, real-time operating
+capabilities, and long-term reliability. This article breaks down the
+essential technical, environmental, and software considerations required
+to successfully deploy an SBC in place of a traditional PLC.</p>
+<h3 id="electrical-interfacing-and-signal-conditioning">Electrical
+Interfacing and Signal Conditioning</h3>
+<p>Traditional PLCs inherently support industrial voltage levels—most
+commonly 24V DC for digital inputs and outputs, as well as standard
+0–10V or 4–20mA analog loops. Most SBCs operate strictly at 3.3V or 5V
+logic levels on their General Purpose Input/Output (GPIO) pins. Direct
+connection to industrial sensors or actuators will destroy the SBC.
+Replacing a PLC requires dedicated intermediate circuitry,
+including:</p>
+<ul>
+<li><strong>Optocouplers and Galvanic Isolation:</strong> Essential to
+isolate sensitive digital pins from high-voltage spikes, ground loops,
+and electrical noise.</li>
+<li><strong>Level Shifting and Drivers:</strong> Necessary to translate
+3.3V/5V control signals up to 24V DC to trigger relays, solenoids, or
+motor starters.</li>
+<li><strong>Analog Signal Conditioning:</strong> External
+analog-to-digital converters (ADCs) and digital-to-analog converters
+(DACs) with built-in filtering and overvoltage protection are required,
+as many SBCs lack native, high-resolution analog inputs.</li>
+</ul>
+<h3 id="determinism-and-real-time-execution">Determinism and Real-Time
+Execution</h3>
+<p>PLCs operate on deterministic scan cycles, ensuring tasks execute
+within precise timeframes. Standard SBC operating systems (like standard
+Linux or Android) are non-deterministic; background tasks, thread
+scheduling, and kernel interruptions introduce latency jitter that can
+compromise high-speed process control.</p>
+<ul>
+<li><strong>Real-Time Kernels:</strong> An SBC running Linux typically
+requires a real-time patch, such as PREEMPT_RT or Xenomai, to ensure
+low-latency and deterministic behavior.</li>
+<li><strong>Coprocessors:</strong> Some architectures offload
+time-critical tasks to integrated microcontrollers (like a dual-core
+system combining an ARM Cortex-A with a Cortex-M core) to maintain hard
+real-time execution.</li>
+</ul>
+<h3 id="industrial-hardening-and-environmental-tolerances">Industrial
+Hardening and Environmental Tolerances</h3>
+<p>Factory floors present harsh operating environments that standard
+SBCs are not designed to endure. Environmental factors include:</p>
+<ul>
+<li><strong>Operating Temperatures:</strong> Commercial SBCs are often
+rated for 0°C to 50°C. Industrial PLCs handle -20°C to 60°C or broader.
+Industrial-grade SBC variants or active thermal management (heatsinks,
+rugged enclosures) must be used.</li>
+<li><strong>Electromagnetic Interference (EMI) and ESD:</strong> Heavy
+machinery causes transient voltage spikes and radio frequency
+interference. SBC enclosures must offer robust shielding, and power
+supplies must include transient voltage suppression (TVS) diodes and
+surge protection.</li>
+<li><strong>Vibration and Dust:</strong> Solid mounting (such as
+DIN-rail integration), conformally coated PCBs, and IP-rated enclosures
+protect components against physical shock, dust ingress, and
+moisture.</li>
+</ul>
+<h3 id="storage-and-system-reliability">Storage and System
+Reliability</h3>
+<p>PLCs are designed for instant startup and immunity to sudden power
+losses. In contrast, common SBCs relying on micro-SD cards frequently
+suffer file-system corruption if power is removed unexpectedly during a
+write cycle.</p>
+<ul>
+<li><strong>Storage Media:</strong> Utilize onboard eMMC storage, NVMe
+drives, or read-only file systems to prevent data corruption.</li>
+<li><strong>Watchdog Timers:</strong> Hardware watchdog timers should be
+implemented to automatically reboot or safely fault the system if the
+main OS hangs.</li>
+<li><strong>Power Loss Recovery:</strong> Adding a supercapacitor-based
+uninterruptible power supply (UPS) allows the SBC to perform a clean
+shutdown during sudden power outages.</li>
+</ul>
+<h3 id="software-stack-and-maintenance">Software Stack and
+Maintenance</h3>
+<p>While SBCs allow programmers to write automation logic in C++,
+Python, or Rust, standard industrial environments rely heavily on IEC
+61131-3 programming languages (Ladder Logic, Structured Text, Function
+Block Diagrams) for troubleshooting by plant technicians.</p>
+<ul>
+<li><strong>PLC Runtimes:</strong> Open-source platforms like OpenPLC or
+commercial runtimes like CODESYS can be deployed on Linux-based SBCs to
+provide IEC 61131-3 compatibility.</li>
+<li><strong>Security and Updates:</strong> A network-connected SBC
+requires an active management strategy for security patches, firewall
+configurations, and long-term OS updates without interrupting ongoing
+production.</li>
+</ul>
+<h3 id="safety-and-certification-requirements">Safety and Certification
+Requirements</h3>
+<p>PLCs often carry critical certifications (such as UL, CE, and
+functional safety ratings like SIL 2 or SIL 3) that guarantee fail-safe
+behaviors. SBC-based custom systems rarely have these certifications out
+of the box. For critical safety loops—such as emergency stops and
+personnel safety interlocks—dedicated, certified safety relays or safety
+PLCs should remain in place rather than relying solely on a
+software-driven SBC.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

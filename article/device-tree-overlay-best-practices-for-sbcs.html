@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Tree Overlay Best Practices for SBCs - sbc</title>
+    <meta name="description" content="This article provides a concise guide on structuring Device Tree Overlays (DTOs) for custom hardware expansions on Single Board Computers (SBCs). You will learn how to organize source files, define pin control states, maintain modularity, handle dynamic">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/device-tree-overlay-best-practices-for-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Device Tree Overlay Best Practices for SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/device-tree-overlay-best-practices-for-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a concise guide on structuring Device Tree Overlays (DTOs) for custom hardware expansions on Single Board Computers (SBCs). You will learn how to organize source files, define pin control states, maintain modularity, handle dynamic" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="device-tree-overlay-best-practices-for-sbcs">Device Tree Overlay
+Best Practices for SBCs</h1>
+<p>This article provides a concise guide on structuring Device Tree
+Overlays (DTOs) for custom hardware expansions on Single Board Computers
+(SBCs). You will learn how to organize source files, define pin control
+states, maintain modularity, handle dynamic parameters, and ensure safe
+integration with the base system device tree.</p>
+<h3 id="1-maintain-modularity-per-peripheral">1. Maintain Modularity per
+Peripheral</h3>
+<p>Create separate overlay files for distinct hardware modules rather
+than combining unrelated peripherals into a single monolithic file.</p>
+<ul>
+<li><strong>Isolate functions:</strong> If your board contains an I2C
+sensor, an SPI display, and a dedicated PWM driver, create three
+separate <code>.dts</code> files (e.g., <code>custom-sensor.dts</code>,
+<code>custom-display.dts</code>).</li>
+<li><strong>Ease troubleshooting:</strong> Independent overlays allow
+you to load, unload, and debug individual hardware modules without
+affecting others.</li>
+</ul>
+<h3 id="2-follow-standard-overlay-syntax">2. Follow Standard Overlay
+Syntax</h3>
+<p>Ensure the overlay source is correctly marked for dynamic application
+by including the proper header directives and target references.</p>
+<ul>
+<li><strong>Declare plugin mode:</strong> Always start the file with
+<code>/dts-v1/;</code> followed by <code>/plugin/;</code>.</li>
+<li><strong>Use phandle references:</strong> Target base tree nodes
+using references (<code>target = &lt;&amp;i2c1&gt;;</code> or
+<code>target = &lt;&amp;spi0&gt;;</code>) instead of hardcoded paths
+whenever possible. This ensures portability across kernel
+revisions.</li>
+</ul>
+<pre class="dts"><code>/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = &quot;brcm,bcm2835&quot;, &quot;allwinner,sun8i-h3&quot;;
+
+    fragment@0 {
+        target = &lt;&amp;i2c1&gt;;
+        __overlay__ {
+            #address-cells = &lt;1&gt;;
+            #size-cells = &lt;0&gt;;
+            status = &quot;okay&quot;;
+
+            custom_sensor: sensor@48 {
+                compatible = &quot;vendor,sensor-model&quot;;
+                reg = &lt;0x48&gt;;
+                status = &quot;okay&quot;;
+            };
+        };
+    };
+};</code></pre>
+<h3 id="3-define-explicit-pin-multiplexing-pinctrl">3. Define Explicit
+Pin Multiplexing (pinctrl)</h3>
+<p>Avoid relying on default bootloader pin states. Explicitly declare
+pin control and multiplexing configurations inside the overlay.</p>
+<ul>
+<li><strong>Group pins by function:</strong> Define dedicated
+<code>pinctrl</code> nodes for your hardware interface (e.g., GPIO
+interrupts, I2C, SPI lines).</li>
+<li><strong>Assign pull-up/pull-down states:</strong> Clearly define the
+electrical characteristics (e.g., bias pull-up, bias pull-down, or drive
+strength) in the pin controller configuration node.</li>
+<li><strong>Link states to peripherals:</strong> Attach the pin
+configuration to the target peripheral node using
+<code>pinctrl-names = "default";</code> and
+<code>pinctrl-0 = &lt;&amp;custom_pins&gt;;</code>.</li>
+</ul>
+<h3 id="4-manage-node-status-and-conflicts">4. Manage Node Status and
+Conflicts</h3>
+<ul>
+<li><strong>Enable base buses:</strong> Always set
+<code>status = "okay";</code> on the parent controller (such as
+<code>&amp;i2c1</code> or <code>&amp;spi0</code>) within the overlay to
+guarantee the bus driver initializes.</li>
+<li><strong>Avoid resource collision:</strong> Check that the GPIOs,
+interrupts, and DMA channels you assign do not conflict with existing
+base system functions or other active overlays.</li>
+</ul>
+<h3 id="5-expose-dynamic-runtime-parameters">5. Expose Dynamic Runtime
+Parameters</h3>
+<p>Make your overlays adaptable by exposing parameters that can be
+configured at boot time without modifying the source code.</p>
+<ul>
+<li>Use the <code>__overrides__</code> node (supported by many standard
+bootloaders such as U-Boot and Raspberry Pi bootloader) to expose
+settings like I2C addresses, GPIO pin assignments, or clock speeds.</li>
+</ul>
+<pre class="dts"><code>__overrides__ {
+    addr = &lt;&amp;custom_sensor&gt;, &quot;reg:0&quot;;
+    gpiopin = &lt;&amp;custom_pins&gt;, &quot;pins:0&quot;;
+};</code></pre>
+<h3 id="6-compilation-and-symbol-preservation">6. Compilation and Symbol
+Preservation</h3>
+<ul>
+<li><strong>Generate symbols:</strong> When compiling the overlay with
+the Device Tree Compiler (<code>dtc</code>), always use the
+<code>@</code> flag to generate and resolve dynamic symbol references:
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dtc</span> <span class="at">-@</span> <span class="at">-I</span> dts <span class="at">-O</span> dtb <span class="at">-o</span> custom-hardware.dtbo custom-hardware.dts</span></code></pre></div></li>
+<li><strong>Verify against standard schema:</strong> Use kernel tools
+such as <code>dt-validate</code> and standard <code>yaml</code> bindings
+to ensure your device tree node properties conform to Linux kernel
+upstream standards.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

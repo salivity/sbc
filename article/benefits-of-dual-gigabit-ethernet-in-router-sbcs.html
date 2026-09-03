@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benefits of Dual Gigabit Ethernet in Router SBCs - sbc</title>
+    <meta name="description" content="Single-board computers (SBCs) designed for software-defined routing gain significant performance, security, and architectural advantages when equipped with dual Gigabit Ethernet ports. Having two dedicated physical network interfaces transforms an SBC in">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/benefits-of-dual-gigabit-ethernet-in-router-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Benefits of Dual Gigabit Ethernet in Router SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/benefits-of-dual-gigabit-ethernet-in-router-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Single-board computers (SBCs) designed for software-defined routing gain significant performance, security, and architectural advantages when equipped with dual Gigabit Ethernet ports. Having two dedicated physical network interfaces transforms an SBC in" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="benefits-of-dual-gigabit-ethernet-in-router-sbcs">Benefits of
+Dual Gigabit Ethernet in Router SBCs</h1>
+<p>Single-board computers (SBCs) designed for software-defined routing
+gain significant performance, security, and architectural advantages
+when equipped with dual Gigabit Ethernet ports. Having two dedicated
+physical network interfaces transforms an SBC into a full-fledged,
+high-throughput gateway capable of handling separate WAN and LAN traffic
+without the bottlenecks, latency, or configuration complexities
+associated with single-port "router-on-a-stick" setups.</p>
+<h3 id="physical-wan-and-lan-separation">Physical WAN and LAN
+Separation</h3>
+<p>The primary advantage of dual Gigabit Ethernet ports is the ability
+to physically isolate incoming internet traffic (WAN) from internal
+local traffic (LAN). In a single-port SBC, routing requires configuring
+virtual local area networks (VLANs) over a single physical wire to a
+managed switch. Dual ports eliminate this requirement entirely, allowing
+one port to connect directly to the internet modem and the other to an
+internal network switch or access point.</p>
+<h3 id="maximized-throughput-and-reduced-latency">Maximized Throughput
+and Reduced Latency</h3>
+<p>Gigabit Ethernet is full-duplex, offering up to 1 Gbps of bandwidth
+in both directions simultaneously. When a single-port SBC acts as a
+router, the available bandwidth on that single physical cable must be
+shared for both incoming and outgoing packets, effectively halving the
+maximum routing throughput. Dual Gigabit ports provide a dedicated 1
+Gbps path for WAN traffic and a dedicated 1 Gbps path for LAN traffic,
+preventing packet collisions, reducing routing latency, and enabling
+true gigabit line-rate forwarding.</p>
+<h3 id="elimination-of-vlan-and-managed-switch-dependencies">Elimination
+of VLAN and Managed Switch Dependencies</h3>
+<p>With dual physical interfaces, users do not need to invest in or
+configure an external managed switch to establish separate broadcast
+domains. This simplifies network deployment, reduces setup errors, and
+lowers hardware costs. Software distributions like OpenWrt, pfSense, and
+OPNsense can immediately assign <code>eth0</code> and <code>eth1</code>
+to default firewall zones upon first boot.</p>
+<h3 id="enhanced-network-security">Enhanced Network Security</h3>
+<p>Physical separation of interfaces provides a robust security
+boundary. By default, incoming untrusted packets hit a distinct network
+interface card (NIC), minimizing the risk of VLAN-hopping attacks or
+misconfigured bridging rules that could inadvertently leak external
+traffic directly into the internal network.</p>
+<h3 id="greater-software-defined-routing-flexibility">Greater
+Software-Defined Routing Flexibility</h3>
+<p>Dual Gigabit interfaces give software-defined routing stacks the
+flexibility to implement advanced networking features:</p>
+<ul>
+<li><strong>Dual-WAN Failover and Load Balancing:</strong> An SBC can
+use one port for a primary ISP and reconfigure a USB-to-Ethernet or
+Wi-Fi interface for LAN, reserving the two high-speed onboard ports for
+dual WAN connections.</li>
+<li><strong>Dedicated DMZ Creation:</strong> Software can isolate
+sensitive servers on one physical port while managing standard traffic
+on another.</li>
+<li><strong>Hardware-Level Packet Filtering:</strong> Many modern SBC
+network controllers include dedicated hardware queues and direct memory
+access (DMA), allowing the host CPU to route packets between interfaces
+with minimal processing overhead.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

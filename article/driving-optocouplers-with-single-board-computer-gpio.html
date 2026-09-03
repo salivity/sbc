@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driving Optocouplers with Single Board Computer GPIO - sbc</title>
+    <meta name="description" content="Interfacing external optocouplers with the General-Purpose Input/Output (GPIO) pins of a single-board computer (SBC) requires careful attention to electrical constraints to prevent hardware damage and ensure reliable switching. This guide covers the crit">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/driving-optocouplers-with-single-board-computer-gpio">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Driving Optocouplers with Single Board Computer GPIO - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/driving-optocouplers-with-single-board-computer-gpio" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interfacing external optocouplers with the General-Purpose Input/Output (GPIO) pins of a single-board computer (SBC) requires careful attention to electrical constraints to prevent hardware damage and ensure reliable switching. This guide covers the crit" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="driving-optocouplers-with-single-board-computer-gpio">Driving
+Optocouplers with Single Board Computer GPIO</h1>
+<p>Interfacing external optocouplers with the General-Purpose
+Input/Output (GPIO) pins of a single-board computer (SBC) requires
+careful attention to electrical constraints to prevent hardware damage
+and ensure reliable switching. This guide covers the critical electrical
+considerations, including GPIO voltage levels, current sourcing and
+sinking limits, resistor calculations, Current Transfer Ratio (CTR), and
+driver topologies needed to safely isolate your SBC from external
+circuits.</p>
+<h2 id="gpio-voltage-levels-and-forward-voltage-v_f">GPIO Voltage Levels
+and Forward Voltage (<span class="math inline">\(V_F\)</span>)</h2>
+<p>Most modern SBCs (such as Raspberry Pi, BeagleBone, or Rock Pi)
+operate on 3.3V logic, while some older or industrial boards use 5V. An
+optocoupler's input is an infrared LED, which typically has a forward
+voltage drop (<span class="math inline">\(V_F\)</span>) between 1.1V and
+1.6V.</p>
+<ul>
+<li>Ensure the GPIO output high voltage (<span
+class="math inline">\(V_{OH}\)</span>) is significantly higher than the
+optocoupler's <span class="math inline">\(V_F\)</span>. A 3.3V GPIO
+easily exceeds the typical ~1.2V <span
+class="math inline">\(V_F\)</span> of a standard GaAs infrared LED.</li>
+<li>Account for variations in <span class="math inline">\(V_F\)</span>
+across operating temperature ranges to maintain consistent LED
+current.</li>
+</ul>
+<h2 id="current-sourcing-and-sinking-limits">Current Sourcing and
+Sinking Limits</h2>
+<p>SBC GPIO pins have strict current limitations that must not be
+exceeded:</p>
+<ul>
+<li><strong>Per-Pin Limits:</strong> Many 3.3V microprocessors can only
+safely source or sink between 4mA and 16mA per pin. Driving standard
+optocouplers often requires 5mA to 10mA to achieve full saturation on
+the output transistor.</li>
+<li><strong>Cumulative Port Limits:</strong> Microprocessors enforce
+total current limits across an entire GPIO bank (often 50mA to 100mA
+total). Driving multiple optocouplers simultaneously can exceed this
+aggregate limit even if individual pins are within specification.</li>
+</ul>
+<h2 id="calculating-the-current-limiting-resistor">Calculating the
+Current-Limiting Resistor</h2>
+<p>An external series resistor is mandatory to prevent the GPIO pin and
+the optocoupler LED from burning out. Use the following formula to
+calculate the resistor value:</p>
+<p><span class="math display">\[R = \frac{V_{GPIO} -
+V_F}{I_F}\]</span></p>
+<ul>
+<li><strong><span class="math inline">\(V_{GPIO}\)</span></strong>:
+Output high voltage of the SBC pin (e.g., 3.3V).</li>
+<li><strong><span class="math inline">\(V_F\)</span></strong>: Forward
+voltage drop of the optocoupler LED (e.g., 1.2V).</li>
+<li><strong><span class="math inline">\(I_F\)</span></strong>: Desired
+forward current through the LED (e.g., 5mA or 0.005A).</li>
+</ul>
+<p>Using these values: <span class="math display">\[R =
+\frac{3.3\text{V} - 1.2\text{V}}{0.005\text{A}} =
+420\,\Omega\]</span></p>
+<p>Choose the nearest standard resistor value (e.g., <span
+class="math inline">\(430\,\Omega\)</span> or <span
+class="math inline">\(470\,\Omega\)</span>).</p>
+<h2 id="drive-topology-sinking-vs-sourcing">Drive Topology: Sinking vs.
+Sourcing</h2>
+<ul>
+<li><strong>Current Sourcing (Active-High):</strong> The GPIO pin
+outputs a high signal to supply current to the anode of the optocoupler
+LED, with the cathode connected to ground.</li>
+<li><strong>Current Sinking (Active-Low):</strong> The anode of the LED
+is connected to the 3.3V power rail, and the cathode connects to the
+GPIO pin. Setting the GPIO low completes the circuit to ground. Many
+microcontrollers and SBC processors can sink more current reliably than
+they can source, making active-low configurations common for direct
+drive.</li>
+</ul>
+<h2 id="current-transfer-ratio-ctr-and-output-saturation">Current
+Transfer Ratio (CTR) and Output Saturation</h2>
+<p>The Current Transfer Ratio (CTR) is the ratio of output collector
+current (<span class="math inline">\(I_C\)</span>) to input forward
+current (<span class="math inline">\(I_F\)</span>), expressed as a
+percentage:</p>
+<p><span class="math display">\[\text{CTR} =
+\left(\frac{I_C}{I_F}\right) \times 100\%\]</span></p>
+<ul>
+<li><strong>CTR Degradation:</strong> CTR degrades over time, with high
+temperatures, and at low <span class="math inline">\(I_F\)</span>
+values.</li>
+<li><strong>Saturation Margin:</strong> When using the optocoupler as a
+digital switch, design the circuit so the base drive is strong enough to
+force the output phototransistor into saturation (<span
+class="math inline">\(V_{CE(sat)} \approx 0.1\text{V} \text{ to }
+0.4\text{V}\)</span>). Design with an assumed CTR of 50% of the nominal
+datasheet value to guarantee long-term reliability.</li>
+</ul>
+<h2 id="using-a-buffer-or-driver-transistor">Using a Buffer or Driver
+Transistor</h2>
+<p>If the required <span class="math inline">\(I_F\)</span> exceeds the
+safe current capability of the SBC GPIO, do not drive the optocoupler
+directly. Instead:</p>
+<ul>
+<li>Use a small N-channel MOSFET (such as a 2N7002 or BSS138) or NPN
+bipolar junction transistor (such as a 2N3904) to switch the optocoupler
+LED using an external supply rail.</li>
+<li>Alternatively, use an integrated low-side driver IC (such as a
+ULN2003A) or a logic gate buffer (such as the 74HCT series) to handle
+high-current multi-channel configurations.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

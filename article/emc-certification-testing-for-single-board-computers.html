@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMC Certification Testing for Single Board Computers - sbc</title>
+    <meta name="description" content="EMC certification testing for a newly designed single board computer (SBC) is a structured verification process that ensures the device does not emit excessive electromagnetic interference (EMI) and operates reliably in the presence of external electroma">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/emc-certification-testing-for-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="EMC Certification Testing for Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/emc-certification-testing-for-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="EMC certification testing for a newly designed single board computer (SBC) is a structured verification process that ensures the device does not emit excessive electromagnetic interference (EMI) and operates reliably in the presence of external electroma" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="emc-certification-testing-for-single-board-computers">EMC
+Certification Testing for Single Board Computers</h1>
+<p>EMC certification testing for a newly designed single board computer
+(SBC) is a structured verification process that ensures the device does
+not emit excessive electromagnetic interference (EMI) and operates
+reliably in the presence of external electromagnetic disturbances. To
+achieve compliance with regulatory bodies such as the FCC (United
+States) and CE (European Union), engineers guide the SBC through
+rigorous pre-compliance evaluations, formal emissions testing, and
+immunity assessments inside specialized laboratory environments before
+compiling the final documentation required for commercial
+distribution.</p>
+<h3 id="1-defining-standards-and-the-test-plan">1. Defining Standards
+and the Test Plan</h3>
+<p>Before physical testing begins, engineers identify the applicable
+regulatory standards based on the SBC's intended deployment environment
+(commercial, industrial, automotive, or residential). Common standards
+include FCC Part 15 (Subpart B) for North America and CISPR 32 / CISPR
+35 (EN 55032 / EN 55035) for Europe.</p>
+<p>Engineers create a comprehensive test plan that specifies:</p>
+<ul>
+<li><strong>Worst-Case Operating Modes:</strong> The SBC must be tested
+under maximum stress, which involves running diagnostic software that
+maximizes CPU/GPU utilization, exercises RAM, and continuously transmits
+data across all I/O interfaces (Ethernet, USB, PCIe, HDMI, GPIO).</li>
+<li><strong>Peripheral Configuration:</strong> All ports must be
+populated with appropriate cables and loads to simulate a fully
+configured end-user scenario.</li>
+<li><strong>Power Supply Variations:</strong> Tests are configured for
+nominal, minimum, and maximum input voltages.</li>
+</ul>
+<h3 id="2-pre-compliance-testing">2. Pre-Compliance Testing</h3>
+<p>To minimize the risk of costly failures at an accredited test
+facility, engineers perform in-house pre-compliance screening:</p>
+<ul>
+<li><strong>Near-Field Probing:</strong> Using magnetic (H-field) and
+electric (E-field) near-field probes connected to a spectrum analyzer,
+engineers scan the PCB surface to detect localized high-frequency
+radiation around clock generators, switching power supplies, and
+high-speed data traces.</li>
+<li><strong>Conducted Emission Checks:</strong> A Line Impedance
+Stabilization Network (LISN) is used to monitor noise injected back into
+the power lines.</li>
+</ul>
+<h3 id="3-formal-emissions-testing">3. Formal Emissions Testing</h3>
+<p>Formal testing takes place in an accredited electromagnetic
+compatibility laboratory to verify that the SBC does not pollute the RF
+spectrum.</p>
+<ul>
+<li><strong>Radiated Emissions:</strong> The SBC is placed on a
+non-conductive turntable inside a Semi-Anechoic Chamber (SAC) or at an
+Open Area Test Site (OATS). Measurement antennas placed at a
+standardized distance (typically 3 or 10 meters) capture emissions
+across frequencies ranging from 30 MHz to several gigahertz. The
+turntable rotates 360 degrees and the antenna height adjusts from 1 to 4
+meters to capture maximum emission peaks across horizontal and vertical
+polarizations.</li>
+<li><strong>Conducted Emissions:</strong> A LISN measures RF energy
+traveling back into the AC or DC power supply lines, typically across
+the frequency band of 150 kHz to 30 MHz.</li>
+</ul>
+<h3 id="4-immunity-susceptibility-testing">4. Immunity (Susceptibility)
+Testing</h3>
+<p>Immunity testing verifies that the SBC continues to function without
+crashing, resetting, or corrupting data when exposed to external
+electromagnetic phenomena.</p>
+<ul>
+<li><strong>Electrostatic Discharge (ESD):</strong> Using an ESD
+simulator gun, engineers apply direct contact discharges (typically up
+to ±4 kV) and air discharges (up to ±8 kV) to all user-accessible
+points, such as connectors, metal chassis points, and buttons, per IEC
+61000-4-2 standards.</li>
+<li><strong>Radiated Immunity:</strong> The device is subjected to
+high-intensity RF fields (e.g., 3 V/m to 10 V/m or higher) swept across
+a wide frequency range (typically 80 MHz to 6 GHz) inside an anechoic
+chamber to simulate nearby radio transmitters.</li>
+<li><strong>Electrical Fast Transient / Burst (EFT):</strong>
+High-frequency repetitive bursts are injected into power and signal
+lines to simulate switching transients from inductive loads.</li>
+<li><strong>Surge Testing:</strong> High-energy pulses are applied to
+power inputs to evaluate protection against lightning strikes and
+power-grid fluctuations.</li>
+<li><strong>Conducted Immunity:</strong> Continuous RF currents are
+coupled directly into power and communication cables to verify
+resistance against induced common-mode noise.</li>
+</ul>
+<h3 id="5-remediation-and-final-certification">5. Remediation and Final
+Certification</h3>
+<p>If the SBC exceeds limits during testing, engineers implement
+targeted countermeasures:</p>
+<ul>
+<li>Adding or tuning ferrite beads and common-mode chokes on high-speed
+lines.</li>
+<li>Enhancing enclosure shielding and grounding gaskets.</li>
+<li>Placing transient voltage suppressor (TVS) diodes on sensitive I/O
+lines.</li>
+<li>Adjusting PCB decoupling networks or adding spread-spectrum clocking
+via firmware.</li>
+</ul>
+<p>Once the SBC passes all required tests within the specified margins,
+the accredited test house issues a formal EMC test report. Engineers use
+this report to generate a Declaration of Conformity (DoC), apply the
+relevant regulatory marks (such as CE, UKCA, or FCC), and finalize the
+product for global market release.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Determines Single Board Computer MTBF? - sbc</title>
+    <meta name="description" content="Mean Time Between Failures (MTBF) is a foundational reliability metric predicting the elapsed operational time between inherent system failures in a commercial Single Board Computer (SBC). Determining an SBC's MTBF rating involves evaluating multiple eng">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/what-determines-single-board-computer-mtbf">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Determines Single Board Computer MTBF? - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/what-determines-single-board-computer-mtbf" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Mean Time Between Failures (MTBF) is a foundational reliability metric predicting the elapsed operational time between inherent system failures in a commercial Single Board Computer (SBC). Determining an SBC's MTBF rating involves evaluating multiple eng" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-determines-single-board-computer-mtbf">What Determines
+Single Board Computer MTBF?</h1>
+<p>Mean Time Between Failures (MTBF) is a foundational reliability
+metric predicting the elapsed operational time between inherent system
+failures in a commercial Single Board Computer (SBC). Determining an
+SBC's MTBF rating involves evaluating multiple engineering and
+environmental criteria, including component-level failure rates, thermal
+management, electrical derating, environmental operating stresses,
+manufacturing quality standards, and the statistical prediction models
+applied.</p>
+<h2 id="component-selection-and-quality">Component Selection and
+Quality</h2>
+<p>The overall reliability of an SBC directly depends on the individual
+failure rates of the parts on its Bill of Materials (BOM). Key
+components that heavily influence MTBF include:</p>
+<ul>
+<li><strong>Capacitors:</strong> Electrolytic capacitors dry out over
+time due to chemical breakdown, making them a common failure point.
+Solid ceramic or tantalum capacitors yield significantly higher MTBF
+figures.</li>
+<li><strong>Power Management ICs (PMICs):</strong> Power regulation
+components convert and handle varying voltages, bearing significant
+thermal and electrical strain.</li>
+<li><strong>Connectors and Solder Joints:</strong> The mechanical
+durability of I/O ports, pin headers, and surface-mount technology (SMT)
+joints contributes to long-term structural integrity.</li>
+<li><strong>Silicon Reliability:</strong> Process nodes and fabrication
+standards for the processor (SoC/CPU), RAM, and flash storage influence
+long-term semiconductor wear-out mechanisms such as
+electromigration.</li>
+</ul>
+<h2 id="operating-temperature-and-thermal-dissipation">Operating
+Temperature and Thermal Dissipation</h2>
+<p>Temperature is the single most influential environmental factor in
+hardware degradation. Component failure rates typically follow the
+Arrhenius equation, where failure rates double for roughly every 10°C
+rise in junction temperature. MTBF calculations assess:</p>
+<ul>
+<li><strong>Thermal Design:</strong> The efficiency of heat sinks,
+thermal interface materials (TIM), and heat spreaders in moving heat
+away from core processors.</li>
+<li><strong>Ambient Temperature Limits:</strong> The rated operational
+range (e.g., standard commercial 0°C to 60°C versus industrial -40°C to
+85°C). Higher ambient ratings correlate with a longer lifespan under
+normal operating conditions.</li>
+</ul>
+<h2 id="electrical-stress-and-component-derating">Electrical Stress and
+Component Derating</h2>
+<p>Derating is the practice of intentionally operating components well
+below their maximum electrical ratings (voltage, current, and power
+dissipation). Commercial SBC designs that incorporate conservative
+derating margins experience less electrical stress, substantially
+increasing the MTBF. Designs operating near maximum ratings degrade
+faster and yield lower MTBF scores.</p>
+<h2 id="environmental-stressors">Environmental Stressors</h2>
+<p>Commercial SBCs encounter external conditions that directly degrade
+hardware:</p>
+<ul>
+<li><strong>Vibration and Shock:</strong> Dynamic physical loads can
+cause micro-fractures in solder joints and component leads.</li>
+<li><strong>Humidity and Contaminants:</strong> Moisture and airborne
+contaminants accelerate corrosion and dendrite growth on bare PCB traces
+unless protective measures like conformal coating are implemented.</li>
+<li><strong>Power Quality:</strong> Transients, electrostatic discharge
+(ESD), and input voltage spikes reduce MTBF if the SBC lacks dedicated
+input protection circuitry (such as TVS diodes and filtering
+stages).</li>
+</ul>
+<h2 id="pcb-design-and-manufacturing-standards">PCB Design and
+Manufacturing Standards</h2>
+<p>The physical construction and assembly quality of the board dictate
+structural longevity:</p>
+<ul>
+<li><strong>PCB Fabrication:</strong> Layer count, copper weight, trace
+geometry, and via plating quality determine resistance to thermal
+expansion cycles.</li>
+<li><strong>IPC Classification:</strong> Compliance with IPC-A-610
+standards (Class 2 for standard commercial products or Class 3 for
+high-reliability systems) defines the tolerance levels for soldering
+defects, voiding, and assembly alignment.</li>
+</ul>
+<h2 id="reliability-prediction-models">Reliability Prediction
+Models</h2>
+<p>MTBF is typically calculated theoretically rather than measured
+through lifetime testing alone. The mathematical model and method chosen
+establish the final published MTBF rating:</p>
+<ul>
+<li><strong>Standard Frameworks:</strong> Recognized empirical standards
+such as <strong>Telcordia SR-332</strong> (widely used for commercial
+and telecommunications equipment) or <strong>MIL-HDBK-217</strong>
+(military-grade baseline) provide standard baseline failure rates for
+every component class.</li>
+<li><strong>Parts Count Method vs. Part Stress Method:</strong> The
+Parts Count method provides an early estimate based on generic failure
+rates, while the Part Stress method calculates MTBF using the exact
+operating temperature, voltage, and environmental stresses applied to
+each component in the circuit, yielding a more accurate rating.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

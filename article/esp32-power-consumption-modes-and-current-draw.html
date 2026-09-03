@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Power Consumption: Modes and Current Draw - sbc</title>
+    <meta name="description" content="The ESP32 is a popular, feature-rich microcontroller board widely used in Internet of Things (IoT) applications due to its integrated Wi-Fi, Bluetooth, and advanced power management capabilities. Understanding its power consumption characteristics is ess">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/esp32-power-consumption-modes-and-current-draw">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ESP32 Power Consumption: Modes and Current Draw - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/esp32-power-consumption-modes-and-current-draw" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The ESP32 is a popular, feature-rich microcontroller board widely used in Internet of Things (IoT) applications due to its integrated Wi-Fi, Bluetooth, and advanced power management capabilities. Understanding its power consumption characteristics is ess" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="esp32-power-consumption-modes-and-current-draw">ESP32 Power
+Consumption: Modes and Current Draw</h1>
+<p>The ESP32 is a popular, feature-rich microcontroller board widely
+used in Internet of Things (IoT) applications due to its integrated
+Wi-Fi, Bluetooth, and advanced power management capabilities.
+Understanding its power consumption characteristics is essential for
+designing battery-operated or energy-efficient devices. This article
+outlines the power requirements of an ESP32-based development board
+across its different operating modes, examines the hardware factors that
+affect overall energy draw, and highlights key strategies for optimizing
+power usage.</p>
+<h2 id="active-operating-modes">Active Operating Modes</h2>
+<p>In active mode, the ESP32’s dual-core Tensilica Xtensa 32-bit LX6
+processor and wireless radios operate at full capacity. Current draw
+during active operations varies significantly based on clock frequency
+and radio usage:</p>
+<ul>
+<li><strong>Wi-Fi Transmission (TX):</strong> 160 mA to 260 mA (peaks
+can reach up to 500 mA briefly during transmission bursts at maximum
+output power).</li>
+<li><strong>Wi-Fi Reception (RX):</strong> 95 mA to 100 mA.</li>
+<li><strong>Bluetooth / BLE Operation:</strong> 30 mA to 130 mA
+depending on transmit power and connection intervals.</li>
+<li><strong>CPU Active (No Radio):</strong>
+<ul>
+<li>240 MHz clock speed: ~68 mA</li>
+<li>160 MHz clock speed: ~44 mA</li>
+<li>80 MHz clock speed: ~30 mA</li>
+</ul></li>
+</ul>
+<h2 id="low-power-sleep-modes">Low-Power Sleep Modes</h2>
+<p>To conserve energy, the ESP32 provides four main low-power states
+that turn off unused subsystems:</p>
+<h3 id="1-modem-sleep-mode">1. Modem-Sleep Mode</h3>
+<ul>
+<li><strong>Current Draw:</strong> ~20 mA to 30 mA</li>
+<li><strong>Characteristics:</strong> The CPU remains active, but Wi-Fi
+and Bluetooth baseband and radio circuits are powered down. This mode is
+used when processing tasks do not require active network
+connections.</li>
+</ul>
+<h3 id="2-light-sleep-mode">2. Light-Sleep Mode</h3>
+<ul>
+<li><strong>Current Draw:</strong> ~0.8 mA</li>
+<li><strong>Characteristics:</strong> The CPU clock is gated (paused),
+and digital peripherals are unclocked. The Real-Time Clock (RTC) and
+Ultra-Low-Power (ULP) coprocessor remain active. The system can wake up
+instantly via GPIOs, timers, or UART.</li>
+</ul>
+<h3 id="3-deep-sleep-mode">3. Deep-Sleep Mode</h3>
+<ul>
+<li><strong>Current Draw (Chip level):</strong> ~10 µA to 150 µA</li>
+<li><strong>Characteristics:</strong> The CPU, main digital peripherals,
+and most RAM are powered off. Only the RTC controller, RTC peripherals,
+RTC Fast/Slow memory, and the ULP coprocessor remain powered. The system
+retains minimal data in RTC memory and wakes up via a reset-like cycle
+triggered by timers, external pins, or touch sensors.</li>
+</ul>
+<h3 id="4-hibernation-mode">4. Hibernation Mode</h3>
+<ul>
+<li><strong>Current Draw (Chip level):</strong> ~5 µA</li>
+<li><strong>Characteristics:</strong> Almost all internal circuits are
+powered off, including the RTC memory. Only a single RTC timer or
+specific low-power pins remain functional to wake the device.</li>
+</ul>
+<h2 id="development-board-overhead">Development Board Overhead</h2>
+<p>While the standalone ESP32 chip consumes microamps in deep sleep,
+standard development boards (such as NodeMCU-32S, ESP32-WROOM-DevKit, or
+ESP32-CAM) consume significantly more power due to onboard auxiliary
+components:</p>
+<ul>
+<li><strong>Linear Voltage Regulators (LDOs):</strong> Standard boards
+often use low-cost LDOs (e.g., AMS1117) with high quiescent currents,
+adding 5 mA to 10 mA of continuous draw.</li>
+<li><strong>USB-to-Serial Chips:</strong> Onboard converters (e.g.,
+CP2102, CH340) remain powered from the 3.3V/5V rail, drawing 1 mA to 15
+mA even when idle.</li>
+<li><strong>Power LEDs:</strong> A single onboard power indicator LED
+typically draws 1 mA to 3 mA continuously.</li>
+</ul>
+<p>Consequently, a standard ESP32 development board in deep sleep often
+draws between <strong>5 mA and 15 mA</strong>, compared to the bare
+module's <strong>10 µA to 150 µA</strong>.</p>
+<h2 id="methods-to-minimize-power-consumption">Methods to Minimize Power
+Consumption</h2>
+<ul>
+<li><strong>Reduce CPU Frequency:</strong> Scale the system clock from
+240 MHz down to 80 MHz or 40 MHz for non-compute-intensive tasks.</li>
+<li><strong>Utilize Deep Sleep:</strong> Keep the device in deep sleep
+for the majority of the operational cycle, waking up only to read
+sensors and transmit data.</li>
+<li><strong>Batch Wireless Transmissions:</strong> Collect multiple
+sensor readings in RTC memory before turning on the Wi-Fi radio to
+transmit them all at once.</li>
+<li><strong>Choose Low-Power Dev Boards:</strong> Use boards designed
+specifically for low power that feature ultra-low quiescent current LDOs
+(such as the AP2112K or ME6211) and switchable USB bridges.</li>
+<li><strong>Hardware Modifications:</strong> Remove the onboard power
+LED and bypass the USB-to-UART converter on general-purpose boards when
+deploying for long-term battery use.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

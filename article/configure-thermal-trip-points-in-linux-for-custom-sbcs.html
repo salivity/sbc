@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Thermal Trip Points in Linux for Custom SBCs - sbc</title>
+    <meta name="description" content="Configuring thermal trip points in the Linux kernel for a custom single board computer (SBC) involves defining thermal zones, trip temperatures, and cooling device behaviors within the Device Tree (DTS). This guide explains how to structure the Device Tr">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/configure-thermal-trip-points-in-linux-for-custom-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure Thermal Trip Points in Linux for Custom SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/configure-thermal-trip-points-in-linux-for-custom-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring thermal trip points in the Linux kernel for a custom single board computer (SBC) involves defining thermal zones, trip temperatures, and cooling device behaviors within the Device Tree (DTS). This guide explains how to structure the Device Tr" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="configure-thermal-trip-points-in-linux-for-custom-sbcs">Configure
+Thermal Trip Points in Linux for Custom SBCs</h1>
+<p>Configuring thermal trip points in the Linux kernel for a custom
+single board computer (SBC) involves defining thermal zones, trip
+temperatures, and cooling device behaviors within the Device Tree (DTS).
+This guide explains how to structure the Device Tree thermal nodes,
+define different trip types such as active, passive, and critical, bind
+them to cooling mechanisms like Dynamic Voltage and Frequency Scaling
+(DVFS) or PWM fans, and verify the configuration at runtime using
+<code>sysfs</code>.</p>
+<h2
+id="understanding-the-linux-thermal-framework-in-device-tree">Understanding
+the Linux Thermal Framework in Device Tree</h2>
+<p>The Linux kernel thermal framework monitors on-chip temperature
+sensors (TSCs/thermal sensors) and triggers mitigation actions based on
+predefined thresholds known as trip points. On custom ARM/ARM64 and
+RISC-V SBCs, this behavior is declared under the
+<code>thermal-zones</code> node in your board's Device Tree source
+(<code>.dts</code> or <code>.dtsi</code>) file.</p>
+<p>A complete thermal configuration consists of three primary
+components:</p>
+<ol type="1">
+<li><strong>Thermal Sensor (<code>thermal-sensors</code>)</strong>: The
+hardware sensor providing temperature readings.</li>
+<li><strong>Trips (<code>trips</code>)</strong>: Temperature thresholds
+that trigger specific actions.</li>
+<li><strong>Cooling Maps (<code>cooling-maps</code>)</strong>:
+Associations connecting trip points to cooling devices (CPUs, GPUs,
+fans).</li>
+</ol>
+<h2 id="step-by-step-device-tree-configuration">Step-by-Step Device Tree
+Configuration</h2>
+<h3 id="1-define-the-thermal-zone-and-sensor-reference">1. Define the
+Thermal Zone and Sensor Reference</h3>
+<p>Open your custom board's DTS file and define the
+<code>thermal-zones</code> block. Ensure your SoC's internal thermal
+sensor driver is enabled in the kernel config (e.g.,
+<code>CONFIG_ROCKCHIP_THERMAL</code>,
+<code>CONFIG_IMX_SCU_THERMAL</code>).</p>
+<pre class="dts"><code>/ {
+    thermal-zones {
+        cpu_thermal: cpu-thermal {
+            polling-delay-passive = &lt;250&gt;; /* Polling interval in ms when cooling */
+            polling-delay = &lt;1000&gt;;         /* Polling interval in ms when idle */
+            thermal-sensors = &lt;&amp;tsadc 0&gt;;   /* Reference to your hardware sensor */
+
+            trips {
+                /* Trip points defined here */
+            };
+
+            cooling-maps {
+                /* Bindings to cooling devices defined here */
+            };
+        };
+    };
+};</code></pre>
+<h3 id="2-define-thermal-trip-points">2. Define Thermal Trip Points</h3>
+<p>Under the <code>trips</code> subnode, create nodes for each required
+threshold. Temperatures are specified in milli-Celsius (e.g.,
+<code>75000</code> equals 75°C).</p>
+<pre class="dts"><code>trips {
+    cpu_alert: cpu-alert {
+        temperature = &lt;70000&gt;;
+        hysteresis = &lt;2000&gt;;
+        type = &quot;passive&quot;;
+    };
+
+    fan_active: fan-active {
+        temperature = &lt;80000&gt;;
+        hysteresis = &lt;5000&gt;;
+        type = &quot;active&quot;;
+    };
+
+    cpu_crit: cpu-crit {
+        temperature = &lt;95000&gt;;
+        hysteresis = &lt;0&gt;;
+        type = &quot;critical&quot;;
+    };
+};</code></pre>
+<h4 id="trip-types">Trip Types:</h4>
+<ul>
+<li><strong><code>passive</code></strong>: Throttles performance
+(typically reducing CPU/GPU operating frequency) to prevent further
+heating without hardware-driven external cooling.</li>
+<li><strong><code>active</code></strong>: Engages active cooling devices
+such as a PWM-controlled fan.</li>
+<li><strong><code>hot</code></strong>: Notifies user-space via a uevent
+without kernel-level thermal governor intervention.</li>
+<li><strong><code>critical</code></strong>: Triggers an immediate
+hardware or software shutdown to prevent silicon damage.</li>
+</ul>
+<h3 id="3-bind-trip-points-to-cooling-devices">3. Bind Trip Points to
+Cooling Devices</h3>
+<p>Under <code>cooling-maps</code>, pair each trip point with a cooling
+device (e.g., CPU frequency states via CPUFreq or a PWM fan).</p>
+<pre class="dts"><code>cooling-maps {
+    map0 {
+        trip = &lt;&amp;cpu_alert&gt;;
+        cooling-device = &lt;&amp;cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT&gt;;
+        contribution = &lt;1024&gt;;
+    };
+
+    map1 {
+        trip = &lt;&amp;fan_active&gt;;
+        cooling-device = &lt;&amp;fan0 1 3&gt;; /* Fan states: minimum state 1, maximum state 3 */
+    };
+};</code></pre>
+<p><em>Note: Ensure the CPU nodes have
+<code>#cooling-cells = &lt;2&gt;;</code> defined to allow CPUFreq to act
+as a cooling device.</em></p>
+<h2 id="kernel-configuration">Kernel Configuration</h2>
+<p>Ensure the necessary thermal governors are compiled into your kernel
+(<code>.config</code>):</p>
+<ul>
+<li><code>CONFIG_THERMAL=y</code></li>
+<li><code>CONFIG_THERMAL_OF=y</code></li>
+<li><code>CONFIG_THERMAL_GOV_STEP_WISE=y</code> (commonly used for
+passive DVFS cooling)</li>
+<li><code>CONFIG_THERMAL_GOV_FAIR_SHARE=y</code></li>
+<li><code>CONFIG_CPU_THERMAL=y</code> (allows CPU frequency scaling as a
+cooling device)</li>
+<li><code>CONFIG_THERMAL_GOV_USER_SPACE=y</code> (if handling thermal
+states in userspace)</li>
+</ul>
+<h2 id="verifying-thermal-trip-points-via-sysfs">Verifying Thermal Trip
+Points via Sysfs</h2>
+<p>After compiling the Device Tree blob (<code>.dtb</code>) and booting
+the custom SBC, verify that the thermal subsystem is operational through
+<code>/sys/class/thermal/</code>:</p>
+<ol type="1">
+<li><p><strong>List thermal zones and read current
+temperature:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /sys/class/thermal/thermal_zone0/type</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /sys/class/thermal/thermal_zone0/temp</span></code></pre></div></li>
+<li><p><strong>Check configured trip points:</strong></p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /sys/class/thermal/thermal_zone0/trip_point_0_temp</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /sys/class/thermal/thermal_zone0/trip_point_0_type</span></code></pre></div></li>
+<li><p><strong>Modify trip points at runtime for testing (requires root
+permissions):</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> 65000 <span class="op">&gt;</span> /sys/class/thermal/thermal_zone0/trip_point_0_temp</span></code></pre></div></li>
+</ol>
+<p>Simulate load using a tool like <code>stress-ng</code> to verify that
+CPU frequency drops when the passive threshold is reached and that the
+system shuts down safely if the critical temperature is triggered.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

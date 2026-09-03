@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspberry Pi 4 Dual-Display Output Explained - sbc</title>
+    <meta name="description" content="The Raspberry Pi 4 Model B represents a massive leap forward from its predecessors, notably introducing support for dual-display outputs at up to 4K resolution. This functionality is driven by a combination of upgraded Broadcom hardware, dual micro-HDMI">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/raspberry-pi-4-dual-display-output-explained">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Raspberry Pi 4 Dual-Display Output Explained - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/raspberry-pi-4-dual-display-output-explained" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Raspberry Pi 4 Model B represents a massive leap forward from its predecessors, notably introducing support for dual-display outputs at up to 4K resolution. This functionality is driven by a combination of upgraded Broadcom hardware, dual micro-HDMI" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="raspberry-pi-4-dual-display-output-explained">Raspberry Pi 4
+Dual-Display Output Explained</h1>
+<p>The Raspberry Pi 4 Model B represents a massive leap forward from its
+predecessors, notably introducing support for dual-display outputs at up
+to 4K resolution. This functionality is driven by a combination of
+upgraded Broadcom hardware, dual micro-HDMI ports, and an overhauled
+software graphics stack. This article breaks down how the Raspberry Pi 4
+manages dual displays, the hardware architecture behind it, and the
+configuration required to optimize performance.</p>
+<h3 id="the-hardware-architecture">The Hardware Architecture</h3>
+<p>At the heart of the Raspberry Pi 4's dual-display capability is the
+Broadcom BCM2711 SoC (System on Chip). Unlike older models that relied
+on a single full-sized HDMI port and a shared VideoCore IV graphics
+pipeline, the BCM2711 incorporates an upgraded VideoCore VI 3D graphics
+processor.</p>
+<p>To physically support two screens while maintaining a small form
+factor, the traditional HDMI port was replaced with two
+<strong>micro-HDMI ports</strong>, labeled HDMI0 and HDMI1.</p>
+<ul>
+<li><strong>HDMI0:</strong> This is the primary port, located closest to
+the USB-C power jack. It is the default display output used during the
+initial boot sequence.</li>
+<li><strong>HDMI1:</strong> This is the secondary port, located next to
+HDMI0, closer to the audio jack.</li>
+</ul>
+<h3 id="resolution-and-refresh-rate-dynamics">Resolution and Refresh
+Rate Dynamics</h3>
+<p>While the Raspberry Pi 4 can drive two displays simultaneously, the
+maximum resolution and refresh rate depend heavily on whether you are
+using one or both ports. The hardware splits its internal bandwidth
+across the displays based on specific configurations:</p>
+<ul>
+<li><strong>Single Display:</strong> If you connect a single monitor to
+HDMI0, the Pi 4 can comfortably output a <strong>4K resolution (<span
+class="math inline">\(3840 \times 2160\)</span>) at a smooth
+60Hz</strong> refresh rate.</li>
+<li><strong>Dual Displays:</strong> When both ports are in use, the
+default configuration caps the output of both monitors to <strong>4K at
+30Hz</strong>.</li>
+</ul>
+<p>If you require 60Hz on a dual-monitor setup, you must lower the
+resolution of the monitors (e.g., dual 1080p displays at 60Hz work
+flawlessly), or manually enable a 4K 60Hz mode in the system
+configuration, which shifts extra processing load and heat to the
+SoC.</p>
+<h3 id="the-software-and-driver-stack">The Software and Driver
+Stack</h3>
+<p>The transition to dual-display output required a fundamental shift in
+how the Raspberry Pi OS interacts with graphics hardware. Older
+Raspberry Pi models used a proprietary Broadcom graphics driver stack
+(dispmanx). The Raspberry Pi 4 transitioned to standard Linux graphics
+drivers: <strong>V3D, KMS (Kernel Mode Setting), and DRM (Direct
+Rendering Manager)</strong>.</p>
+<p>When the Pi boots, the firmware detects the Extended Display
+Identification Data (EDID) from any connected monitors via the HDMI
+Display Data Channel (DDC). This data tells the Pi the native
+resolution, aspect ratio, and refresh rates supported by the monitors.
+The KMS driver then dynamically allocates the desktop space across the
+detected screens.</p>
+<h3 id="power-and-thermal-considerations">Power and Thermal
+Considerations</h3>
+<p>Operating two displays, especially at high resolutions, increases the
+workload on the BCM2711 chip. This results in higher power consumption
+and increased heat generation.</p>
+<p>When configuring a dual-display setup, utilizing a high-quality,
+official Raspberry Pi 3A (15W) USB-C power supply is critical to prevent
+low-voltage warnings. Additionally, using passive heatsinks or an active
+cooling fan is highly recommended to prevent the CPU and GPU from
+thermally throttling under the heavy graphics load of driving two
+independent desktops.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

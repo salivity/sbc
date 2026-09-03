@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implementing PWM LED Dimming on a Custom SBC - sbc</title>
+    <meta name="description" content="This guide outlines how developers can implement Pulse-Width Modulation (PWM) to control LED brightness on a custom Single Board Computer (SBC). It covers the essential hardware considerations, timer peripheral and register configuration, firmware-level">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/implementing-pwm-led-dimming-on-a-custom-sbc">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Implementing PWM LED Dimming on a Custom SBC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/implementing-pwm-led-dimming-on-a-custom-sbc" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide outlines how developers can implement Pulse-Width Modulation (PWM) to control LED brightness on a custom Single Board Computer (SBC). It covers the essential hardware considerations, timer peripheral and register configuration, firmware-level" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="implementing-pwm-led-dimming-on-a-custom-sbc">Implementing PWM
+LED Dimming on a Custom SBC</h1>
+<p>This guide outlines how developers can implement Pulse-Width
+Modulation (PWM) to control LED brightness on a custom Single Board
+Computer (SBC). It covers the essential hardware considerations, timer
+peripheral and register configuration, firmware-level duty cycle
+manipulation, and visual compensation techniques necessary for smooth
+and reliable dimming.</p>
+<h3 id="1-hardware-pin-assignment-and-circuit-design">1. Hardware Pin
+Assignment and Circuit Design</h3>
+<p>To implement PWM dimming, identify a General-Purpose Input/Output
+(GPIO) pin on the custom SBC’s System on Chip (SoC) or microcontroller
+that is internally mapped to a hardware timer/counter peripheral with
+PWM generation capabilities.</p>
+<ul>
+<li><strong>Direct Drive (Low Power):</strong> If driving a single
+low-power indicator LED (typically under 15–20 mA), wire the PWM-capable
+GPIO through a current-limiting resistor to the LED anode, with the
+cathode connected to ground.</li>
+<li><strong>Transistor/MOSFET Drive (High Power):</strong> For
+high-brightness LEDs or LED strips drawing more current than the SoC pin
+can source, connect the GPIO pin to the gate of an N-channel logic-level
+MOSFET with a pull-down resistor to prevent floating states during board
+bootup.</li>
+</ul>
+<h3 id="2-configuring-the-hardware-timer-peripheral">2. Configuring the
+Hardware Timer Peripheral</h3>
+<p>Hardware PWM is preferred over software bit-banging to prevent CPU
+overhead and jitter.</p>
+<ol type="1">
+<li><strong>Select PWM Frequency:</strong> Set a frequency high enough
+to prevent visible flicker. For human vision, any frequency above 100 Hz
+works, but frequencies between 1 kHz and 20 kHz are standard to avoid
+audible switching noise from ceramic capacitors or inductors.</li>
+<li><strong>Set the Prescaler and Period:</strong> Calculate the timer's
+clock prescaler and auto-reload register (ARR) / period register value
+based on the SoC’s master clock frequency: <span
+class="math display">\[\text{PWM Frequency} = \frac{\text{Timer
+Clock}}{(\text{Prescaler} + 1) \times (\text{Period} + 1)}\]</span></li>
+<li><strong>Define Resolution:</strong> The period value determines the
+dimming resolution. For instance, a period count of 255 yields 8-bit
+resolution (256 steps), while a count of 65535 yields 16-bit
+resolution.</li>
+</ol>
+<h3 id="3-setting-the-duty-cycle-in-firmware">3. Setting the Duty Cycle
+in Firmware</h3>
+<p>The duty cycle represents the ratio of the signal's "on" time to the
+total period time, determining the average power delivered to the
+LED.</p>
+<ul>
+<li><strong>Register-Level (Bare Metal / RTOS):</strong> Update the
+timer’s Capture/Compare Register (CCR) to adjust the duty cycle.
+<ul>
+<li><span class="math inline">\(0\%\text{ Brightness} \rightarrow
+\text{CCR} = 0\)</span></li>
+<li><span class="math inline">\(50\%\text{ Brightness} \rightarrow
+\text{CCR} = \text{Period} / 2\)</span></li>
+<li><span class="math inline">\(100\%\text{ Brightness} \rightarrow
+\text{CCR} = \text{Period}\)</span></li>
+</ul></li>
+<li><strong>Linux-Based SBC (Device Tree &amp; Sysfs):</strong>
+<ol type="1">
+<li>Define the PWM pin and peripheral within the Device Tree
+(<code>.dts</code>).</li>
+<li>Export the PWM channel via the Linux PWM subsystem:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> 0 <span class="op">&gt;</span> /sys/class/pwm/pwmchip0/export</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> 1000000 <span class="op">&gt;</span> /sys/class/pwm/pwmchip0/pwm0/period    <span class="co"># 1 kHz (1,000,000 ns)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> 500000 <span class="op">&gt;</span> /sys/class/pwm/pwmchip0/pwm0/duty_cycle <span class="co"># 50% duty cycle</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> 1 <span class="op">&gt;</span> /sys/class/pwm/pwmchip0/pwm0/enable</span></code></pre></div></li>
+</ol></li>
+</ul>
+<h3 id="4-applying-gamma-correction-for-perceived-brightness">4.
+Applying Gamma Correction for Perceived Brightness</h3>
+<p>Human eye perception of light intensity is non-linear and follows an
+approximate power-law relationship (CIE 1931 lightness formula). If duty
+cycle increases linearly, the LED will appear to brighten rapidly at low
+values and change minimally at high values.</p>
+<p>To achieve perceived linear dimming:</p>
+<ol type="1">
+<li>Implement a gamma correction formula: <span
+class="math display">\[\text{Duty Cycle} = \left(\frac{\text{Input
+Value}}{\text{Max Input}}\right)^\gamma \times \text{Max Duty}\]</span>
+<em>(A standard <span class="math inline">\(\gamma\)</span> value
+between 2.0 and 2.8 works well for LEDs).</em></li>
+<li>Precompute a look-up table (LUT) containing gamma-corrected values
+to avoid running floating-point calculations during runtime.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Custom Sensor Kernel Drivers for SBCs - sbc</title>
+    <meta name="description" content="Writing a Linux kernel device driver for a custom sensor on a single board computer (SBC) involves identifying the sensor's communication interface, selecting the appropriate kernel subsystem, describing the hardware in a Device Tree, implementing driver">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/writing-custom-sensor-kernel-drivers-for-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Writing Custom Sensor Kernel Drivers for SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/writing-custom-sensor-kernel-drivers-for-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Writing a Linux kernel device driver for a custom sensor on a single board computer (SBC) involves identifying the sensor's communication interface, selecting the appropriate kernel subsystem, describing the hardware in a Device Tree, implementing driver" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="writing-custom-sensor-kernel-drivers-for-sbcs">Writing Custom
+Sensor Kernel Drivers for SBCs</h1>
+<p>Writing a Linux kernel device driver for a custom sensor on a single
+board computer (SBC) involves identifying the sensor's communication
+interface, selecting the appropriate kernel subsystem, describing the
+hardware in a Device Tree, implementing driver lifecycle and
+data-reading callbacks, and compiling the code into a loadable kernel
+module. This guide details each technical step required to connect
+custom sensor hardware to the Linux kernel ecosystem.</p>
+<h3 id="1-analyze-hardware-specifications-and-interfaces">1. Analyze
+Hardware Specifications and Interfaces</h3>
+<p>Before writing code, review the sensor's datasheet to identify its
+operational parameters:</p>
+<ul>
+<li><strong>Bus Protocol:</strong> Most sensors use I2C, SPI, or UART.
+Note the default bus speed, chip addresses, and clock
+polarity/phase.</li>
+<li><strong>Register Map:</strong> Map out the command registers for
+initialization, configuration, status checks, and data output.</li>
+<li><strong>Interrupts:</strong> Determine if the sensor provides an
+interrupt pin (e.g., Data Ready, Threshold Alerts) and note the active
+logic level (high, low, edge-triggered).</li>
+</ul>
+<h3 id="2-select-the-appropriate-kernel-subsystem">2. Select the
+Appropriate Kernel Subsystem</h3>
+<p>Rather than writing a generic character device, use a standardized
+Linux kernel subsystem:</p>
+<ul>
+<li><strong>Industrial I/O (IIO) Subsystem:</strong> The standard choice
+for ADCs, DACs, accelerometers, gyroscopes, light sensors, temperature
+sensors, and pressure sensors. It provides built-in buffering, trigger
+mechanisms, and standard sysfs attributes.</li>
+<li><strong>Hardware Monitoring (<code>hwmon</code>):</strong> Used
+specifically for thermal, fan, and voltage sensors in system-health
+monitoring contexts.</li>
+<li><strong>Input Subsystem:</strong> Best suited for buttons, touch
+panels, rotary encoders, or joysticks.</li>
+</ul>
+<h3 id="3-configure-the-device-tree">3. Configure the Device Tree</h3>
+<p>SBCs using ARM or RISC-V architectures rely on the Device Tree (DT)
+to discover non-enumerable hardware. You must declare your sensor in a
+Device Tree Overlay (<code>.dtbo</code>) or within the main Device Tree
+Source (<code>.dts</code>):</p>
+<ul>
+<li><strong>Specify the Parent Bus:</strong> Attach the sensor node to
+the target I2C or SPI controller node.</li>
+<li><strong>Define Properties:</strong> Include the
+<code>compatible</code> string matching your driver, the
+<code>reg</code> property (I2C address or SPI chip-select), SPI clock
+frequencies, and interrupt lines mapped to specific GPIO pins.</li>
+</ul>
+<h3 id="4-implement-driver-boilerplate-and-probing">4. Implement Driver
+Boilerplate and Probing</h3>
+<p>Set up the kernel module structure with the required license, author
+information, and device identification tables:</p>
+<ul>
+<li><strong>Matching Table:</strong> Define an <code>of_device_id</code>
+table containing the <code>compatible</code> string specified in your
+Device Tree.</li>
+<li><strong>Driver Structure:</strong> Populate an
+<code>i2c_driver</code> or <code>spi_driver</code> struct with pointers
+to <code>probe</code>, <code>remove</code>, and the device matching
+table.</li>
+<li><strong>Probe Function:</strong> When the kernel matches the Device
+Tree node to your driver, it executes the <code>probe()</code> function.
+In <code>probe()</code>:
+<ol type="1">
+<li>Allocate subsystem resources (e.g.,
+<code>devm_iio_device_alloc</code>).</li>
+<li>Map communication resources (such as
+<code>regmap_init_i2c</code>).</li>
+<li>Reset and initialize the sensor registers.</li>
+<li>Request and configure optional GPIO interrupt lines via
+<code>devm_request_threaded_irq</code>.</li>
+<li>Register the device with the chosen subsystem (e.g.,
+<code>devm_iio_device_register</code>).</li>
+</ol></li>
+<li><strong>Remove Function:</strong> Clean up allocated resources,
+power down the sensor, and unregister hooks. When using resource-managed
+functions (the <code>devm_*</code> family), much of this cleanup is
+handled automatically.</li>
+</ul>
+<h3 id="5-implement-subsystem-callbacks">5. Implement Subsystem
+Callbacks</h3>
+<p>For an IIO driver, define an <code>iio_info</code> structure
+containing callback functions:</p>
+<ul>
+<li><strong><code>read_raw</code>:</strong> Intercepts requests when
+user-space reads attributes from
+<code>/sys/bus/iio/devices/iio:deviceX/</code>. Use this function to
+read raw sensor registers, apply scaling factors, and return processed
+or raw integers.</li>
+<li><strong><code>write_raw</code>:</strong> Handles user-space
+adjustments to sampling rates, filter bandwidths, or calibration
+offsets.</li>
+<li><strong>Channel Specifications
+(<code>iio_chan_spec</code>):</strong> Define what channels your sensor
+supports (e.g., <code>IIO_TEMP</code>, <code>IIO_ACCEL</code>) along
+with their data types, bit depths, and storage formats.</li>
+</ul>
+<h3 id="6-build-deploy-and-test">6. Build, Deploy, and Test</h3>
+<ul>
+<li><strong>Build Configuration:</strong> Create a <code>Makefile</code>
+pointing to the target SBC’s kernel headers or cross-compilation
+toolchain. Build the module using
+<code>make -C /lib/modules/$(uname -r)/build M=$(PWD) modules</code>.</li>
+<li><strong>Compile and Apply Device Tree:</strong> Compile the overlay
+using the Device Tree Compiler
+(<code>dtc -@ -I dts -O dtb -o sensor.dtbo sensor.dts</code>) and load
+it via the bootloader config or
+<code>/sys/kernel/config/device-tree/overlays/</code>.</li>
+<li><strong>Load Driver:</strong> Insert the module using
+<code>insmod sensor.ko</code> or place it in <code>/lib/modules/</code>
+and load via <code>modprobe</code>.</li>
+<li><strong>Verify:</strong> Check kernel logs with <code>dmesg</code>
+to ensure successful probing. Test user-space access by reading sensor
+outputs from <code>/sys/bus/iio/devices/</code> or via utility tools
+like <code>iio-sensor-proxy</code> and <code>libiio</code>.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

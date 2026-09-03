@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfacing an ADC with a Raspberry Pi - sbc</title>
+    <meta name="description" content="This article provides a comprehensive guide on how to interface an Analog-to-Digital Converter (ADC) with a Raspberry Pi. Since the Raspberry Pi lacks native analog input pins, utilizing an external ADC chip is essential for reading data from analog sens">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/interfacing-an-adc-with-a-raspberry-pi">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Interfacing an ADC with a Raspberry Pi - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/interfacing-an-adc-with-a-raspberry-pi" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a comprehensive guide on how to interface an Analog-to-Digital Converter (ADC) with a Raspberry Pi. Since the Raspberry Pi lacks native analog input pins, utilizing an external ADC chip is essential for reading data from analog sens" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="interfacing-an-adc-with-a-raspberry-pi">Interfacing an ADC with
+a Raspberry Pi</h1>
+<p>This article provides a comprehensive guide on how to interface an
+Analog-to-Digital Converter (ADC) with a Raspberry Pi. Since the
+Raspberry Pi lacks native analog input pins, utilizing an external ADC
+chip is essential for reading data from analog sensors. Below, we will
+explore the core concepts, step-by-step wiring configurations, and the
+Python software implementation required to successfully read analog
+signals using the popular MCP3008 ADC chip via the Serial Peripheral
+Interface (SPI) protocol.</p>
+<h2 id="why-the-raspberry-pi-needs-an-external-adc">Why the Raspberry Pi
+Needs an External ADC</h2>
+<p>Unlike microcontrollers such as the Arduino, the Raspberry Pi is a
+single-board computer designed primarily for digital processing. Its
+General Purpose Input/Output (GPIO) pins can only interpret binary
+digital signals: High (3.3V) or Low (0V).</p>
+<p>When working with analog sensors—such as light-dependent resistors
+(LDRs), analog temperature sensors (like the LM35), or
+potentiometers—the output voltage varies continuously. An ADC bridges
+this gap by sampling the continuous analog voltage and converting it
+into a digital number that the Raspberry Pi can process.</p>
+<h2 id="choosing-the-right-interface-spi-vs-i2c">Choosing the Right
+Interface: SPI vs. I2C</h2>
+<p>External ADCs generally communicate with the Raspberry Pi using one
+of two serial communication protocols:</p>
+<ul>
+<li><strong>SPI (Serial Peripheral Interface):</strong> Typically faster
+and ideal for applications requiring higher sampling rates. The MCP3008
+is a widely used 10-bit, 8-channel SPI ADC.</li>
+<li><strong>I2C (Inter-Integrated Circuit):</strong> Uses fewer pins
+(only two) but is generally slower than SPI. The ADS1115 is a popular
+16-bit, 4-channel I2C ADC known for high precision.</li>
+</ul>
+<p>This guide focuses on the <strong>MCP3008 chip using SPI</strong>, as
+it balances affordability, ease of use, and plenty of input
+channels.</p>
+<h2 id="hardware-wiring-and-connections">Hardware Wiring and
+Connections</h2>
+<p>To connect an MCP3008 ADC to your Raspberry Pi, you need to map the
+power, ground, and SPI communication pins correctly. The MCP3008 has 16
+pins in total—8 pins on the analog input side (CH0-CH7) and 8 pins on
+the digital/power side.</p>
+<p>The table below outlines the necessary connections between the
+MCP3008 and the Raspberry Pi GPIO header:</p>
+<table>
+<thead>
+<tr>
+<th>MCP3008 Pin</th>
+<th>Pin Name</th>
+<th>Raspberry Pi Connection</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pin 9</td>
+<td>DGND</td>
+<td>GND (e.g., Pin 6)</td>
+<td>Digital Ground</td>
+</tr>
+<tr>
+<td>Pin 10</td>
+<td>CS/SHDN</td>
+<td>GPIO 8 (SPI CS0 / Pin 24)</td>
+<td>Chip Select</td>
+</tr>
+<tr>
+<td>Pin 11</td>
+<td>DIN</td>
+<td>GPIO 10 (SPI MOSI / Pin 19)</td>
+<td>Master Out Slave In</td>
+</tr>
+<tr>
+<td>Pin 12</td>
+<td>DOUT</td>
+<td>GPIO 9 (SPI MISO / Pin 21)</td>
+<td>Master In Slave Out</td>
+</tr>
+<tr>
+<td>Pin 13</td>
+<td>CLK</td>
+<td>GPIO 11 (SPI SCLK / Pin 23)</td>
+<td>Serial Clock</td>
+</tr>
+<tr>
+<td>Pin 14</td>
+<td>AGND</td>
+<td>GND (e.g., Pin 14)</td>
+<td>Analog Ground</td>
+</tr>
+<tr>
+<td>Pin 15</td>
+<td>VREF</td>
+<td>3.3V (e.g., Pin 1)</td>
+<td>Reference Voltage</td>
+</tr>
+<tr>
+<td>Pin 16</td>
+<td>VDD</td>
+<td>3.3V (e.g., Pin 17)</td>
+<td>Power Supply</td>
+</tr>
+</tbody>
+</table>
+<p>Your analog sensor's output signal pin should be connected to one of
+the analog input channels on the opposite side of the chip, such as
+<strong>CH0 (Pin 1)</strong>.</p>
+<h2 id="software-configuration-and-python-implementation">Software
+Configuration and Python Implementation</h2>
+<p>Before writing the script, you must enable the SPI interface on your
+Raspberry Pi operating system and install the required Python
+libraries.</p>
+<h3 id="1-enable-spi-on-the-raspberry-pi">1. Enable SPI on the Raspberry
+Pi</h3>
+<p>Open the terminal on your Raspberry Pi and run the configuration
+tool:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> raspi-config</span></code></pre></div>
+<p>Navigate to <strong>Interface Options</strong>, select
+<strong>SPI</strong>, choose <strong>Yes</strong> to enable it, and
+finish by exiting the tool.</p>
+<h3 id="2-install-the-required-library">2. Install the Required
+Library</h3>
+<p>The <code>gpiozero</code> library provides an incredibly
+straightforward, high-level interface for interacting with the MCP3008.
+Install it along with <code>spidev</code> using the terminal:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install python3-gpiozero python3-spidev</span></code></pre></div>
+<h3 id="3-python-source-code">3. Python Source Code</h3>
+<p>Create a new Python file (e.g., <code>adc_reader.py</code>) and write
+the following code to read values from an analog sensor connected to
+channel 0:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gpiozero <span class="im">import</span> MCP3008</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> time <span class="im">import</span> sleep</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the ADC on channel 0</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>potentiometer <span class="op">=</span> MCP3008(channel<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Reading analog values... Press Ctrl+C to exit.&quot;</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># gpiozero returns a normalized value between 0.0 and 1.0</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        raw_value <span class="op">=</span> potentiometer.value</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate the corresponding voltage based on a 3.3V reference</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        voltage <span class="op">=</span> raw_value <span class="op">*</span> <span class="fl">3.3</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Normalized Value: </span><span class="sc">{</span>raw_value<span class="sc">:.4f}</span><span class="ss"> | Voltage: </span><span class="sc">{</span>voltage<span class="sc">:.2f}</span><span class="ss">V&quot;</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        sleep(<span class="fl">0.5</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">KeyboardInterrupt</span>:</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Program stopped by user.&quot;</span>)</span></code></pre></div>
+<h2 id="understanding-the-digital-output">Understanding the Digital
+Output</h2>
+<p>The MCP3008 is a 10-bit ADC, which means it translates the analog
+voltage into a digital integer ranging from <span
+class="math inline">\(0\)</span> to <span
+class="math inline">\(1023\)</span> (<span class="math inline">\(2^{10}
+= 1024\)</span> discrete steps).</p>
+<p>While the Python script above uses <code>gpiozero</code> to
+automatically normalize this value to a float between <code>0.0</code>
+(0V) and <code>1.0</code> (3.3V), you can easily calculate the true
+bit-integer value or scale it to fit specific sensor physics (like
+converting voltage to temperature Celsius) depending on your project
+requirements.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

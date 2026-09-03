@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking International Flights via Raspberry Pi - sbc</title>
+    <meta name="description" content="This article explains how a Raspberry Pi can be transformed into a local radar station to track international flights using radio signals. By decoding Automatic Dependent Surveillance-Broadcast (ADS-B) signals transmitted from commercial aircraft, a Rasp">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/tracking-international-flights-via-raspberry-pi">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tracking International Flights via Raspberry Pi - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/tracking-international-flights-via-raspberry-pi" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how a Raspberry Pi can be transformed into a local radar station to track international flights using radio signals. By decoding Automatic Dependent Surveillance-Broadcast (ADS-B) signals transmitted from commercial aircraft, a Rasp" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="tracking-international-flights-via-raspberry-pi">Tracking
+International Flights via Raspberry Pi</h1>
+<p>This article explains how a Raspberry Pi can be transformed into a
+local radar station to track international flights using radio signals.
+By decoding Automatic Dependent Surveillance-Broadcast (ADS-B) signals
+transmitted from commercial aircraft, a Raspberry Pi paired with a
+low-cost Software Defined Radio (SDR) receiver can capture real-time
+aviation data including altitude, speed, and flight coordinates. Readers
+will discover the required hardware components, the software setup
+process, and how to visualize or share this live flight data
+globally.</p>
+<h2 id="the-core-technology-ads-b-signals">The Core Technology: ADS-B
+Signals</h2>
+<p>Modern commercial aircraft continuously broadcast tracking
+information using a system called Automatic Dependent
+Surveillance-Broadcast (ADS-B). This technology relies on an onboard
+transponder that determines the aircraft's precise position using
+satellite navigation systems. The position, alongside vital telemetric
+data such as flight number, velocity, heading, and altitude, is
+broadcast unencrypted via radio frequencies at exactly 1090 MHz.</p>
+<p>Because these signals are public and unencrypted, anyone with a
+proper radio antenna and a decoding computer can capture them. A
+standard ground station can intercept these broadcasts from aircraft up
+to 250 miles away, provided there is a relatively clear line of sight
+between the receiver antenna and the open sky.</p>
+<h2 id="required-hardware-components">Required Hardware Components</h2>
+<p>Building a DIY flight tracker requires a modest amount of hardware,
+centered around a compact computer and an inexpensive radio
+receiver.</p>
+<ul>
+<li><strong>Raspberry Pi:</strong> A Raspberry Pi 3, 4, 5, or Zero 2 W
+is ideal. The device processes the raw radio signals decoded by the
+receiver.</li>
+<li><strong>MicroSD Card:</strong> An 8GB or larger card to host the
+operating system and tracking software.</li>
+<li><strong>USB SDR Receiver:</strong> A Software Defined Radio USB
+dongle based on the RTL2832U chipset. Many specialized dongles come with
+built-in 1090 MHz amplifiers and filters to reduce background radio
+noise.</li>
+<li><strong>1090 MHz Antenna:</strong> A small magnetic antenna often
+comes bundled with the SDR, but a specialized, outdoor-mounted 1090 MHz
+antenna drastically maximizes range.</li>
+<li><strong>Power Supply and Internet:</strong> A stable power adapter
+for the Pi and a local Wi-Fi or Ethernet connection to update software
+and share data.</li>
+</ul>
+<h2 id="setting-up-the-software">Setting Up the Software</h2>
+<p>The setup involves flashing specialized software to the Raspberry Pi
+to control the USB radio dongle and decode the incoming binary pulses
+into human-readable data.</p>
+<p>There are two primary methods to deploy the software:</p>
+<h3 id="1-dedicated-os-images">1. Dedicated OS Images</h3>
+<p>Major aviation tracking networks like Flightradar24, FlightAware, and
+ADS-B Exchange offer pre-configured operating system images (such as
+Pi24 or PiAware). Using a tool like the Raspberry Pi Imager, you flash
+this custom software directly onto the microSD card. Upon booting the Pi
+with the USB SDR connected, the system immediately initializes as a
+dedicated flight-tracking node.</p>
+<h3 id="2-manual-terminal-installation">2. Manual Terminal
+Installation</h3>
+<p>For users who prefer to use a standard Raspberry Pi OS, the tracking
+software can be added manually. By accessing the Pi via a secure shell
+(SSH) or a local terminal window, a user can run a simple installation
+script provided by the chosen flight service. For instance, installing a
+tracker client pulls down a foundational decoder application known as
+<code>dump1090</code>. This program handles the heavy lifting of
+translating the raw 1090 MHz I/Q radio data samples into structured
+flight coordinates.</p>
+<h2 id="visualizing-and-sharing-flight-data">Visualizing and Sharing
+Flight Data</h2>
+<p>Once the software is operational, the Raspberry Pi begins logging
+aircraft data immediately. The <code>dump1090</code> utility launches a
+local web server on the Pi. By typing the local IP address of the
+Raspberry Pi into any web browser on the same network, users can access
+an interactive, real-time map displaying every aircraft currently being
+tracked by their antenna. Clicking on an aircraft reveals its flight
+number, altitude, speed, and visual trajectory.</p>
+<p>Beyond personal mapping, users can feed their data streams to global
+aggregation networks. In exchange for contributing local coverage data,
+platforms like Flightradar24 and FlightAware reward hosts with premium,
+data-rich subscription tiers for free. By leveraging Multilateration
+(MLAT)—a process where multiple ground stations calculate the
+time-difference-of-arrival of a signal—these networks can even pinpoint
+older commercial and military aircraft that do not broadcast full GPS
+data, providing a comprehensive view of global airspace right from a
+home setup.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

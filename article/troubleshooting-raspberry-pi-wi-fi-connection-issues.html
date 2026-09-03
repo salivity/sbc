@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting Raspberry Pi Wi-Fi Connection Issues - sbc</title>
+    <meta name="description" content="If your Raspberry Pi refuses to connect to a Wi-Fi network, the issue usually stems from incorrect network credentials, misconfigured region settings, insufficient power, or temporary software glitches. This guide provides a systematic troubleshooting ap">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/troubleshooting-raspberry-pi-wi-fi-connection-issues">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Troubleshooting Raspberry Pi Wi-Fi Connection Issues - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/troubleshooting-raspberry-pi-wi-fi-connection-issues" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="If your Raspberry Pi refuses to connect to a Wi-Fi network, the issue usually stems from incorrect network credentials, misconfigured region settings, insufficient power, or temporary software glitches. This guide provides a systematic troubleshooting ap" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="troubleshooting-raspberry-pi-wi-fi-connection-issues">Troubleshooting
+Raspberry Pi Wi-Fi Connection Issues</h1>
+<p>If your Raspberry Pi refuses to connect to a Wi-Fi network, the issue
+usually stems from incorrect network credentials, misconfigured region
+settings, insufficient power, or temporary software glitches. This guide
+provides a systematic troubleshooting approach to identify and fix the
+most common wireless connectivity problems on Raspbian and Raspberry Pi
+OS, helping you get your device back online quickly.</p>
+<h2 id="check-your-network-credentials-and-configuration">Check Your
+Network Credentials and Configuration</h2>
+<p>The most frequent culprit behind a failed Wi-Fi connection is a typo
+in the network name (SSID) or password. If you set up your Pi using the
+Raspberry Pi Imager, these details are written to the OS configuration,
+but they can easily be misentered.</p>
+<p>To manually verify or update your Wi-Fi credentials on the Pi, you
+need to check the configuration file. Open the terminal and access the
+network configuration by running:</p>
+<p><code>sudo nano /etc/wpa_supplicant/wpa_supplicant.conf</code></p>
+<p>Inside this file, look for the network block. Ensure it mirrors the
+following structure exactly, paying close attention to capitalization
+and punctuation:</p>
+<pre class="text"><code>network={
+    ssid=&quot;Your_Network_Name&quot;
+    psk=&quot;Your_Secret_Password&quot;
+}
+</code></pre>
+<p>If you make any changes, save the file by pressing
+<code>Ctrl+O</code>, exit with <code>Ctrl+X</code>, and reboot your Pi
+using <code>sudo reboot</code> to apply the settings.</p>
+<h2 id="verify-the-wi-fi-country-code">Verify the Wi-Fi Country
+Code</h2>
+<p>Raspberry Pi devices disable the Wi-Fi module by default until a
+Wi-Fi country code is explicitly set. This is done to ensure the device
+complies with local legal regulations regarding wireless frequencies. If
+your country code is missing or incorrect, the Pi may fail to detect or
+connect to your local router.</p>
+<p>You can easily set or fix the country code using the built-in
+configuration tool. Open the terminal and type:</p>
+<p><code>sudo raspi-config</code></p>
+<p>Navigate through the menu using your arrow keys:</p>
+<ol type="1">
+<li>Select <strong>Localisation Options</strong> (or <strong>System
+Options</strong> depending on your OS version).</li>
+<li>Select <strong>WLAN Country</strong>.</li>
+<li>Choose your specific country from the list.</li>
+<li>Save, exit, and allow the Pi to reboot.</li>
+</ol>
+<h2 id="inspect-power-supply-and-hardware-limits">Inspect Power Supply
+and Hardware Limits</h2>
+<p>Wireless chips require a stable draw of power, especially when
+scanning for or connecting to networks. If you are using a generic phone
+charger or an underpowered power supply instead of an official Raspberry
+Pi power supply, the Wi-Fi hardware may intermittently shut down or fail
+to initialize entirely. Look for a tiny red LED on the Pi board; if it
+is blinking or turns off, your device is experiencing under-voltage.</p>
+<p>Additionally, consider the frequency bands of your router. Older Pi
+models, like the Raspberry Pi 3 Model B, only support <strong>2.4
+GHz</strong> Wi-Fi networks. If your router is exclusively broadcasting
+a <strong>5 GHz</strong> signal, older Pis will not even see the
+network. Ensure your router has a 2.4 GHz band enabled, or use a
+separate SSID for the two different frequencies to avoid confusion.</p>
+<h2 id="address-software-and-dhcp-glitches">Address Software and DHCP
+Glitches</h2>
+<p>Sometimes the Pi connects to the router successfully but fails to
+acquire an IP address, resulting in a lack of internet access. This is
+often caused by a glitch in the DHCP client daemon
+(<code>dhcpcd</code>).</p>
+<p>You can restart the networking services manually without rebooting
+the entire system by entering these commands in the terminal:</p>
+<p><code>sudo systemctl restart dhcpcd</code></p>
+<p>If the software remains stubborn, ensuring your system repository is
+fully updated can resolve underlying driver bugs. Connect your Pi
+temporarily to your router via an Ethernet cable and run:</p>
+<p><code>sudo apt update &amp;&amp; sudo apt upgrade -y</code></p>
+<p>Once the update finishes, disconnect the cable and test the wireless
+connection again.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

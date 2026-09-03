@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Host a VPN on a Raspberry Pi - sbc</title>
+    <meta name="description" content="Transforming a Raspberry Pi into a self-hosted Virtual Private Network (VPN) is an excellent, cost-effective way to secure your internet connection and access your home network remotely. This guide provides a straightforward overview of how to set up you">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-host-a-vpn-on-a-raspberry-pi">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Host a VPN on a Raspberry Pi - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-host-a-vpn-on-a-raspberry-pi" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Transforming a Raspberry Pi into a self-hosted Virtual Private Network (VPN) is an excellent, cost-effective way to secure your internet connection and access your home network remotely. This guide provides a straightforward overview of how to set up you" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-host-a-vpn-on-a-raspberry-pi">How to Host a VPN on a
+Raspberry Pi</h1>
+<p>Transforming a Raspberry Pi into a self-hosted Virtual Private
+Network (VPN) is an excellent, cost-effective way to secure your
+internet connection and access your home network remotely. This guide
+provides a straightforward overview of how to set up your own private
+VPN server using a Raspberry Pi and PiVPN, covering everything from the
+initial hardware preparation to connecting your remote devices
+safely.</p>
+<h3 id="hardware-and-software-requirements">Hardware and Software
+Requirements</h3>
+<p>Before beginning the installation, ensure you have the necessary
+components ready. A stable setup requires reliable hardware and an
+updated operating system to function efficiently as a 24/7 network
+server.</p>
+<ul>
+<li><strong>Raspberry Pi:</strong> A Raspberry Pi 3, 4, or 5 is
+recommended for optimal performance.</li>
+<li><strong>MicroSD Card:</strong> At least 16GB with Raspberry Pi OS
+(Lite version is ideal) installed.</li>
+<li><strong>Network Connection:</strong> An Ethernet cable connection to
+your router is preferred over Wi-Fi for stability and lower
+latency.</li>
+<li><strong>Power Supply:</strong> A reliable, official power adapter to
+prevent unexpected shutdowns.</li>
+</ul>
+<h3 id="step-1-prepare-the-raspberry-pi">Step 1: Prepare the Raspberry
+Pi</h3>
+<p>Log into your Raspberry Pi via SSH or use a connected monitor and
+keyboard. Before installing any new software, it is vital to ensure the
+system repository and existing packages are completely up to date. Run
+the following commands in the terminal:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt upgrade <span class="at">-y</span></span></code></pre></div>
+<p>It is also highly recommended to assign a static IP address to your
+Raspberry Pi through your router's DHCP reservation settings. This
+ensures the Pi always retains the same local IP address on your home
+network.</p>
+<h3 id="step-2-install-pivpn">Step 2: Install PiVPN</h3>
+<p>The most efficient way to host a VPN on a Raspberry Pi is by using
+<strong>PiVPN</strong>, an open-source script that automates the complex
+configuration process of enterprise-grade VPN protocols.</p>
+<p>Launch the automated installer by executing this command:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> https://install.pivpn.io <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
+<p>An interactive configuration screen will appear to guide you through
+the setup.</p>
+<h3 id="step-3-configure-protocol-and-security">Step 3: Configure
+Protocol and Security</h3>
+<p>During the PiVPN installation wizard, you will be prompted to make
+several key infrastructure choices:</p>
+<ul>
+<li><strong>Choose a Protocol:</strong> Select
+<strong>WireGuard</strong>. It is modern, incredibly fast, lighter on
+the Raspberry Pi's processor, and more battery-efficient for mobile
+devices compared to OpenVPN.</li>
+<li><strong>Select Ports:</strong> The installer will automatically
+select a default port for WireGuard (usually 51820). You can keep this
+default.</li>
+<li><strong>DNS Provider:</strong> Choose a secure DNS provider (such as
+Cloudflare, Google, or Quad9) to resolve internet addresses when
+connected to the VPN.</li>
+<li><strong>Public IP or DNS:</strong> The installer needs to know how
+remote devices will find your home network. If your ISP provides a
+dynamic public IP address that changes frequently, you should set up a
+free Dynamic DNS (DDNS) service and enter your custom hostname here. If
+your IP is static, select your current public IP.</li>
+</ul>
+<p>Once the wizard finishes, restart your Raspberry Pi to apply all
+system changes.</p>
+<h3 id="step-4-configure-port-forwarding-on-your-router">Step 4:
+Configure Port Forwarding on Your Router</h3>
+<p>For your VPN server to receive incoming connections from the outside
+world, you must configure your home router to forward traffic to the
+Raspberry Pi.</p>
+<ol type="1">
+<li>Access your router’s admin dashboard via a web browser.</li>
+<li>Locate the <strong>Port Forwarding</strong> or <strong>Virtual
+Server</strong> settings.</li>
+<li>Create a new rule forwarding the WireGuard port (Default:
+<strong>51820</strong>) using the <strong>UDP</strong> protocol.</li>
+<li>Set the destination IP to the static local IP address of your
+Raspberry Pi.</li>
+</ol>
+<h3 id="step-5-create-profiles-and-connect-devices">Step 5: Create
+Profiles and Connect Devices</h3>
+<p>With the server running and the router configured, you can now
+generate credentials for your devices.</p>
+<p>To create a new client profile, run the following command on your
+Pi:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pivpn</span> add</span></code></pre></div>
+<p>Follow the prompts to name the profile (e.g., "Phone" or "Laptop").
+To easily connect a smartphone, you can generate a scannable QR code by
+running:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pivpn</span> <span class="at">-qr</span></span></code></pre></div>
+<p>Download the official WireGuard app on your smartphone or computer,
+scan the generated QR code or import the configuration file, and toggle
+the connection switch. Your traffic is now securely encrypted and routed
+directly through your home Raspberry Pi VPN server.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

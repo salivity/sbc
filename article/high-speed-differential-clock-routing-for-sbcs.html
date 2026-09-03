@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Speed Differential Clock Routing for SBCs - sbc</title>
+    <meta name="description" content="Routing high-speed differential clock lines on a single board computer (SBC) requires precise layout techniques to preserve signal integrity, minimize timing jitter, and prevent electromagnetic interference (EMI). Because clock signals govern overall sys">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/high-speed-differential-clock-routing-for-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="High-Speed Differential Clock Routing for SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/high-speed-differential-clock-routing-for-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Routing high-speed differential clock lines on a single board computer (SBC) requires precise layout techniques to preserve signal integrity, minimize timing jitter, and prevent electromagnetic interference (EMI). Because clock signals govern overall sys" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="high-speed-differential-clock-routing-for-sbcs">High-Speed
+Differential Clock Routing for SBCs</h1>
+<p>Routing high-speed differential clock lines on a single board
+computer (SBC) requires precise layout techniques to preserve signal
+integrity, minimize timing jitter, and prevent electromagnetic
+interference (EMI). Because clock signals govern overall system timing
+and synchronize critical peripherals like DDR memory, PCIe interfaces,
+and processor cores, layout engineers must strictly manage impedance,
+skew, reference planes, and noise isolation.</p>
+<h3 id="1-differential-and-single-ended-impedance-control">1.
+Differential and Single-Ended Impedance Control</h3>
+<p>Differential clock pairs typically require a tightly controlled
+differential impedance (typically 100Ω or 90Ω, depending on the standard
+such as LVDS, HCSL, or CML).</p>
+<ul>
+<li><strong>Uniform Geometry:</strong> Maintain constant trace widths
+and spacing along the entire signal path to prevent localized impedance
+discontinuities that trigger signal reflections.</li>
+<li><strong>Stackup Calculation:</strong> Work with the PCB
+manufacturer's specific dielectric constants (<span
+class="math inline">\(D_k\)</span>) and layer heights to calculate
+accurate trace profiles prior to routing.</li>
+</ul>
+<h3 id="2-intra-pair-length-matching-and-skew-management">2. Intra-Pair
+Length Matching and Skew Management</h3>
+<p>Intra-pair skew occurs when one leg of the differential pair arrives
+earlier than the other, converting differential-mode signals into
+common-mode noise and increasing jitter.</p>
+<ul>
+<li><strong>Tight Tolerance:</strong> Keep intra-pair length mismatch
+within strict limits (often under 5 to 10 mils, or less than 1–2 ps of
+time delay).</li>
+<li><strong>Early Correction:</strong> If length tuning (such as
+serpentine or accordion routing) is required due to package pinouts or
+bend radii, apply the compensation bends immediately at the point where
+the mismatch occurs rather than at the end of the trace run.</li>
+<li><strong>Symmetrical Bends:</strong> When turning, use 45-degree
+angles or curved traces to ensure both traces experience the same
+electrical path length.</li>
+</ul>
+<h3 id="3-continuous-reference-planes-and-return-paths">3. Continuous
+Reference Planes and Return Paths</h3>
+<p>Differential signals still rely on reference planes for their
+high-frequency return currents.</p>
+<ul>
+<li><strong>Unbroken Ground Planes:</strong> Always route differential
+clock lines over an uninterrupted, solid ground (GND) plane. Never route
+clock pairs across split planes, power plane boundaries, or voids.</li>
+<li><strong>Stitching Vias:</strong> If layer transitions are
+unavoidable, place ground stitching vias immediately adjacent to the
+signal vias to provide an unbroken return current path and preserve
+impedance continuity.</li>
+</ul>
+<h3 id="4-crosstalk-and-noise-isolation">4. Crosstalk and Noise
+Isolation</h3>
+<p>Single board computers feature dense layouts where high-speed clocks
+can easily couple noise to—or receive interference from—adjacent
+signals.</p>
+<ul>
+<li><strong>Spacing Rules:</strong> Apply a minimum spacing of 3W to 5W
+(where W is the trace width) between the differential clock pair and
+other high-speed or single-ended traces.</li>
+<li><strong>Guard Traces:</strong> In exceptionally tight layouts,
+grounded guard traces with periodic stitching vias can be placed
+alongside clock lines to provide shielding, provided they do not disrupt
+the differential pair's target impedance.</li>
+<li><strong>Isolation from Switching Nodes:</strong> Keep clock pairs
+physically distant from inductive components, switch-mode power supplies
+(SMPS), and high-current power rails.</li>
+</ul>
+<h3 id="5-minimizing-discontinuities-and-vias">5. Minimizing
+Discontinuities and Vias</h3>
+<p>Every layer transition introduces parasitic capacitance and
+inductance that degrades signal edge rates.</p>
+<ul>
+<li><strong>Limit Via Count:</strong> Route differential clocks on a
+single signal layer whenever possible. If vias are required, keep the
+count identical on both legs of the pair.</li>
+<li><strong>Via Stubs:</strong> On thick or multi-layer boards,
+eliminate unused via stubs via backdrilling or by routing on outer or
+lower internal layers to avoid resonant stub reflections.</li>
+</ul>
+<h3 id="6-component-placement-and-termination-routing">6. Component
+Placement and Termination Routing</h3>
+<p>Component placement directly dictates the routing complexity and
+quality of differential clock lines.</p>
+<ul>
+<li><strong>Direct Routing:</strong> Place the clock generator, buffer,
+and receiver ICs to allow for straight, direct routing with minimal
+directional changes.</li>
+<li><strong>Termination Placement:</strong> Place termination resistors
+(e.g., parallel termination for LVDS or source termination for HCSL) as
+close as possible to the receiving or driving pins according to the
+component datasheet, avoiding branch stubs.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

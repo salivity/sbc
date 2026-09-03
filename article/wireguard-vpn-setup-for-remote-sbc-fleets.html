@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WireGuard VPN Setup for Remote SBC Fleets - sbc</title>
+    <meta name="description" content="Establishing secure point-to-point WireGuard tunnels across a fleet of field-deployed single board computers (SBCs) requires a systematic approach to key generation, configuration management, NAT traversal, and lifecycle automation. Because SBCs often op">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/wireguard-vpn-setup-for-remote-sbc-fleets">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="WireGuard VPN Setup for Remote SBC Fleets - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/wireguard-vpn-setup-for-remote-sbc-fleets" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Establishing secure point-to-point WireGuard tunnels across a fleet of field-deployed single board computers (SBCs) requires a systematic approach to key generation, configuration management, NAT traversal, and lifecycle automation. Because SBCs often op" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="wireguard-vpn-setup-for-remote-sbc-fleets">WireGuard VPN Setup
+for Remote SBC Fleets</h1>
+<p>Establishing secure point-to-point WireGuard tunnels across a fleet
+of field-deployed single board computers (SBCs) requires a systematic
+approach to key generation, configuration management, NAT traversal, and
+lifecycle automation. Because SBCs often operate on cellular networks or
+behind restrictive firewalls, standard point-to-point connections rely
+on automated provisioning tools, a central rendezvous or coordination
+server, and persistent connection configurations. This guide details the
+practical architecture and deployment steps developers use to securely
+manage WireGuard connections across distributed edge devices.</p>
+<h2 id="1-network-topology-and-architecture">1. Network Topology and
+Architecture</h2>
+<p>While WireGuard is strictly a point-to-point protocol, managing a
+fleet requires choosing between two primary topologies:</p>
+<ul>
+<li><strong>Hub-and-Spoke:</strong> Each SBC establishes a tunnel to a
+centralized cloud gateway (hub) with a static public IP. Routing rules
+on the hub allow SBCs to communicate with central services or with other
+nodes via the hub. This is the most reliable setup for edge hardware
+behind NAT.</li>
+<li><strong>Full Mesh with Coordination:</strong> SBCs connect directly
+to one another using a control plane (such as Headscale or custom
+signaling APIs) to negotiate dynamic IP changes and hole-punching.</li>
+</ul>
+<p>For most production fleets, the hub-and-spoke model is preferred due
+to its simplicity, predictable firewall behavior, and centralized access
+control.</p>
+<h2 id="2-automated-key-generation-and-management">2. Automated Key
+Generation and Management</h2>
+<p>Security relies on unique cryptographic key pairs for every device.
+Never bake private keys into a master operating system image.</p>
+<ol type="1">
+<li><strong>First-Boot Key Generation:</strong> Configure a first-boot
+script (using <code>cloud-init</code>, <code>systemd</code>, or custom
+provisioning daemons) to run
+<code>wg genkey | tee privatekey | wg pubkey &gt; publickey</code>.</li>
+<li><strong>Secure Storage:</strong> Restrict permissions on the private
+key file immediately (<code>chmod 600 privatekey</code>). On SBCs with
+cryptographic hardware (such as TPM 2.0 or ATECC608 chips), store keys
+within the secure element.</li>
+<li><strong>Public Key Registration:</strong> The SBC sends its public
+key, along with its unique device ID and an authentication token, to a
+central fleet management API via HTTPS. The API assigns a dedicated
+tunnel IP address (e.g., <code>10.100.0.x/32</code>) and registers the
+peer on the central WireGuard gateway.</li>
+</ol>
+<h2 id="3-configuring-nat-traversal-and-endpoints">3. Configuring NAT
+Traversal and Endpoints</h2>
+<p>Field SBCs commonly use 4G/5G modems or restricted local Wi-Fi,
+meaning they do not possess public IPv4 addresses. To keep the tunnel
+open through firewalls and stateful NAT routers:</p>
+<ul>
+<li><strong>Specify Central Endpoint:</strong> Set the
+<code>Endpoint</code> in the SBC's <code>wg0.conf</code> to the domain
+or static IP of the central gateway.</li>
+<li><strong>Enable Persistent Keepalive:</strong> Include
+<code>PersistentKeepalive = 25</code> inside the <code>[Peer]</code>
+section of the SBC configuration. This instructs WireGuard to send an
+empty packet every 25 seconds, keeping the NAT mapping active in the
+carrier's gateway.</li>
+</ul>
+<p>Example SBC Configuration (<code>/etc/wireguard/wg0.conf</code>):</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Interface]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">PrivateKey </span><span class="ot">=</span><span class="st"> &lt;CLIENT_PRIVATE_KEY&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Address </span><span class="ot">=</span><span class="st"> 10.100.0.15/24</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">DNS </span><span class="ot">=</span><span class="st"> 1.1.1.1</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[Peer]</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="dt">PublicKey </span><span class="ot">=</span><span class="st"> &lt;SERVER_PUBLIC_KEY&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="dt">Endpoint </span><span class="ot">=</span><span class="st"> vpn.example.com:51820</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="dt">AllowedIPs </span><span class="ot">=</span><span class="st"> 10.100.0.0/24</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="dt">PersistentKeepalive </span><span class="ot">=</span><span class="st"> </span><span class="dv">25</span></span></code></pre></div>
+<h2 id="4-fleet-provisioning-and-configuration-deployment">4. Fleet
+Provisioning and Configuration Deployment</h2>
+<p>Manual configuration does not scale. Developers use configuration
+management tools to automate deployment:</p>
+<ul>
+<li><strong>Ansible / SaltStack:</strong> For connected devices, use
+dynamic inventory plugins to push updated peer lists and
+configurations.</li>
+<li><strong>Containerized Deployments (Docker / Balena):</strong> Run
+WireGuard inside a lightweight container with <code>NET_ADMIN</code>
+capabilities. The container entrypoint script can query the fleet
+management API on startup, retrieve the latest assigned network
+parameters, and launch <code>wg-quick</code>.</li>
+<li><strong>Template Engines:</strong> Use tools like
+<code>envsubst</code> or Jinja2 templates in your initialization
+pipeline to generate the <code>wg0.conf</code> file dynamically using
+environment variables provided during device flashing.</li>
+</ul>
+<h2 id="5-tunnel-persistence-and-failure-recovery">5. Tunnel Persistence
+and Failure Recovery</h2>
+<p>Field devices experience frequent power loss, intermittent
+connectivity, and cellular dropouts. Implement robust service management
+to maintain connectivity:</p>
+<ul>
+<li><strong>Systemd Service:</strong> Enable the built-in WireGuard
+systemd unit:
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">systemctl</span> enable wg-quick@wg0.service</span></code></pre></div></li>
+<li><strong>Connection Watchdog:</strong> Deploy a lightweight health
+check script via a cron job or systemd timer. The script pings the
+central gateway (e.g., <code>10.100.0.1</code>). If the ping fails
+consecutively for several minutes, the script restarts the interface
+using <code>wg-quick down wg0 &amp;&amp; wg-quick up wg0</code> or
+reinitializes the network interface.</li>
+<li><strong>Dynamic DNS Handling:</strong> If the central gateway uses
+dynamic DNS instead of a static IP, install <code>reresolve-dns</code>
+scripts to ensure the SBC updates the endpoint IP when the gateway's DNS
+record changes without requiring a full service restart.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

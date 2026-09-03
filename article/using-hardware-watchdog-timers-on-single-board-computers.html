@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Hardware Watchdog Timers on Single Board Computers - sbc</title>
+    <meta name="description" content="Hardware watchdog timers (WDTs) are critical components used by embedded developers to ensure that single board computers (SBCs) recover automatically from software crashes, deadlocks, and system freezes. This article explores how developers configure an">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/using-hardware-watchdog-timers-on-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using Hardware Watchdog Timers on Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/using-hardware-watchdog-timers-on-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Hardware watchdog timers (WDTs) are critical components used by embedded developers to ensure that single board computers (SBCs) recover automatically from software crashes, deadlocks, and system freezes. This article explores how developers configure an" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="using-hardware-watchdog-timers-on-single-board-computers">Using
+Hardware Watchdog Timers on Single Board Computers</h1>
+<p>Hardware watchdog timers (WDTs) are critical components used by
+embedded developers to ensure that single board computers (SBCs) recover
+automatically from software crashes, deadlocks, and system freezes. This
+article explores how developers configure and utilize hardware watchdogs
+on SBCs, covering the initialization process, "petting" mechanisms,
+software architecture integration, and best practices for creating
+resilient autonomous systems.</p>
+<h3 id="understanding-the-hardware-watchdog">Understanding the Hardware
+Watchdog</h3>
+<p>A hardware watchdog timer is an independent timing circuit integrated
+into the SBC’s System on Chip (SoC) or mounted as an external dedicated
+integrated circuit. It operates on a simple countdown principle: the
+timer continuously counts down from a predefined threshold. If the timer
+reaches zero, it triggers a hardware reset line, power-cycling or
+rebooting the SBC. To prevent this reboot, the running software must
+periodically reset—or "kick"—the timer before it expires.</p>
+<h3 id="enabling-and-configuring-the-watchdog">Enabling and Configuring
+the Watchdog</h3>
+<p>On Linux-based SBCs (such as Raspberry Pi, BeagleBone, or industrial
+i.MX-based boards), developers access the hardware watchdog through
+kernel drivers exposed via the <code>/dev/watchdog</code> device
+node.</p>
+<ol type="1">
+<li><strong>Kernel and Device Tree Setup:</strong> Developers enable the
+appropriate SoC watchdog driver in the Linux kernel configuration (e.g.,
+<code>CONFIG_BCM2835_WDT</code> or <code>CONFIG_IMX2_WDT</code>) and
+ensure the hardware interface is defined in the Device Tree.</li>
+<li><strong>Setting Timeouts:</strong> Using standard Linux
+<code>ioctl</code> calls or configuration files, developers define the
+watchdog timeout interval (typically ranging from a few seconds to a
+couple of minutes), giving the operating system enough margin to operate
+under heavy load without triggering false resets.</li>
+</ol>
+<h3 id="implementing-the-petting-strategy">Implementing the "Petting"
+Strategy</h3>
+<p>Embedded engineers use different levels of watchdog management
+depending on the reliability requirements of the system:</p>
+<ul>
+<li><strong>System-Level Monitoring (<code>systemd</code> /
+<code>watchdogd</code>):</strong> Linux services such as
+<code>systemd</code> natively support watchdog hardware. By enabling
+<code>RuntimeWatchdogSec=</code> in <code>systemctl.conf</code>, the
+init system regularly pings <code>/dev/watchdog</code>. If the kernel
+hangs or core operating system services lock up, <code>systemd</code>
+stops kicking the timer, forcing a hardware reboot.</li>
+<li><strong>Application-Level Heartbeats:</strong> For mission-critical
+applications, relying solely on system-level daemons is insufficient
+because a critical process can crash while the background OS remains
+healthy. Developers implement application heartbeats where primary
+tasks, sensor-polling loops, and communication threads must all report
+health to a central supervisor process before that supervisor pings the
+watchdog.</li>
+</ul>
+<h3 id="advanced-architectural-techniques">Advanced Architectural
+Techniques</h3>
+<p>To build robust embedded designs, developers adopt several advanced
+watchdog patterns:</p>
+<ul>
+<li><strong>Staged Watchdogs (Windowed Watchdogs):</strong> Some
+hardware WDTs require kicks to occur within a specific time
+window—neither too late nor too early. This detects situations where
+code executes in an uncontrolled tight loop.</li>
+<li><strong>Safe-State Bootstrapping:</strong> Upon receiving a
+watchdog-induced reset, bootloader code (such as U-Boot) detects the
+reset source register. If repeated resets occur, the bootloader can roll
+back a faulty firmware update, boot into a recovery partition, or signal
+an alert.</li>
+<li><strong>Graceful Shutdown Hooks:</strong> Before the final reset
+triggers, certain watchdogs generate a Non-Maskable Interrupt (NMI)
+shortly before the hardware reset. Developers utilize this brief window
+to flush critical data to non-volatile storage or write debugging
+registers for post-mortem analysis.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

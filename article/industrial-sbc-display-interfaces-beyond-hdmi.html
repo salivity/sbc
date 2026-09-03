@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial SBC Display Interfaces Beyond HDMI - sbc</title>
+    <meta name="description" content="While HDMI and standard DisplayPort are the most common interfaces for external consumer monitors, industrial single board computers (SBCs) must support a diverse range of internal, low-power, and legacy display standards. Industrial applications frequen">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/industrial-sbc-display-interfaces-beyond-hdmi">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Industrial SBC Display Interfaces Beyond HDMI - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/industrial-sbc-display-interfaces-beyond-hdmi" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="While HDMI and standard DisplayPort are the most common interfaces for external consumer monitors, industrial single board computers (SBCs) must support a diverse range of internal, low-power, and legacy display standards. Industrial applications frequen" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="industrial-sbc-display-interfaces-beyond-hdmi">Industrial SBC
+Display Interfaces Beyond HDMI</h1>
+<p>While HDMI and standard DisplayPort are the most common interfaces
+for external consumer monitors, industrial single board computers (SBCs)
+must support a diverse range of internal, low-power, and legacy display
+standards. Industrial applications frequently require direct integration
+with bare LCD panels, rugged touchscreens, and legacy human-machine
+interfaces (HMIs). To meet these needs, industrial SBCs commonly feature
+technologies such as LVDS, eDP, MIPI DSI, Parallel RGB, and legacy
+analog VGA.</p>
+<h3 id="low-voltage-differential-signaling-lvds">Low-Voltage
+Differential Signaling (LVDS)</h3>
+<p>LVDS is one of the most widely adopted internal display interfaces in
+industrial computing. It uses differential signaling to transmit
+high-speed digital data over copper cables with low power consumption
+and high noise immunity.</p>
+<ul>
+<li><strong>Key Benefits:</strong> High resistance to electromagnetic
+interference (EMI), long-term availability, and the ability to drive
+displays over relatively long internal cable runs (up to several
+meters).</li>
+<li><strong>Common Use Cases:</strong> Rugged HMIs, medical devices,
+kiosk systems, and factory automation panels.</li>
+</ul>
+<h3 id="embedded-displayport-edp">Embedded DisplayPort (eDP)</h3>
+<p>eDP is the modern successor to LVDS, based on the VESA DisplayPort
+standard but designed specifically for internal display connections.</p>
+<ul>
+<li><strong>Key Benefits:</strong> Higher data transfer rates, reduced
+pin count, lower power consumption, and native support for higher
+resolutions (such as 4K and beyond) with high refresh rates.</li>
+<li><strong>Common Use Cases:</strong> Modern industrial tablets,
+high-resolution medical imaging devices, and advanced digital
+signage.</li>
+</ul>
+<h3 id="mipi-display-serial-interface-mipi-dsi">MIPI Display Serial
+Interface (MIPI DSI)</h3>
+<p>Originally developed for the mobile industry, MIPI DSI is
+increasingly prevalent on ARM-based and compact x86 industrial SBCs. It
+is a high-speed serial interface designed for point-to-point connections
+between a processor and a display module.</p>
+<ul>
+<li><strong>Key Benefits:</strong> Extremely low power consumption,
+minimal PCB footprint, and direct integration with small-to-medium-sized
+LCD and OLED screens.</li>
+<li><strong>Common Use Cases:</strong> Handheld industrial diagnostic
+tools, smart meters, wearable devices, and compact IoT edge
+controllers.</li>
+</ul>
+<h3 id="parallel-rgb-ttl">Parallel RGB (TTL)</h3>
+<p>Parallel RGB, often referred to as TTL (Transistor-Transistor Logic),
+sends pixel data concurrently across multiple parallel data lines along
+with clock and synchronization signals.</p>
+<ul>
+<li><strong>Key Benefits:</strong> Simple design with no complex
+serialization hardware required on the display module, making display
+panels cost-effective.</li>
+<li><strong>Limitations:</strong> Prone to EMI and limited to short
+trace lengths and lower resolutions (typically up to WVGA or SVGA).</li>
+<li><strong>Common Use Cases:</strong> Cost-sensitive embedded systems,
+small system status screens, and simple instrumentation.</li>
+</ul>
+<h3 id="analog-rgb--vga">Analog RGB / VGA</h3>
+<p>Despite being phased out of consumer electronics, analog VGA remains
+a staple on many industrial SBCs to maintain backward compatibility with
+legacy infrastructure.</p>
+<ul>
+<li><strong>Key Benefits:</strong> Plug-and-play compatibility with
+older CRT and LCD monitors without requiring active signal
+converters.</li>
+<li><strong>Common Use Cases:</strong> Legacy factory control rooms,
+marine monitoring equipment, and legacy machinery retrofits.</li>
+</ul>
+<h3 id="serial-interfaces-spi-and-i2c">Serial Interfaces (SPI and
+I2C)</h3>
+<p>For minimal display requirements, many industrial SBCs use low-speed
+serial buses like SPI (Serial Peripheral Interface) or I2C.</p>
+<ul>
+<li><strong>Key Benefits:</strong> Uses very few GPIO pins and requires
+minimal processing overhead.</li>
+<li><strong>Common Use Cases:</strong> Small monochrome displays,
+character LCDs, and auxiliary status OLED screens used for system
+diagnostics.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

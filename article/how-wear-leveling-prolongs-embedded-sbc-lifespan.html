@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Wear-Leveling Prolongs Embedded SBC Lifespan - sbc</title>
+    <meta name="description" content="Flash memory in embedded Single Board Computers (SBCs) is susceptible to physical degradation caused by continuous write and erase cycles during standard operation. This article explains how flash memory wear-leveling algorithms prevent localized storage">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-wear-leveling-prolongs-embedded-sbc-lifespan">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Wear-Leveling Prolongs Embedded SBC Lifespan - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-wear-leveling-prolongs-embedded-sbc-lifespan" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Flash memory in embedded Single Board Computers (SBCs) is susceptible to physical degradation caused by continuous write and erase cycles during standard operation. This article explains how flash memory wear-leveling algorithms prevent localized storage" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-wear-leveling-prolongs-embedded-sbc-lifespan">How
+Wear-Leveling Prolongs Embedded SBC Lifespan</h1>
+<p>Flash memory in embedded Single Board Computers (SBCs) is susceptible
+to physical degradation caused by continuous write and erase cycles
+during standard operation. This article explains how flash memory
+wear-leveling algorithms prevent localized storage failure, balance
+write distribution across memory blocks, and maximize the operational
+lifespan and reliability of embedded hardware deployments.</p>
+<hr />
+<h3 id="the-flash-memory-degradation-problem-in-sbcs">The Flash Memory
+Degradation Problem in SBCs</h3>
+<p>Embedded SBCs frequently rely on NAND flash storage—such as eMMC
+modules, onboard flash chips, or industrial microSD cards—to host the
+operating system, run applications, and log system metrics.</p>
+<p>NAND flash memory is organized into physical blocks, which are
+subdivided into pages. While data can be read and written in pages, it
+must be erased in entire blocks before new data can be written to the
+same location. Each Program/Erase (P/E) cycle physically degrades the
+insulating oxide layer within the memory cells. After reaching a
+specific threshold (typically 1,000 to 100,000 P/E cycles depending on
+whether the flash is TLC, MLC, or SLC), a block can no longer reliably
+retain charge, rendering it unusable.</p>
+<p>Without intervention, standard SBC operations like constant system
+logging (<code>/var/log</code>) or continuous sensor data collection
+target the exact same physical memory locations repeatedly. This creates
+localized "hotspots," causing individual blocks to fail prematurely
+while the rest of the drive remains unused, ultimately crashing the
+operating system and bricking the SBC.</p>
+<hr />
+<h3 id="how-wear-leveling-works">How Wear-Leveling Works</h3>
+<p>Wear-leveling is a firmware-level technique managed by the flash
+controller or the Flash Translation Layer (FTL). It decouples the
+logical addresses requested by the operating system from the physical
+addresses on the NAND flash chip.</p>
+<p>Instead of writing data back to the same physical block, the
+controller dynamically maps logical blocks to different physical blocks
+with the lowest wear counts. This prevents any single memory block from
+wearing out ahead of the others.</p>
+<hr />
+<h3 id="dynamic-vs-static-wear-leveling">Dynamic vs. Static
+Wear-Leveling</h3>
+<p>Flash storage controllers in embedded systems typically implement one
+of two wear-leveling strategies:</p>
+<ol type="1">
+<li><p><strong>Dynamic Wear-Leveling:</strong> This method only manages
+blocks containing data that is actively being modified (dynamic data).
+When the SBC writes new data or modifies an existing file, the
+controller selects the free physical block with the lowest erase count.
+However, blocks holding read-only files (like the OS kernel, bootloader,
+or static system binaries) remain untouched, leaving a portion of the
+flash memory unutilized for wear distribution.</p></li>
+<li><p><strong>Static Wear-Leveling:</strong> Static wear-leveling
+provides comprehensive protection by rotating both dynamic and static
+data. If the controller detects that dynamic blocks are accumulating
+significantly higher erase counts than blocks containing static
+read-only data, it moves the static data into the heavily cycled blocks.
+This frees up the pristine, low-cycle blocks to absorb high-frequency
+write operations, ensuring the entire physical capacity of the flash
+chip degrades at a uniform rate.</p></li>
+</ol>
+<hr />
+<h3 id="direct-benefits-for-embedded-single-board-computers">Direct
+Benefits for Embedded Single Board Computers</h3>
+<ul>
+<li><strong>Maximized Total Bytes Written (TBW):</strong> By
+distributing write cycles across 100% of available memory cells,
+wear-leveling enables the SBC storage to reach its maximum theoretical
+endurance.</li>
+<li><strong>Elimination of Early Sector Failures:</strong> It prevents
+premature corruption of critical system files caused by localized write
+exhaustion.</li>
+<li><strong>Reduced Downtime and Maintenance Costs:</strong> Embedded
+SBCs often operate in remote, industrial, or inaccessible environments.
+Extending storage lifespan directly prevents hardware replacement visits
+and unplanned system outages.</li>
+<li><strong>Preserved System Stability:</strong> When paired with
+bad-block management and Error Correction Code (ECC) algorithms,
+wear-leveling maintains reliable read/write speeds and prevents data
+integrity issues over years of continuous deployment.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

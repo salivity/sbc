@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD Pipelines for Custom SBC Image Builds - sbc</title>
+    <meta name="description" content="Building and testing operating system images for custom single board computers (SBCs) requires a continuous integration (CI) pipeline that automates Board Support Package (BSP) compilation, root filesystem generation, and validation across both emulated">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/ci-cd-pipelines-for-custom-sbc-image-builds">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CI/CD Pipelines for Custom SBC Image Builds - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/ci-cd-pipelines-for-custom-sbc-image-builds" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Building and testing operating system images for custom single board computers (SBCs) requires a continuous integration (CI) pipeline that automates Board Support Package (BSP) compilation, root filesystem generation, and validation across both emulated" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="cicd-pipelines-for-custom-sbc-image-builds">CI/CD Pipelines for
+Custom SBC Image Builds</h1>
+<p>Building and testing operating system images for custom single board
+computers (SBCs) requires a continuous integration (CI) pipeline that
+automates Board Support Package (BSP) compilation, root filesystem
+generation, and validation across both emulated and physical hardware.
+This article details the structural stages of an embedded CI/CD
+pipeline—from environment setup and caching strategies to image
+generation, Hardware-in-the-Loop (HIL) testing, and artifact
+deployment.</p>
+<h3 id="1-build-environment-and-runner-architecture">1. Build
+Environment and Runner Architecture</h3>
+<p>Embedded Linux image builds are resource-intensive. Developers
+typically avoid public cloud-hosted shared runners due to CPU, storage,
+and execution time limits.</p>
+<ul>
+<li><strong>Dedicated Self-Hosted Runners:</strong> Pipelines run on
+high-core bare-metal servers or self-hosted VMs with 32+ CPU cores, 64
+GB+ RAM, and fast NVMe storage.</li>
+<li><strong>Containerized Build Environments:</strong> Build
+dependencies (toolchains, SDKs, host utilities) are packaged inside
+Docker containers to guarantee reproducibility across team members and
+CI agents.</li>
+<li><strong>Aggressive Caching:</strong> Build systems like the Yocto
+Project (BitBake) or Buildroot rely on persistent storage caches.
+Runners mount persistent volumes for download directories
+(<code>DL_DIR</code>) and shared state caches (<code>SSTATE_DIR</code>)
+to reduce build times from hours to minutes on incremental commits.</li>
+</ul>
+<h3 id="2-source-control-and-pipeline-triggers">2. Source Control and
+Pipeline Triggers</h3>
+<p>Custom SBC repositories are generally structured into modular layers:
+the kernel/U-Boot source, custom hardware layers (meta-layers), and
+application stacks.</p>
+<ul>
+<li><strong>Trigger Rules:</strong> Full image builds are triggered on
+release tags or merges to the main branch. Lightweight smoke tests or
+pull request (PR) builds compile only modified packages or recipes to
+provide fast feedback.</li>
+<li><strong>Manifest Management:</strong> Tools like <code>repo</code>
+(Google's multi-git management tool) or Git submodules track explicit
+commit hashes of external layers to ensure deterministic builds.</li>
+</ul>
+<h3 id="3-image-compilation-stage">3. Image Compilation Stage</h3>
+<p>Once triggered, the pipeline orchestrates the build system to
+generate partition tables and bootable binaries:</p>
+<ul>
+<li><strong>Target Selection:</strong> The pipeline defines environment
+variables specifying the target board (<code>MACHINE</code>), image type
+(minimal, development, production), and init system (systemd,
+SysVinit).</li>
+<li><strong>Artifact Generation:</strong> The output includes the
+bootloader (U-Boot), Linux kernel (zImage/Image), Device Tree Blobs
+(<code>.dtb</code>), kernel modules, and raw disk images
+(<code>.wic</code>, <code>.img</code>, <code>.sdcard</code>).</li>
+<li><strong>Software Bill of Materials (SBOM):</strong> The build
+automatically outputs license manifests and vulnerability reports (e.g.,
+using <code>cve-check</code> in Yocto) to detect unpatched CVEs.</li>
+</ul>
+<h3 id="4-emulation-and-virtual-testing">4. Emulation and Virtual
+Testing</h3>
+<p>Before touching physical hardware, images pass automated virtual
+validation to fail fast on critical boot or configuration errors:</p>
+<ul>
+<li><strong>QEMU Emulation:</strong> The CI launches QEMU matching the
+SBC's processor architecture (ARM, ARM64, or RISC-V) with the generated
+kernel and rootfs.</li>
+<li><strong>Smoke Testing:</strong> Automated scripts (via Python, Bash,
+or pytest) verify that the system completes the boot process, mounts
+filesystems correctly, starts critical systemd services, and responds to
+network commands.</li>
+</ul>
+<h3 id="5-hardware-in-the-loop-hil-testing">5. Hardware-in-the-Loop
+(HIL) Testing</h3>
+<p>To validate physical peripheral controllers (GPIO, I2C, SPI, CAN) and
+power management that QEMU cannot simulate, the pipeline integrates
+physical test benches.</p>
+<ul>
+<li><strong>Test Frameworks:</strong> Frameworks such as LAVA (Linaro
+Automated Validation Architecture) or Labgrid manage boards connected to
+the CI infrastructure.</li>
+<li><strong>Flashing and Power Control:</strong> Automated smart power
+switches (PDUs) power-cycle the board. SD-mux devices or network boot
+servers (TFTP/NFS) flash the newly built image to the physical SBC's
+eMMC or SD card.</li>
+<li><strong>Serial Console Automation:</strong> The test runner monitors
+UART serial outputs using tools like <code>pexpect</code> to confirm the
+U-Boot sequence, kernel handoff, and userspace login.</li>
+<li><strong>Peripheral Verification:</strong> Automated test suites run
+on-device commands to check communication across exposed interfaces and
+loopback circuits.</li>
+</ul>
+<h3 id="6-artifact-signing-packaging-and-distribution">6. Artifact
+Signing, Packaging, and Distribution</h3>
+<p>Once all tests pass, the pipeline packages the verified build
+artifacts for deployment:</p>
+<ul>
+<li><strong>Signing:</strong> Cryptographic signatures are applied to
+the kernel, bootloader, and rootfs for Secure Boot verification.</li>
+<li><strong>OTA Packaging:</strong> Dual-copy (A/B) Over-The-Air update
+payloads (e.g., RAUC, Mender, or SWUpdate bundles) are generated
+alongside the raw flash images.</li>
+<li><strong>Storage and Release:</strong> The pipeline uploads
+compressed images and update bundles to an artifact repository (such as
+JFrog Artifactory, AWS S3, or internal package feeds), indexed by Git
+commit hash and release tags.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

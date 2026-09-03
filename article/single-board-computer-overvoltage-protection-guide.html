@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Board Computer Overvoltage Protection Guide - sbc</title>
+    <meta name="description" content="Single board computers (SBCs) contain sensitive microprocessors and peripheral components that can be permanently damaged by voltage spikes, incorrect power supplies, or electrostatic discharge. To mitigate these risks, hardware designers integrate hardw">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/single-board-computer-overvoltage-protection-guide">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Single Board Computer Overvoltage Protection Guide - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/single-board-computer-overvoltage-protection-guide" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Single board computers (SBCs) contain sensitive microprocessors and peripheral components that can be permanently damaged by voltage spikes, incorrect power supplies, or electrostatic discharge. To mitigate these risks, hardware designers integrate hardw" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="single-board-computer-overvoltage-protection-guide">Single Board
+Computer Overvoltage Protection Guide</h1>
+<p>Single board computers (SBCs) contain sensitive microprocessors and
+peripheral components that can be permanently damaged by voltage spikes,
+incorrect power supplies, or electrostatic discharge. To mitigate these
+risks, hardware designers integrate hardware-level safety mechanisms
+directly onto bare boards. These protective systems instantly detect
+abnormal electrical conditions and either clamp excessive voltage,
+divert surplus energy safely to ground, or physically disconnect the
+power rail to prevent catastrophic component failure.</p>
+<h3 id="transient-voltage-suppression-tvs-diodes">Transient Voltage
+Suppression (TVS) Diodes</h3>
+<p>TVS diodes are semiconductor devices placed in parallel across the
+input power lines. Under normal operating conditions, the TVS diode
+remains high-impedance and behaves like an open circuit. When an
+overvoltage event or electrostatic discharge (ESD) occurs, the diode
+rapidly enters an avalanche breakdown state within picoseconds. This
+clamps the voltage to a safe threshold and diverts the excess current
+harmlessly to ground before it reaches the main processing units.</p>
+<h3 id="dedicated-overvoltage-protection-ovp-ics-and-efuses">Dedicated
+Overvoltage Protection (OVP) ICs and eFuses</h3>
+<p>Modern SBCs frequently use dedicated OVP integrated circuits or
+electronic fuses (eFuses). These active silicon solutions continuously
+monitor the input rail via an internal comparator. When the input
+voltage exceeds a preset limit, the OVP controller turns off an internal
+or external series MOSFET within microseconds. This creates an open
+circuit that completely isolates downstream electronics from the
+dangerous voltage source until safe power levels are restored.</p>
+<h3 id="crowbar-circuits">Crowbar Circuits</h3>
+<p>A crowbar circuit is a protective mechanism designed to handle
+sustained overvoltage conditions that could overwhelm a standard
+clamping diode. Typically composed of a Zener diode and a Silicon
+Controlled Rectifier (SCR) or thyristor paired with an input fuse, the
+circuit activates when high voltage reaches a trigger threshold. Once
+triggered, the SCR creates a direct short circuit to ground,
+intentionally tripping a resettable Polyfuse (PTC) or blowing a
+traditional fuse to cut power completely.</p>
+<h3 id="power-management-integrated-circuits-pmics">Power Management
+Integrated Circuits (PMICs)</h3>
+<p>Advanced SBCs rely on comprehensive PMICs to regulate multiple
+voltage rails across the board. PMICs incorporate built-in Overvoltage
+Lockout (OVLO) and Undervoltage Lockout (UVLO) circuitry. If the input
+power adapter supplies a voltage higher than the PMIC’s maximum rating,
+the chip automatically disables its internal buck converters and linear
+regulators, preventing overvoltage propagation to the CPU, GPU, and
+RAM.</p>
+<h3 id="zener-diode-regulation-and-clamping">Zener Diode Regulation and
+Clamping</h3>
+<p>For low-power auxiliary lines, Zener diodes serve as basic
+overvoltage protection elements. When reverse-biased beyond their
+breakdown voltage, they conduct current to maintain a steady voltage
+drop across their terminals. While slower and less capable of absorbing
+high-energy surges compared to TVS diodes, they provide a reliable,
+low-cost baseline for non-critical input lines.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

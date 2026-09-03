@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How SBCs Interface with Gas Chromatograph Analyzers - sbc</title>
+    <meta name="description" content="Single board computers (SBCs) play a vital role in modern chemical plants by serving as compact, cost-effective data acquisition units, edge processors, and communication bridges for industrial gas chromatography (GC) analyzers. This article explores how">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-sbcs-interface-with-gas-chromatograph-analyzers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How SBCs Interface with Gas Chromatograph Analyzers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-sbcs-interface-with-gas-chromatograph-analyzers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Single board computers (SBCs) play a vital role in modern chemical plants by serving as compact, cost-effective data acquisition units, edge processors, and communication bridges for industrial gas chromatography (GC) analyzers. This article explores how" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-sbcs-interface-with-gas-chromatograph-analyzers">How SBCs
+Interface with Gas Chromatograph Analyzers</h1>
+<p>Single board computers (SBCs) play a vital role in modern chemical
+plants by serving as compact, cost-effective data acquisition units,
+edge processors, and communication bridges for industrial gas
+chromatography (GC) analyzers. This article explores how SBCs connect to
+GC systems through physical I/O interfaces, handle real-time detector
+data, communicate via industrial protocols with Distributed Control
+Systems (DCS), and operate safely within harsh, hazardous plant
+environments.</p>
+<h2 id="physical-and-electrical-interfacing">Physical and Electrical
+Interfacing</h2>
+<p>Industrial gas chromatographs rely on sensitive detectors—such as
+Flame Ionization Detectors (FID), Thermal Conductivity Detectors (TCD),
+or Flame Photometric Detectors (FPD)—to measure chemical concentrations.
+SBCs interface with these analyzers using both analog and digital
+physical layers:</p>
+<ul>
+<li><strong>Analog-to-Digital Conversion (ADC):</strong> Raw analog
+outputs from GC detector electrometers are sampled using high-resolution
+(typically 24-bit) ADC expansion boards connected to the SBC via SPI or
+I2C buses. This ensures microvolt-level peak detection accuracy.</li>
+<li><strong>Industrial Serial Buses:</strong> Most modern GC analyzers
+feature onboard microcontrollers that output pre-processed data. SBCs
+interface with these controllers using integrated or HAT-based RS-232,
+RS-422, or isolated RS-485 serial ports to transmit instrument statuses
+and analytical results.</li>
+<li><strong>Industrial Ethernet:</strong> SBCs equipped with Gigabit
+Ethernet or dual-NIC configurations connect directly to the analyzer’s
+local network port for high-speed diagnostic data, raw chromatogram
+streaming, and remote firmware configuration.</li>
+<li><strong>General-Purpose I/O (GPIO) and Relays:</strong> SBC GPIO
+pins, coupled with optical isolation and industrial relay modules,
+manage hardware triggers such as stream switching valves, sample
+injection solenoids, and carrier gas pressure alarms.</li>
+</ul>
+<h2 id="communication-protocols-and-system-integration">Communication
+Protocols and System Integration</h2>
+<p>Once physical connectivity is established, SBCs translate proprietary
+or low-level instrument data into standardized industrial protocols,
+enabling seamless integration with plant-wide control architectures:</p>
+<ul>
+<li><strong>Modbus (RTU and TCP):</strong> SBCs commonly act as Modbus
+slaves or masters, exposing registers that hold component
+concentrations, retention times, peak areas, and alarm statuses to the
+facility's Programmable Logic Controllers (PLCs) or DCS.</li>
+<li><strong>OPC UA:</strong> Running lightweight OPC UA servers on SBCs
+allows secure, platform-independent telemetry transmission directly to
+Supervisory Control and Data Acquisition (SCADA) platforms and
+enterprise asset management systems.</li>
+<li><strong>MQTT and REST APIs:</strong> For plants adopting Industrial
+Internet of Things (IIoT) frameworks, SBCs publish analytical data over
+lightweight MQTT brokers to cloud analytics platforms for predictive
+maintenance and column degradation monitoring.</li>
+</ul>
+<h2 id="edge-processing-and-chromatogram-analysis">Edge Processing and
+Chromatogram Analysis</h2>
+<p>Rather than relying entirely on central plant servers to process
+chromatographic curves, SBCs perform real-time edge computing. Embedded
+software running on Linux-based real-time kernels (such as PREEMPT_RT)
+performs baseline drift correction, peak identification, peak
+integration, and calibration curve calculations directly at the analyzer
+shelter. This edge autonomy ensures that critical stream composition
+data is generated reliably even if the primary plant network experiences
+downtime.</p>
+<h2 id="hazardous-area-and-environmental-considerations">Hazardous Area
+and Environmental Considerations</h2>
+<p>Chemical plants present demanding operating environments subject to
+strict safety regulations. Interfacing SBCs with gas chromatographs
+requires specific protective measures:</p>
+<ul>
+<li><strong>Intrinsic Safety and Galvanic Isolation:</strong> All
+electrical connections between the SBC, the GC, and external sensors
+must incorporate galvanic isolation barriers and optocouplers to prevent
+ground loops and voltage spikes.</li>
+<li><strong>Explosion-Proof Enclosures:</strong> When deployed in
+hazardous environments (such as ATEX Zone 1/Zone 2 or Class I, Division
+1/Division 2 areas), SBCs are housed inside flameproof (Ex d) or
+purged/pressurized (Ex p) enclosures.</li>
+<li><strong>Industrial-Grade Hardware:</strong> Implementations utilize
+fanless, wide-temperature-rated (-40°C to +85°C) SBCs with
+conformal-coated circuit boards to resist corrosive atmospheric gases
+like hydrogen sulfide (<span class="math inline">\(H_2S\)</span>) and
+chlorine.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

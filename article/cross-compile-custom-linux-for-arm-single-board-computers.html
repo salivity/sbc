@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Compile Custom Linux for ARM Single Board Computers - sbc</title>
+    <meta name="description" content="Cross-compiling a custom Linux distribution involves building the operating system components on a fast host architecture (typically x8664) to run on a target ARM-based single board computer (SBC). This guide outlines the essential phases of the process,">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/cross-compile-custom-linux-for-arm-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Cross-Compile Custom Linux for ARM Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/cross-compile-custom-linux-for-arm-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Cross-compiling a custom Linux distribution involves building the operating system components on a fast host architecture (typically x8664) to run on a target ARM-based single board computer (SBC). This guide outlines the essential phases of the process," />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="cross-compile-custom-linux-for-arm-single-board-computers">Cross-Compile
+Custom Linux for ARM Single Board Computers</h1>
+<p>Cross-compiling a custom Linux distribution involves building the
+operating system components on a fast host architecture (typically
+x86_64) to run on a target ARM-based single board computer (SBC). This
+guide outlines the essential phases of the process, covering toolchain
+setup, bootloader compilation, kernel configuration, root filesystem
+creation, and storage media preparation.</p>
+<h2 id="1-setting-up-the-host-environment-and-cross-toolchain">1.
+Setting Up the Host Environment and Cross-Toolchain</h2>
+<p>Cross-compilation requires a dedicated toolchain capable of
+generating ARM machine code on your host machine.</p>
+<ul>
+<li><strong>Select the Target Architecture:</strong> Determine whether
+your board uses a 32-bit (e.g., <code>armhf</code>,
+<code>arm-linux-gnueabihf</code>) or 64-bit (e.g., <code>aarch64</code>,
+<code>aarch64-linux-gnu</code>) instruction set.</li>
+<li><strong>Install Prerequisites:</strong> Install essential build
+utilities such as <code>build-essential</code>, <code>bison</code>,
+<code>flex</code>, <code>libssl-dev</code>, <code>bc</code>, and the
+appropriate GNU cross-compiler toolchain via your host distribution's
+package manager.</li>
+<li><strong>Export Environment Variables:</strong> Simplify the build
+process by exporting architecture and compiler prefixes in your shell:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">ARCH</span><span class="op">=</span>arm64</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">CROSS_COMPILE</span><span class="op">=</span>aarch64-linux-gnu-</span></code></pre></div></li>
+</ul>
+<h2 id="2-compiling-the-bootloader-u-boot">2. Compiling the Bootloader
+(U-Boot)</h2>
+<p>The bootloader initializes hardware components (DRAM, clocks,
+storage) and loads the Linux kernel into memory.</p>
+<ul>
+<li><strong>Source Acquisition:</strong> Clone the official Das U-Boot
+repository or your board vendor's downstream fork.</li>
+<li><strong>Configuration:</strong> Load your target board’s default
+configuration file:
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> <span class="op">&lt;</span>your_board<span class="op">&gt;</span>_defconfig</span></code></pre></div></li>
+<li><strong>Compilation:</strong> Run <code>make -j$(nproc)</code> to
+generate board-specific boot binaries, such as <code>u-boot.bin</code>,
+<code>u-boot-sunxi-with-spl.bin</code>, or separate Secondary Program
+Loader (SPL) files.</li>
+</ul>
+<h2 id="3-building-the-linux-kernel-and-device-trees">3. Building the
+Linux Kernel and Device Trees</h2>
+<p>The Linux kernel interacts directly with the board's hardware, while
+Device Tree Blobs (DTBs) describe the non-discoverable hardware layout
+to the kernel.</p>
+<ul>
+<li><strong>Fetch Kernel Sources:</strong> Download stable mainline
+Linux kernel sources from kernel.org or the board vendor’s
+repository.</li>
+<li><strong>Configure the Kernel:</strong> Apply a baseline
+configuration for your target SoC:
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> defconfig</span></code></pre></div>
+Use <code>make menuconfig</code> to enable board-specific drivers, file
+systems, and network protocols.</li>
+<li><strong>Build Binaries:</strong> Compile the kernel image, modules,
+and device trees:
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> <span class="at">-j</span><span class="va">$(</span><span class="fu">nproc</span><span class="va">)</span> Image dtbs modules</span></code></pre></div></li>
+<li><strong>Export Kernel Modules:</strong> Direct module outputs to a
+temporary directory for later inclusion in the root filesystem:
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> modules_install INSTALL_MOD_PATH=./output/rootfs</span></code></pre></div></li>
+</ul>
+<h2 id="4-constructing-the-root-filesystem-rootfs">4. Constructing the
+Root Filesystem (RootFS)</h2>
+<p>The RootFS contains all user-space libraries, system binaries,
+initialization systems, and configuration files.</p>
+<ul>
+<li><strong>Minimalist Approach (BusyBox):</strong> Compile BusyBox with
+the cross-compiler to generate core UNIX utilities in a minimal
+footprint.</li>
+<li><strong>Automated Build Systems (Buildroot / Yocto):</strong> For
+production environments, utilize Buildroot or the Yocto Project to
+automate the cross-compilation of the entire userspace, package
+dependencies, and custom init scripts.</li>
+<li><strong>Binary Distribution Base (Debootstrap):</strong> Create a
+Debian or Ubuntu ARM root filesystem using <code>debootstrap</code>
+combined with QEMU user-mode emulation (<code>qemu-arm-static</code> or
+<code>qemu-aarch64-static</code>) to run native package
+configuration.</li>
+</ul>
+<h2 id="5-partitioning-and-flashing-the-storage-media">5. Partitioning
+and Flashing the Storage Media</h2>
+<p>The final step is preparing the boot media (microSD card or eMMC)
+with the compiled components.</p>
+<ul>
+<li><strong>Partition the Disk:</strong> Use <code>fdisk</code> or
+<code>parted</code> to create a standard two-partition layout:
+<ul>
+<li><strong>Partition 1 (Boot):</strong> Formatted as FAT32, flagged as
+bootable, containing the kernel image (<code>Image</code> or
+<code>zImage</code>), compiled device tree (<code>.dtb</code>), and boot
+configuration script (<code>boot.scr</code> or
+<code>extlinux.conf</code>).</li>
+<li><strong>Partition 2 (Root):</strong> Formatted as ext4, containing
+the root filesystem.</li>
+</ul></li>
+<li><strong>Install Bootloader:</strong> Write the bootloader binaries
+directly to the raw blocks or the boot partition according to the SoC's
+boot ROM specification:
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd if=u-boot-sunxi-with-spl.bin of=/dev/sdX bs=1k seek=8 status=progress</span></code></pre></div></li>
+<li><strong>Copy Kernel and RootFS:</strong> Mount the partitions, copy
+the boot assets into Partition 1, extract the root filesystem into
+Partition 2, and verify that <code>/etc/fstab</code> matches your
+partition UUIDs.</li>
+</ul>
+<h2 id="6-booting-and-verification">6. Booting and Verification</h2>
+<p>Insert the storage media into the ARM SBC, connect a USB-to-UART
+serial adapter to the board's serial debug pins, and open a terminal
+emulator (such as <code>minicom</code> or <code>picocom</code>) at the
+required baud rate (commonly 115200). Power the board to observe early
+bootloader output, kernel initialization, and the final user-space login
+prompt.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

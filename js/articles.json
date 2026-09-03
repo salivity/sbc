@@ -1,0 +1,2972 @@
+[
+  [
+    495,
+    "Designing Custom Daughterboards for Single Board Computers",
+    "Designing custom daughterboards—often called hats, capes, or shields—expands the functionality of a Single Board Computer (SBC) for specialized applications. Successfully integrating a secondary board requires a balanced approach to both physical com",
+    false
+  ],
+  [
+    494,
+    "SBCs in Ocean Buoy Remote Monitoring and Telemetry",
+    "Single board computers (SBCs) serve as the computational backbone for modern commercial ocean buoys, enabling automated data acquisition, edge processing, and long-range communication in harsh marine environments. By interfacing directly with oceanograph",
+    false
+  ],
+  [
+    493,
+    "Secure Exposed Network Services on a Public SBC",
+    "Deploying a single-board computer (SBC) with a publicly routable IP address exposes it to persistent port scans, automated exploit attempts, and brute-force attacks. Securing these low-power devices requires a defense-in-depth approach that minimizes the",
+    false
+  ],
+  [
+    492,
+    "Libre Computer AML-S905X-CC Mainline Linux Support",
+    "The Libre Computer AML-S905X-CC, commonly known as \"Le Potato,\" maintains software compatibility with mainline Linux by committing its hardware support directly to upstream open-source repositories rather than relying on out-of-tree vendor board support",
+    false
+  ],
+  [
+    491,
+    "Raw NAND Flash vs eMMC on Industrial SBCs",
+    "Choosing the right non-volatile storage for an industrial single-board computer (SBC) fundamentally impacts system reliability, processor overhead, and maintenance. While both raw NAND flash and embedded MultiMediaCard (eMMC) rely on NAND flash memory ce",
+    false
+  ],
+  [
+    490,
+    "How to Minimize PDN Voltage Drop on High-Load SBCs",
+    "Analyzing a Power Distribution Network (PDN) on a high-load single-board computer (SBC) requires a systematic approach to mitigate both static (DC) and dynamic (AC) voltage drops. Engineers evaluate DC resistance through copper planes and vias, calculate",
+    false
+  ],
+  [
+    489,
+    "Single Board Computers in Air Traffic Radar Systems",
+    "Single-board computers (SBCs) are vital components in modern localized air traffic tracking radar stations, offering cost-effective, low-power, and compact processing capabilities for flight telemetry. These devices act as the primary edge-computing hub,",
+    false
+  ],
+  [
+    488,
+    "How to Configure ALSA Sound Cards via Device Tree Overlays",
+    "Configuring a custom ALSA (Advanced Linux Sound Architecture) sound card on an embedded single-board computer (SBC) requires interfacing your audio hardware with the Linux kernel through Device Tree Overlays (DTOs). This article covers the essential proc",
+    false
+  ],
+  [
+    487,
+    "Rugged Single Board Computers for Mining Automation",
+    "Commercial mining operations increasingly depend on autonomous haulage, robotic drilling, and real-time telemetry to maximize yield and enhance worker safety. This article outlines the primary reasons for deploying rugged single board computers (SBCs) as",
+    false
+  ],
+  [
+    486,
+    "How Edge SBC NPUs Accelerate YOLO Object Detection",
+    "Integrated Neural Processing Units (NPUs) allow modern single board computers (SBCs) to execute YOLO (You Only Look Once) object detection models in real time with high energy efficiency. By offloading intensive deep learning computations from the CPU an",
+    false
+  ],
+  [
+    485,
+    "Sensor Abstraction Layers for Single Board Computers",
+    "Developing embedded applications across diverse single board computer (SBC) models often presents integration bottlenecks due to differing pinouts, system-on-chip (SoC) architectures, and bus interfaces. This article explores the primary software archite",
+    false
+  ],
+  [
+    484,
+    "How to Test ESD Susceptibility on SBC Ports",
+    "Testing the electrostatic discharge (ESD) susceptibility of exposed ports on a commercial single-board computer (SBC) requires standard-compliant simulation tools, structured discharge procedures, and real-time functional monitoring. Engineers subject I/",
+    false
+  ],
+  [
+    483,
+    "High-Speed GPIO Extension Signal Degradation Issues",
+    "Extending high-speed General Purpose Input/Output (GPIO) lines beyond the board edge of a single-board computer (SBC) often leads to severe signal integrity problems. Standard GPIO pins are primarily designed to drive short, on-board PCB traces rather th",
+    false
+  ],
+  [
+    482,
+    "Rock Pi 4 Plus: Improving Boot Reliability with eMMC",
+    "The Rock Pi 4 Plus enhances single-board computer (SBC) performance by integrating onboard eMMC flash storage directly onto the PCB. Unlike traditional platforms that rely strictly on removable microSD cards, this hardware design directly resolves the mo",
+    false
+  ],
+  [
+    481,
+    "How to Recover a Soft-Bricked SBC with Boot-ROM Tools",
+    "A soft-bricked Single Board Computer (SBC) occurs when the system cannot boot due to a corrupted bootloader, misconfigured partition table, or damaged onboard firmware (eMMC/SPI flash), while the underlying hardware remains fully functional. Because prim",
+    false
+  ],
+  [
+    480,
+    "How SBCs Power Local Data Processing in Smart Irrigation",
+    "Single-board computers (SBCs) serve as edge computing nodes in distributed smart irrigation networks by processing environmental data directly in the field. By interfacing with soil and weather sensors, executing local decision-making algorithms, and tri",
+    false
+  ],
+  [
+    479,
+    "Hardware Entropy Sources in SBC Security Appliances",
+    "Using an onboard hardware entropy source provides critical cryptographic integrity and operational reliability for security appliances deployed on single board computers (SBCs). By deriving unpredictability from physical phenomena rather than operating s",
+    false
+  ],
+  [
+    478,
+    "Double-Buffering Graphics on Low-Memory SBCs",
+    "Implementing an efficient double-buffering pipeline on a low-memory single-board computer (SBC) requires minimizing RAM usage while eliminating display tearing and maximizing frame rates. This guide details how developers can achieve smooth rendering und",
+    false
+  ],
+  [
+    477,
+    "Military SBC Substrate Material Selection Factors",
+    "Selecting the right printed circuit board (PCB) substrate material is critical to the survival and performance of military Single Board Computers (SBCs). Operating in mission-critical environments, these embedded systems require materials that balance ex",
+    false
+  ],
+  [
+    476,
+    "CI/CD Pipelines for Custom SBC Image Builds",
+    "Building and testing operating system images for custom single board computers (SBCs) requires a continuous integration (CI) pipeline that automates Board Support Package (BSP) compilation, root filesystem generation, and validation across both emulated",
+    false
+  ],
+  [
+    475,
+    "Risks of Hot-Plugging Ribbon Cables into SBCs",
+    "Hot-plugging sensitive ribbon cables—such as Flexible Flat Cables (FFC) used for camera (CSI), display (DSI), or GPIO expansions—into an active single board computer (SBC) introduces severe electrical hazards. Because these interfaces are typically d",
+    false
+  ],
+  [
+    474,
+    "Khadas VIM4 Active Cooling Under Peak Loads",
+    "The Khadas VIM4 single board computer manages demanding computational tasks by combining a dedicated hardware cooling kit with intelligent, kernel-level thermal management. This article examines how the VIM4 detects temperature spikes across its octa-cor",
+    false
+  ],
+  [
+    473,
+    "Single Board Computers in Motorsport Telemetry",
+    "Single-board computers (SBCs) have become pivotal components in modern motorsport, serving as compact, cost-effective edge-computing hubs for localized vehicle telemetry tracking. By bridging the gap between raw automotive sensor networks and actionable",
+    false
+  ],
+  [
+    472,
+    "Configuring CPU Core Pinning for Real-Time SBCs",
+    "CPU core pinning, or processor affinity, is a critical optimization technique used on multi-core real-time Single Board Computers (SBCs) to achieve deterministic execution. By dedicating specific CPU cores exclusively to time-critical tasks and offloadin",
+    false
+  ],
+  [
+    471,
+    "USB 2.0 vs USB 3.0 Controller Architecture in SBCs",
+    "Understanding the architectural differences between USB 2.0 and USB 3.0 controllers is essential when designing or optimizing applications for single board computers (SBCs). While USB 2.0 relies on host-driven polling, half-duplex signaling, and split co",
+    false
+  ],
+  [
+    470,
+    "How SBCs Interface with Gas Chromatograph Analyzers",
+    "Single board computers (SBCs) play a vital role in modern chemical plants by serving as compact, cost-effective data acquisition units, edge processors, and communication bridges for industrial gas chromatography (GC) analyzers. This article explores how",
+    false
+  ],
+  [
+    469,
+    "Implementing a Fallback OS on Single Board Computers",
+    "Deploying a high-reliability fallback OS partition ensures that a single board computer (SBC) can automatically recover from corrupted updates, boot failures, or software crashes without requiring physical intervention. In remote or mission-critical embe",
+    false
+  ],
+  [
+    468,
+    "Odroid-XU4 Heterogeneous Multi-Processing Explained",
+    "The Odroid-XU4 single-board computer implements Heterogeneous Multi-Processing (HMP) through its Samsung Exynos 5422 system-on-chip (SoC), which utilizes ARM's big.LITTLE architecture. This article explains how the Odroid-XU4 coordinates its four high-pe",
+    false
+  ],
+  [
+    467,
+    "Best CLI Packet Inspection Tools for SBCs",
+    "Headless single-board computers (SBCs) such as the Raspberry Pi, BeagleBone, and Orange Pi are frequently deployed as compact network probes, firewalls, and diagnostic devices. Because these systems run without a graphical desktop environment and have li",
+    false
+  ],
+  [
+    466,
+    "Selecting Decoupling Capacitors for High-Frequency SBCs",
+    "Selecting the correct decoupling capacitors is essential for maintaining power distribution network (PDN) stability and signal integrity on high-frequency single board computers (SBCs). This article covers the step-by-step engineering process required to",
+    false
+  ],
+  [
+    465,
+    "Hardware vs Software FPU on Single Board Computers",
+    "Single board computers (SBCs) rely on floating-point arithmetic to process non-integer math, which is critical for tasks like sensor data processing, computer vision, and 3D rendering. The primary difference between hardware-based and software-based floa",
+    false
+  ],
+  [
+    464,
+    "How SBCs Manage Sensor Fusion in Weather Stations",
+    "Modern automated weather stations rely on Single Board Computers (SBCs) to act as local intelligence hubs that capture, synchronize, and process disparate meteorological data streams. By deploying multi-layer sensor fusion algorithms directly on the edge",
+    false
+  ],
+  [
+    463,
+    "Long-Term SBC Data Logging Without Flash Wear",
+    "Continuous data logging on single-board computers (SBCs) like the Raspberry Pi can rapidly degrade NAND flash memory due to finite write cycles. Because standard SD cards and eMMC modules lack the heavy-duty endurance of enterprise SSDs, unoptimized writ",
+    false
+  ],
+  [
+    462,
+    "Banana Pi BPI-M4 Zero Power Efficiency Explained",
+    "The Banana Pi BPI-M4 Zero balances robust processing performance with minimal energy consumption by pairing an efficiency-focused quad-core processor with low-power memory and targeted hardware optimizations. Designed in an ultra-compact form factor, thi",
+    false
+  ],
+  [
+    461,
+    "Stackable PCIe Headers on Single Board Computers",
+    "Stackable PCIe expansion headers on single board computers (SBCs) provide a modular, space-efficient method to scale system capabilities without the bulk of traditional PCIe slots or external cabling. These connectors allow peripheral modules—such as N",
+    false
+  ],
+  [
+    460,
+    "How to Debug Race Conditions in Real-Time C on SBCs",
+    "Debugging race conditions in multi-threaded C applications running on real-time Single Board Computers (SBCs) requires a structured approach that balances non-intrusive observation with deep hardware-level insight. Because real-time systems often fail no",
+    false
+  ],
+  [
+    459,
+    "Single Board Computers in Portable Ultrasound Devices",
+    "Single Board Computers (SBCs) serve as the computational backbone of modern portable ultrasound systems, integrating processors, memory, and input/output interfaces onto a single circuit board. This article explores how SBCs enable point-of-care ultrasou",
+    false
+  ],
+  [
+    458,
+    "WireGuard VPN Setup for Remote SBC Fleets",
+    "Establishing secure point-to-point WireGuard tunnels across a fleet of field-deployed single board computers (SBCs) requires a systematic approach to key generation, configuration management, NAT traversal, and lifecycle automation. Because SBCs often op",
+    false
+  ],
+  [
+    457,
+    "SBC Co-Processors for Low-Power Deep Sleep Wakeup",
+    "Integrating a dedicated low-power co-processor into a single board computer (SBC) drastically optimizes power efficiency by delegating sleep monitoring and wake-up triggers away from the main application processor. This architectural approach allows the",
+    false
+  ],
+  [
+    456,
+    "BeagleBone AI Visual Analytics with Onboard DSPs",
+    "The BeagleBone AI delivers high-throughput visual analytics at the edge by offloading computationally intensive image processing and machine learning tasks from the host CPU to dedicated hardware accelerators. Built around the Texas Instruments AM5729 Sy",
+    false
+  ],
+  [
+    455,
+    "Thermal Paste Degradation on SBC Performance",
+    "Continuous operation of single-board computers (SBCs) causes thermal interface material (TIM) to degrade over time through drying, cracking, and the \"pump-out\" effect. As the thermal paste loses its conductivity, the system experiences increased thermal",
+    false
+  ],
+  [
+    454,
+    "Configure Custom PCIe Kernel Modules on SBCs",
+    "Configuring a custom Linux kernel module for proprietary PCIe hardware on a single board computer (SBC) requires setting up matching kernel headers, mapping PCIe Base Address Registers (BARs), implementing interrupt handling, and managing Direct Memory A",
+    false
+  ],
+  [
+    453,
+    "Supporting UEFI Boot on Modern ARM SBCs",
+    "Implementing UEFI boot mechanisms on modern ARM single board computers (SBCs) bridges the gap between fragmented embedded ecosystems and standardized PC-like operating system installations. This article explores the essential firmware considerations requ",
+    false
+  ],
+  [
+    452,
+    "SBCs for ML Defect Detection on Conveyor Belts",
+    "Single-board computers (SBCs) enable real-time machine learning inference for defect detection on industrial conveyor belts by processing visual data directly at the edge. By combining compact form factors, dedicated hardware accelerators, and low-latenc",
+    false
+  ],
+  [
+    451,
+    "Prevent Ground Loops in Single Board Computer Systems",
+    "Ground loop interference occurs when multiple interconnected devices share different reference potential paths to ground, leading to unwanted noise, measurement inaccuracies, and potential hardware damage in single board computer (SBC) setups. Interfacin",
+    false
+  ],
+  [
+    450,
+    "Orange Pi 5 Pro LPDDR5 Memory Performance Boost",
+    "The Orange Pi 5 Pro leverages high-speed LPDDR5 RAM to eliminate data transfer bottlenecks on its Rockchip RK3588S system-on-chip (SoC). By drastically increasing memory bandwidth and lowering latency compared to legacy memory standards, the board maximi",
+    false
+  ],
+  [
+    449,
+    "Vibration-Resistant SBC Mounting Bracket Design",
+    "Deploying Single Board Computers (SBCs) in rugged field environments exposes sensitive electronics to continuous mechanical shock, harmonics, and vibration from engines, terrain, or industrial machinery. Designing a vibration-resistant mounting bracket r",
+    false
+  ],
+  [
+    448,
+    "How to Benchmark Memory Latency and Cache on SBCs",
+    "Benchmarking memory latency and cache performance on multi-tier single board computers (SBCs) involves profiling the data transfer speeds and access delays across the entire memory hierarchy, from L1/L2/L3 CPU caches to off-chip system RAM. Because moder",
+    false
+  ],
+  [
+    447,
+    "Security Risks of Exposed SBC Debug UART Ports",
+    "Physical access to an exposed Universal Asynchronous Receiver-Transmitter (UART) port on a single board computer (SBC) presents severe hardware and software vulnerabilities. When left enabled and accessible in production environments, UART interfaces byp",
+    false
+  ],
+  [
+    446,
+    "Milk-V Mars CM Legacy Carrier Board Compatibility",
+    "The Milk-V Mars CM is a compact system-on-module powered by the StarFive JH7110 RISC-V processor, designed specifically to match the Raspberry Pi Compute Module 4 (CM4) form factor. This article explains how the Milk-V Mars CM interfaces with legacy CM4",
+    false
+  ],
+  [
+    445,
+    "Role of Single Board Computers in Modern CNC Milling",
+    "Single board computers (SBCs) have fundamentally transformed modern CNC (Computer Numerical Control) milling by providing compact, cost-effective, and powerful computing platforms to direct automated machining processes. By bridging the gap between high-",
+    false
+  ],
+  [
+    444,
+    "Assessing SBC Power Rail Transient Response",
+    "Assessing the power rail transient response during sudden CPU load spikes on a single board computer (SBC) requires introducing controlled dynamic current steps and measuring the resulting voltage deviations. Engineers evaluate parameters such as voltage",
+    false
+  ],
+  [
+    443,
+    "Software PWM vs Hardware PWM on Single Board Computers",
+    "Pulse Width Modulation (PWM) is an essential technique used by single-board computers (SBCs) to control analog circuits, dim LEDs, drive motors, and encode signals using digital pins. When implementing PWM on an SBC, developers must choose between softwa",
+    false
+  ],
+  [
+    442,
+    "Interfacing SBCs with Optical Water Quality Sensors",
+    "Single Board Computers (SBCs) act as the central processing and telemetry hubs in modern water quality monitoring stations, bridging specialized optical sensors with remote data systems. These stations utilize optical sensors to measure parameters such a",
+    false
+  ],
+  [
+    441,
+    "EtherCAT Master Stacks for Single Board Computers",
+    "Deploying an industrial EtherCAT master on a Single Board Computer (SBC) requires a combination of real-time operating systems and optimized EtherCAT master software stacks. This article explores the primary open-source and commercial software stacks ava",
+    false
+  ],
+  [
+    440,
+    "Radxa Rock 3A: RK3568 SoC and M.2 Expansion",
+    "The Radxa Rock 3A combines the Rockchip RK3568 system-on-chip (SoC) with versatile M.2 expansion interfaces, creating a high-performance single-board computer (SBC) for edge computing, multimedia, and network storage. This article explores how the board",
+    false
+  ],
+  [
+    439,
+    "Back-Drilling Benefits for High-Speed Enterprise PCBs",
+    "High-speed enterprise single-board computers (SBCs) require robust signal integrity to support multi-gigabit interfaces such as PCIe Gen 5/6, DDR5, and 100G+ Ethernet. This article explores how back-drilling—the controlled-depth mechanical removal of u",
+    false
+  ],
+  [
+    438,
+    "Single Board Computers in Autonomous Fleet Validation",
+    "Single board computers (SBCs) act as dedicated, high-efficiency data acquisition nodes deployed within autonomous vehicle test fleets to capture, synchronize, and store reference sensor data. In autonomous driving fleet validation, establishing an absolu",
+    false
+  ],
+  [
+    437,
+    "High-Core SBCs for Edge Server Virtualization",
+    "Modern high-core-count single-board computers (SBCs) have transitioned from simple development boards into enterprise-ready platforms capable of hosting virtual machines and containers at the network edge. Thanks to advances in processor architectures, h",
+    false
+  ],
+  [
+    436,
+    "Configure Custom Baud Rates on Single Board Computers",
+    "Configuring custom, non-standard baud rates on a single board computer (SBC) is essential when interfacing with specialized sensors, legacy industrial hardware, or custom microcontrollers. While standard serial configurations typically rely on predefined",
+    false
+  ],
+  [
+    435,
+    "Security Risks of Unsigned Kernel Binaries on SBCs",
+    "Deploying unsigned kernel binaries on edge single-board computers (SBCs) introduces severe security vulnerabilities by eliminating the cryptographic chain of trust required to guarantee system integrity. Without signature verification, these resource-con",
+    false
+  ],
+  [
+    434,
+    "Libre Computer Solitude Multimedia and Compute Power",
+    "The Libre Computer Solitude (AML-S905D3-CC) is an ultra-compact single board computer engineered to handle modern multimedia processing and moderate edge-compute tasks. Powered by the Amlogic S905D3 system-on-chip (SoC), it integrates a quad-core ARM Cor",
+    false
+  ],
+  [
+    433,
+    "Active Peltier vs Passive Heat Pipes for SBCs",
+    "Choosing the right cooling solution for a single-board computer (SBC) often comes down to a balance between raw thermal performance, power efficiency, and system reliability. While active Peltier (thermoelectric) cooling can drop component temperatures b",
+    false
+  ],
+  [
+    432,
+    "Calibrate Analog Inputs on Single Board Computers",
+    "Calibrating analog inputs on a multi-purpose single board computer (SBC) involves measuring known precision reference voltages, calculating hardware-induced offset and gain errors, and applying a mathematical correction in software. This process compensa",
+    false
+  ],
+  [
+    431,
+    "Single Board Computers in Smart Parcel Lockers",
+    "Modern automated parcel delivery lockers rely on single board computers (SBCs) as their primary control units to manage secure storage, process user authentication, and maintain real-time cloud connectivity. These compact computing platforms bridge physi",
+    false
+  ],
+  [
+    430,
+    "How to Optimize Java GC on Single Board Computers",
+    "Running managed runtimes like Java on Single Board Computers (SBCs) introduces unique performance challenges due to constrained CPU, RAM, and thermal limitations. Default Garbage Collection (GC) settings are typically tuned for multi-core server environm",
+    false
+  ],
+  [
+    429,
+    "Driving Optocouplers with Single Board Computer GPIO",
+    "Interfacing external optocouplers with the General-Purpose Input/Output (GPIO) pins of a single-board computer (SBC) requires careful attention to electrical constraints to prevent hardware damage and ensure reliable switching. This guide covers the crit",
+    false
+  ],
+  [
+    428,
+    "Pine64 Quartz64 Model B Expansion and Desktop Utility",
+    "The Pine64 Quartz64 Model B delivers a carefully engineered balance between maker-oriented physical expansion and general-purpose desktop usability. Powered by the Rockchip RK3566 system-on-chip, this single-board computer provides the processing power,",
+    false
+  ],
+  [
+    427,
+    "ext4 vs Btrfs Performance on SD Card SBCs",
+    "Single-board computers (SBCs) like the Raspberry Pi frequently rely on micro-SD cards for storage, making filesystem choice critical for system speed and hardware longevity. This article compares ext4 and Btrfs across raw input/output performance, system",
+    false
+  ],
+  [
+    426,
+    "Edge Biometric Authentication with Modern SBCs",
+    "Modern single-board computers (SBCs) serve as the computational backbone for next-generation commercial access control units by running biometric authentication algorithms directly at the edge. By integrating high-performance processors, dedicated neural",
+    false
+  ],
+  [
+    425,
+    "SBC Memory Controller Setup in Second-Stage Boot",
+    "During the boot sequence of a Single Board Computer (SBC), the initial Boot ROM lacks the resources to run complex operating systems directly from internal SRAM. The second-stage bootloader (such as U-Boot SPL or ARM Trusted Firmware BL2) is tasked with",
+    false
+  ],
+  [
+    424,
+    "How Hardware Video Scaling Reduces SBC CPU Overhead",
+    "Hardware video scaling offloads the resource-intensive task of resizing video frames and user interface elements from the main processor to dedicated display hardware. On resource-constrained single-board computers (SBCs), graphical user interfaces (GUIs",
+    false
+  ],
+  [
+    423,
+    "SBC Clusters for Distributed Compilation",
+    "Deploying an array of single board computers (SBCs) creates a cost-effective, energy-efficient build farm capable of accelerating software compilation through parallel distribution. By leveraging distributed build tools like distcc across multiple interc",
+    false
+  ],
+  [
+    422,
+    "Thermal Imaging Analysis for Single Board Computers",
+    "Thermal imaging analysis is a non-invasive diagnostic method used by engineers to detect, visualize, and quantify localized heat concentrations on single board computers (SBCs). By capturing infrared radiation emitted by active components, engineers can",
+    false
+  ],
+  [
+    421,
+    "Fast Low-Overhead IPC Methods for Multi-Core SBCs",
+    "On multi-core embedded single-board computers (SBCs), minimizing Inter-Process Communication (IPC) latency and CPU utilization is vital for real-time responsiveness and high data throughput. Traditional IPC mechanisms like network sockets, standard Unix",
+    false
+  ],
+  [
+    420,
+    "Banana Pi BPI-W2 for Network Routing and NAS",
+    "The Banana Pi BPI-W2 is a versatile single-board computer specifically engineered for network routing, multimedia processing, and network-attached storage (NAS) applications. Powered by the Realtek RTD1296 quad-core processor, the board bridges the gap b",
+    false
+  ],
+  [
+    419,
+    "High-Speed Differential Clock Routing for SBCs",
+    "Routing high-speed differential clock lines on a single board computer (SBC) requires precise layout techniques to preserve signal integrity, minimize timing jitter, and prevent electromagnetic interference (EMI). Because clock signals govern overall sys",
+    false
+  ],
+  [
+    418,
+    "How MIPI-DSI Reduces SBC Display Hardware Overhead",
+    "Integrating an onboard MIPI-DSI (Mobile Industry Processor Interface Display Serial Interface) on a single-board computer (SBC) significantly minimizes hardware complexity, bill-of-materials (BOM) costs, and power consumption when driving high-density di",
+    false
+  ],
+  [
+    417,
+    "Single Board Computers in Automated Greenhouses",
+    "Modern automated greenhouse facilities increasingly rely on single board computers (SBCs) to manage complex environmental variables and optimize crop yield. This article examines the central role SBCs play in greenhouse control systems, covering their ap",
+    false
+  ],
+  [
+    416,
+    "Zero-Copy Networking for Single Board Computers",
+    "Zero-copy networking removes CPU-intensive memory duplications between the operating system kernel and user space, allowing resource-constrained single board computers (SBCs) to maximize throughput and minimize latency. This article covers the primary me",
+    false
+  ],
+  [
+    415,
+    "DAC Power Supply Noise on Single Board Computers",
+    "High-resolution Digital-to-Analog Converters (DACs) are inherently vulnerable to power supply noise, which can severely degrade dynamic range, Signal-to-Noise Ratio (SNR), and Total Harmonic Distortion (THD). On compact Single Board Computers (SBCs), hig",
+    false
+  ],
+  [
+    414,
+    "Khadas VIM1S for Low-Power Multimedia Streaming",
+    "The Khadas VIM1S single-board computer (SBC) provides a highly efficient solution for modern multimedia streaming by pairing hardware-accelerated video decoding with an ultra-low-power architecture. Powered by the Amlogic S905Y4 SoC, the board easily han",
+    false
+  ],
+  [
+    413,
+    "USB OTG vs USB Host Ports on Single Board Computers",
+    "Single Board Computers (SBCs) typically feature both standard USB host ports and USB On-The-Go (OTG) ports to handle different connectivity requirements. While a standard USB host port allows an SBC to act strictly as a master controller for external per",
+    false
+  ],
+  [
+    412,
+    "Secure Firmware Rollback Protection on Enterprise SBCs",
+    "This article provides an engineering guide on implementing secure firmware anti-rollback protection on enterprise single board computers (SBCs). It covers the fundamental hardware and software mechanisms required to prevent downgrade attacks—where adve",
+    false
+  ],
+  [
+    411,
+    "Optimizing SBC Cooling Fan Curve Parameters",
+    "Configuring an effective hardware cooling fan curve on a temperature-sensitive single-board computer (SBC) requires balancing thermal dissipation, acoustic comfort, power consumption, and hardware longevity. Because SBCs often integrate the CPU, GPU, mem",
+    false
+  ],
+  [
+    410,
+    "SBCs in Decentralized Wildfire Detection Networks",
+    "Single-board computers (SBCs) are transforming wildfire early detection by providing the processing power, energy efficiency, and connectivity required for decentralized sensor networks. By moving intelligence directly to the forest edge, these compact d",
+    false
+  ],
+  [
+    409,
+    "Advantages of STP Cabling for High-Speed SBC I/O",
+    "Shielded twisted-pair (STP) cabling provides critical electrical benefits for high-speed single-board computer (SBC) input/output (I/O) lines by preserving signal integrity across high data rates. As SBCs increasingly handle multi-gigabit protocols—suc",
+    false
+  ],
+  [
+    408,
+    "Odroid-GO Architecture for Handheld Gaming",
+    "The Odroid-GO single-board computer architecture is purpose-built to deliver efficient, low-latency retro emulation within a portable form factor. By leveraging the ESP32 microcontroller platform, direct peripheral routing, and dedicated power management",
+    false
+  ],
+  [
+    407,
+    "Consumer vs Defense SBC Conformal Coatings",
+    "This article provides an overview of the structural, chemical, and application differences between consumer-grade and defense-grade conformal coatings on single board computers (SBCs). While consumer coatings are designed for basic dust and humidity resi",
+    false
+  ],
+  [
+    406,
+    "Apply Device Tree Overlays at Runtime on Linux SBCs",
+    "Configuring Device Tree Overlays (DTOs) dynamically allows developers to reconfigure hardware pins, enable peripherals, and attach drivers on a Linux-powered single board computer without rebooting the system. This guide covers the end-to-end process of",
+    false
+  ],
+  [
+    405,
+    "Wide-Range DC Input Converter Design for SBCs",
+    "Incorporating wide-range DC input converters into a single board computer (SBC) enables reliable operation across diverse, unpredictable power environments such as industrial automation, automotive systems, and telecommunications. This article outlines t",
+    false
+  ],
+  [
+    404,
+    "SBC Edge Data Encryption for Cellular Networks",
+    "Single Board Computers (SBCs) secure edge data before cellular transmission by combining local data aggregation, cryptographic hardware acceleration, and robust transport-layer security protocols. As edge nodes in Internet of Things (IoT) ecosystems, SBC",
+    false
+  ],
+  [
+    403,
+    "How to Calibrate SBC Crystal Oscillators for Timing",
+    "Single-board computers (SBCs) rely on onboard crystal oscillators to generate clock signals for their processors, hardware timers, and system clocks. However, standard quartz crystals suffer from manufacturing tolerances, aging, and temperature-induced f",
+    false
+  ],
+  [
+    402,
+    "Rock 5 Model A Performance in a Compact Footprint",
+    "The Radxa Rock 5 Model A (Rock 5A) achieves high-end processing performance within a credit-card-sized form factor by integrating the octa-core Rockchip RK3588S system-on-chip (SoC), an advanced 6 TOPS Neural Processing Unit (NPU), and high-bandwidth LPD",
+    false
+  ],
+  [
+    401,
+    "Limitations of Running ESXi on ARM SBCs",
+    "Running enterprise-grade hypervisors like VMware ESXi on ARM single-board computers (SBCs) provides a compact, energy-efficient solution for edge computing, testing, and homelab environments. However, deploying heavy virtualization platforms onto consume",
+    false
+  ],
+  [
+    400,
+    "Interfacing High-Speed Parallel Buses to SBCs",
+    "Interfacing high-speed parallel digital buses to an expansion-rich single-board computer (SBC) requires addressing critical hardware challenges, including signal integrity, pin availability, clock synchronization, and data throughput bottlenecks. Enginee",
+    false
+  ],
+  [
+    399,
+    "Single Board Computers in AUV Telemetry",
+    "Single board computers (SBCs) serve as the primary computational backbone for managing telemetry in modern autonomous underwater vehicles (AUVs). By acting as the central hub between onboard sensors, internal health diagnostics, and multi-modal communica",
+    false
+  ],
+  [
+    398,
+    "How to Configure SBC High-Resolution Framebuffers",
+    "Configuring high-resolution framebuffers for direct display rendering on a single board computer (SBC) enables developers to output smooth, low-latency visuals without the overhead of a desktop environment or X11/Wayland window server. This article cover",
+    false
+  ],
+  [
+    397,
+    "Automated Factory Diagnostics for Single Board Computers",
+    "Implementing automated factory diagnostics for the mass production of a single board computer (SBC) ensures hardware reliability, minimizes manufacturing defects, and maintains high throughput. This article outlines the essential steps required to build",
+    false
+  ],
+  [
+    396,
+    "BeagleBone Black Wireless PCB Antenna Integration",
+    "The BeagleBone Black Wireless replaces the traditional wired Ethernet interface of the standard BeagleBone with 802.11b/g/n 2.4 GHz Wi-Fi and Bluetooth 4.1. This article explores how the board's printed circuit board (PCB) integrates its wireless antenna",
+    false
+  ],
+  [
+    395,
+    "Vertical vs Horizontal SBC Mounting Thermal Trade-Offs",
+    "Mounting orientation significantly influences the thermal dynamics of a single board computer (SBC). The choice between a vertical and horizontal orientation alters natural convection, heat dissipation efficiency across the printed circuit board (PCB), a",
+    false
+  ],
+  [
+    394,
+    "How Secure Key Storage Protects IP on Commercial SBCs",
+    "Hardware-based secure key storage safeguards proprietary software, proprietary algorithms, and sensitive data on commercial single-board computers (SBCs) by establishing a hardware-enforced root of trust. By isolating cryptographic keys inside dedicated",
+    false
+  ],
+  [
+    393,
+    "Benefits of Rugged SBCs in Maritime Navigation",
+    "Rugged single board computers (SBCs) provide maritime navigation consoles with the processing power, durability, and reliability required for demanding marine environments. By integrating computing components onto a single, reinforced circuit board, thes",
+    false
+  ],
+  [
+    392,
+    "Writing Custom Udev Rules on Single Board Computers",
+    "Single Board Computers (SBCs) frequently interact with external hardware, but Linux dynamically assigns device nodes like /dev/ttyUSB0 or /dev/video0 based on boot order, leading to broken dependencies. Writing custom udev rules solves this problem by bi",
+    false
+  ],
+  [
+    391,
+    "Single vs Dual Channel RAM on Single Board Computers",
+    "This article explores the technical distinctions between single-channel and dual-channel memory configurations on single board computers (SBCs). It covers the underlying architectural differences, including data bus width, theoretical throughput, system-",
+    false
+  ],
+  [
+    390,
+    "Smart City Noise Mapping with Single Board Computers",
+    "Single board computers (SBCs) have revolutionized smart city noise mapping by providing low-cost, scalable, and intelligent edge nodes for distributed acoustic monitoring. By processing audio signals locally, these compact computing devices enable munici",
+    false
+  ],
+  [
+    389,
+    "Protecting SBC GPIO Pins from Electrostatic Discharge",
+    "Single board computers (SBCs) rely on exposed expansion headers and General Purpose Input/Output (GPIO) pins for hardware interfacing, making them highly vulnerable to electrostatic discharge (ESD). A stray static shock can instantly destroy the underlyi",
+    false
+  ],
+  [
+    388,
+    "Orange Pi Zero 3 Memory Optimization in IoT",
+    "The Orange Pi Zero 3 is a low-cost, compact single-board computer (SBC) widely deployed in edge computing and Internet of Things (IoT) projects. This article outlines the core strategies for minimizing memory usage on the Orange Pi Zero 3, focusing on le",
+    false
+  ],
+  [
+    387,
+    "USB 3.0 vs Native PCIe on Single Board Computers",
+    "Choosing between USB 3.0 and native PCIe on a single-board computer (SBC) fundamentally impacts data throughput, latency, CPU utilization, and system stability. While native PCIe provides direct hardware-level access to the processor for maximum bandwidt",
+    false
+  ],
+  [
+    386,
+    "How to Compile PREEMPT_RT Kernel for ARM SBC",
+    "This guide outlines the complete process of cross-compiling a real-time Linux kernel using the PREEMPTRT patch for a custom ARM-based single board computer (SBC). Achieving deterministic, low-latency performance on embedded ARM hardware requires obtainin",
+    false
+  ],
+  [
+    385,
+    "Role of SBCs in Automated Liquid Handling",
+    "Single board computers (SBCs) serve as the primary computational and control hubs in modern automated laboratory liquid-handling instruments. By combining processors, memory, input/output interfaces, and network capabilities onto a single compact circuit",
+    false
+  ],
+  [
+    384,
+    "Assessing PCB Flex and Strain on SBC Components",
+    "Evaluating board flexure and mechanical strain on surface-mount components of a Single Board Computer (SBC) is vital to preventing solder joint cracking, pad cratering, and trace breakage. Engineers assess these mechanical risks by combining physical str",
+    false
+  ],
+  [
+    383,
+    "Long-Distance I2C Bus Driving Requirements for SBCs",
+    "Driving an I2C bus over extended distances using a single board computer (SBC) requires specific electrical adjustments to overcome the standard protocol's physical layer limitations. Because standard I2C is designed for short, on-board traces with a max",
+    false
+  ],
+  [
+    382,
+    "Libre Computer Alta Budget AI Processing",
+    "The Libre Computer Alta (AML-A311D-CC) is an affordable single board computer designed to deliver edge artificial intelligence capabilities without the premium price tag of specialized industrial hardware. By pairing an Amlogic A311D processor with a ded",
+    false
+  ],
+  [
+    381,
+    "Setup LUKS Encrypted Storage on an ARM SBC",
+    "Securing data on an ARM single board computer (SBC) is critical if the device is deployed in accessible or remote environments. This guide details the process of using Linux Unified Key Setup (LUKS) and the cryptsetup utility to create, format, open, and",
+    false
+  ],
+  [
+    380,
+    "How Industrial SBCs Protect Data from EMP",
+    "Industrial single board computers (SBCs) maintain critical data integrity during severe electromagnetic pulse (EMP) events by employing a multi-layered defense strategy. This framework combines specialized physical shielding, board-level circuit hardenin",
+    false
+  ],
+  [
+    379,
+    "Static vs Dynamic Memory Allocation in Embedded RTOS",
+    "Choosing between dynamic and static memory allocation on an embedded Real-Time Operating System (RTOS) single-board computer (SBC) involves balancing real-time determinism, memory safety, and hardware resource efficiency. While static allocation guarante",
+    false
+  ],
+  [
+    378,
+    "How to Create Custom Systemd Services on SBCs",
+    "Configuring a custom systemd service allows software developers to run applications automatically on boot, manage background daemons, and ensure process recovery on Single Board Computers (SBCs) running Linux distributions like Raspberry Pi OS, Ubuntu, o",
+    false
+  ],
+  [
+    377,
+    "AI Accelerator Power Budget Efficiency on SBCs",
+    "Evaluating the power-budget efficiency of an Artificial Intelligence (AI) accelerator module on a single board computer (SBC) requires analyzing several interrelated hardware and software factors. The primary criteria determining efficiency include raw p",
+    false
+  ],
+  [
+    376,
+    "Single Board Computers in Modern Rocketry Experiments",
+    "Single board computers (SBCs) have revolutionized modern rocketry by serving as compact, powerful, and cost-effective flight computers for amateur, collegiate, and commercial aerospace projects. This article explores how SBCs manage complex in-flight tas",
+    false
+  ],
+  [
+    375,
+    "Interfacing Raw CMOS Sensors to SBC CSI Buses",
+    "Interfacing a raw CMOS image sensor directly with the Camera Serial Interface (CSI) bus of a single board computer (SBC) presents significant hardware, electrical, and software hurdles. While the MIPI CSI-2 protocol provides high-bandwidth data transmiss",
+    false
+  ],
+  [
+    374,
+    "Radxa E25 Dual 2.5G Ports for Edge Gateways",
+    "This article explores how the Radxa E25 single-board computer leverages its dual 2.5 Gigabit Ethernet (2.5GbE) interfaces to serve as an efficient, high-throughput edge gateway. By combining the Rockchip RK3568 processor with native multi-gigabit network",
+    false
+  ],
+  [
+    373,
+    "SBC Firmware License Management Best Practices",
+    "Deploying commercial hardware built on single board computers (SBCs) requires strict firmware license management to protect intellectual property, prevent copyright infringement, and ensure regulatory compliance. Commercializing SBC-based systems involve",
+    false
+  ],
+  [
+    372,
+    "SBC Multi-Camera Synchronization for 3D Mapping",
+    "Modern single-board computers (SBCs) achieve accurate 3D stereoscopic mapping by coordinating multiple camera sensors through hardware-level triggering, optimized high-speed bus interfaces, and synchronized software pipelines. By combining dedicated Imag",
+    false
+  ],
+  [
+    371,
+    "Enterprise SBC Network Packet Offloading Performance",
+    "Enabling network packet offloading on an enterprise single board computer (SBC) fundamentally alters system resource distribution, shifting repetitive frame processing tasks from resource-constrained central processors to dedicated network interface cont",
+    false
+  ],
+  [
+    370,
+    "Designing Reliable Power-On-Reset for Multi-Core SBCs",
+    "Power-on-reset (POR) circuitry ensures that a multi-core embedded single-board computer (SBC) boots into a known, deterministic state every time power is applied. Designing a reliable POR circuit requires managing complex power supply sequencing, overcom",
+    false
+  ],
+  [
+    369,
+    "High-Speed Differential Trace Layout on SBCs",
+    "High-speed differential trace routing on a Single Board Computer (SBC) is vital for protocols such as PCIe, USB, Ethernet, HDMI, and MIPI to function reliably without data corruption or excessive electromagnetic interference (EMI). Designing these traces",
+    false
+  ],
+  [
+    368,
+    "Milk-V Mars: Advancing Low-Cost RISC-V Computing",
+    "The Milk-V Mars is a credit-card-sized single-board computer (SBC) that significantly accelerates the adoption of the open-standard RISC-V architecture by offering high-performance features at an entry-level price point. Powered by the StarFive JH7110 qu",
+    false
+  ],
+  [
+    367,
+    "Top CAN-FD Single Board Computer Use Cases",
+    "Single Board Computers (SBCs) equipped with integrated CAN-FD (Controller Area Network Flexible Data-Rate) transceivers provide edge computing power paired with high-speed, deterministic automotive and industrial networking. By supporting data rates up t",
+    false
+  ],
+  [
+    366,
+    "Tracing Hardware Interrupt Latency on Real-Time SBCs",
+    "Tracing hardware interrupt (IRQ) latency on a real-time patched (PREEMPTRT) single-board computer (SBC) requires isolating the delay between a physical hardware signal and the execution of its corresponding interrupt service routine (ISR). This guide cov",
+    false
+  ],
+  [
+    365,
+    "Isolating Power Rail and Radio Noise on SBCs",
+    "Single board computers (SBCs) integrate high-speed digital processors, switching power supplies, and sensitive radio frequency (RF) transceivers onto a compact printed circuit board. High-frequency switching noise and voltage ripple from power rails can",
+    false
+  ],
+  [
+    364,
+    "Single Board Computers in Seismic Detection",
+    "Single board computers (SBCs) play a critical role in modern seismic activity detection networks by serving as decentralized, low-cost local processing units. By interfacing directly with seismic sensors, performing on-site signal processing, and executi",
+    false
+  ],
+  [
+    363,
+    "Advantages of Onboard SATA Power on Storage SBCs",
+    "Storage-focused single board computers (SBCs) equipped with native onboard SATA power connectors offer a streamlined approach to building compact network-attached storage (NAS) and media servers. By supplying drive power directly from the mainboard rathe",
+    false
+  ],
+  [
+    362,
+    "Tuning Thermal Governors on Edge Single Board Computers",
+    "Edge single board computers (SBCs) frequently encounter thermal throttling under sustained workloads, causing abrupt CPU frequency drops and degraded performance. Developers prevent these sudden drops by fine-tuning the Linux kernel's thermal framework,",
+    false
+  ],
+  [
+    361,
+    "TLS Proxy Software Requirements for Single Board Computers",
+    "Setting up a secure Transport Layer Security (TLS) proxy server on a modern single board computer (SBC) requires a carefully selected software stack tailored to low-power, ARM- or x86-based hardware. This guide details the essential software components n",
+    false
+  ],
+  [
+    360,
+    "Banana Pi BPI-M2 Zero Form Factor Comparison",
+    "The Banana Pi BPI-M2 Zero is an ultra-compact single-board computer (SBC) designed to match the minimalist footprint popularized by micro-computing platforms. This article examines the physical dimensions, connector layout, and overall design of the BPI-",
+    false
+  ],
+  [
+    359,
+    "Solid Capacitor Durability on Industrial SBCs",
+    "Solid-state electrolytic capacitors—commonly referred to as conductive polymer capacitors—are critical to the long-term reliability and operational stability of industrial single board computers (SBCs). Unlike legacy liquid electrolytic alternatives,",
+    false
+  ],
+  [
+    358,
+    "Custom GPIO Pinmux Configuration in SBC Bootloader",
+    "Configuring custom GPIO pin multiplexing (pinmux) in a Single Board Computer (SBC) bootloader ensures that peripheral interfaces, power rails, and status lines are established before the main operating system kernel boots. This process involves identifyi",
+    false
+  ],
+  [
+    357,
+    "SDIO vs USB Wi-Fi Modules for Single Board Computers",
+    "When integrating wireless connectivity into a single board computer (SBC), designers primarily choose between SDIO (Secure Digital Input Output) and USB (Universal Serial Bus) interfaces. This article compares the operational differences between SDIO and",
+    false
+  ],
+  [
+    356,
+    "SBCs for Edge Analytics on Smart Grid Transformers",
+    "Single-board computers (SBCs) have become pivotal components in modernizing smart utility grids by enabling edge analytics directly at distribution transformers. By processing data locally rather than transmitting raw telemetry to centralized cloud serve",
+    false
+  ],
+  [
+    355,
+    "Why Media SBCs Need Onboard Hardware Audio Codecs",
+    "Single-board computers (SBCs) designed for media applications require reliable, high-performance audio processing to deliver immersive user experiences. Integrating a dedicated onboard hardware audio codec bridges the gap between digital processing and a",
+    false
+  ],
+  [
+    354,
+    "GPS PPS Time Synchronization on Single Board Computers",
+    "Achieving microsecond-level localized time synchronization on a Single Board Computer (SBC) requires combining serial NMEA data with a hardware Pulse Per Second (PPS) signal from a GPS receiver. This guide outlines the end-to-end implementation process,",
+    false
+  ],
+  [
+    353,
+    "Validating DDR Memory Routing on a Custom SBC PCB",
+    "Validating high-speed DDR memory routing on a custom Single Board Computer (SBC) PCB is crucial for ensuring signal integrity, timing compliance, and overall system reliability. This validation process involves a structured sequence of pre-tapeout simula",
+    false
+  ],
+  [
+    352,
+    "Odroid-C4 Efficiency Per Watt vs Modern SBCs",
+    "The Odroid-C4, powered by the Amlogic S905X3 processor featuring four ARM Cortex-A55 cores, remains a strong benchmark for energy-efficient computing. This article analyzes how the Odroid-C4 compares to modern single-board computers (SBCs)—such as the",
+    false
+  ],
+  [
+    351,
+    "SBCs for In-Vehicle Infotainment Prototyping",
+    "Modern in-vehicle infotainment (IVI) development demands rapid iteration, high flexibility, and cost-effective testing environments. Single-board computers (SBCs) have become a preferred prototyping engine for automotive software engineers and UI/UX desi",
+    false
+  ],
+  [
+    350,
+    "How Watchdog Timers Prevent SBC Software Deadlocks",
+    "Unattended single-board computers (SBCs) deployed in remote or industrial environments require high autonomy and reliability without manual intervention. An internal hardware timer, commonly known as a Watchdog Timer (WDT), acts as a critical fail-safe m",
+    false
+  ],
+  [
+    349,
+    "Device Tree Overlay Best Practices for SBCs",
+    "This article provides a concise guide on structuring Device Tree Overlays (DTOs) for custom hardware expansions on Single Board Computers (SBCs). You will learn how to organize source files, define pin control states, maintain modularity, handle dynamic",
+    false
+  ],
+  [
+    348,
+    "SBC Vibration Damping on Industrial Machinery",
+    "Factory environments expose electronic hardware to continuous mechanical oscillation and sudden shock loads, which can lead to solder fatigue, component detachment, and system failure. To protect single board computers (SBCs) installed directly on or nea",
+    false
+  ],
+  [
+    347,
+    "Low-Power Wake-on-LAN on Enterprise SBCs",
+    "Wake-on-LAN (WoL) allows enterprise single board computers (SBCs) to remain dormant until summoned across the local network, drastically cutting energy consumption across edge deployments. Achieving true ultra-low-power operation during these standby per",
+    false
+  ],
+  [
+    346,
+    "BeagleBone Blue Motion Control in Mobile Robotics",
+    "The BeagleBone Blue is an all-in-one, Linux-enabled single-board computer (SBC) specifically engineered to streamline the development of mobile robotics. By embedding inertial measurement units, barometric sensors, motor drivers, and real-time processing",
+    false
+  ],
+  [
+    345,
+    "Unified vs Discrete GPU Memory on Single Board Computers",
+    "Single Board Computers (SBCs) rely on distinct memory bus architectures depending on whether they utilize unified memory with an integrated graphics processor or dedicated memory with a discrete GPU. This article breaks down the physical, structural, and",
+    false
+  ],
+  [
+    344,
+    "How SBCs Synchronize Weather Balloon Payload Releases",
+    "Single Board Computers (SBCs) serve as the central processing hubs for modern research weather balloons, enabling the precise, synchronized release of scientific payloads. By continuously processing data from onboard environmental sensors, GPS modules, a",
+    false
+  ],
+  [
+    343,
+    "Benefits of Upstream Linux vs Vendor BSP on SBCs",
+    "When deploying a single board computer (SBC) for embedded projects or production environments, choosing the right operating system foundation is critical. While hardware manufacturers typically supply a proprietary Board Support Package (BSP) to get hard",
+    false
+  ],
+  [
+    342,
+    "How to Interface Delta-Sigma ADCs with SPI SBCs",
+    "Interfacing high-precision delta-sigma ($\\Delta\\Sigma$) analog-to-digital converters (ADCs) with a Serial Peripheral Interface (SPI)-capable single-board computer (SBC) requires a coordinated approach combining hardware wiring, precise bus timing, interr",
+    false
+  ],
+  [
+    341,
+    "Unauthenticated Serial Console Risks on SBCs",
+    "Deploying single-board computers (SBCs) with unauthenticated serial consoles introduces critical vulnerabilities that can completely undermine a system's security posture. When hardware interfaces such as Universal Asynchronous Receiver-Transmitter (UART",
+    false
+  ],
+  [
+    340,
+    "Khadas Mind Modular Expansion Ecosystem Explained",
+    "The Khadas Mind ecosystem represents a unique approach to compact computing, bridging the gap between an ultra-portable mini-PC and a high-performance modular workstation. By utilizing a proprietary high-speed connector called the Mind Link, the core uni",
+    false
+  ],
+  [
+    339,
+    "SBCs in Telecom Base Station Auxiliary Systems",
+    "Single Board Computers (SBCs) serve as critical, low-cost intelligence hubs within modern telecommunications base stations. While primary radio equipment handles network traffic, auxiliary systems—including power management, climate control, site secur",
+    false
+  ],
+  [
+    338,
+    "SBC Boot Fallback for Corrupted Partitions",
+    "This article details how embedded systems engineers design and implement software fallbacks for corrupted boot partitions on Single Board Computers (SBCs). It covers the fundamental architecture of redundant A/B partitioning, configuring bootloader state",
+    false
+  ],
+  [
+    337,
+    "USB-C Power Negotiation for High-Draw SBCs",
+    "Designing a modern, high-draw single-board computer (SBC) requires moving beyond basic 5V power rails to support dynamic USB Power Delivery (USB-PD). This article outlines the essential hardware design practices needed to ensure reliable power negotiatio",
+    false
+  ],
+  [
+    336,
+    "How Industrial SBCs Maintain Stable Clock Timing",
+    "Industrial single board computers (SBCs) deployed in mission-critical environments must deliver precise, deterministic performance across extreme temperature ranges, typically between -40°C and 85°C (or up to 105°C in extended automotive or aerospace",
+    false
+  ],
+  [
+    335,
+    "32-Bit vs 64-Bit Kernel for a 2GB RAM SBC",
+    "Selecting between a 32-bit and a 64-bit kernel on a 2GB RAM single-board computer (SBC) requires balancing memory overhead against CPU performance and modern software compatibility. While 64-bit systems unlock modern ARMv8 instruction set benefits and br",
+    false
+  ],
+  [
+    334,
+    "Configuring PDM Microphones on Audio SBCs",
+    "Pulse-density modulation (PDM) microphones are widely used in embedded audio projects for their high noise immunity, low cost, and small footprint. Configuring PDM microphones on an audio-focused single-board computer (SBC) requires interfacing the digit",
+    false
+  ],
+  [
+    333,
+    "Full Disk Encryption Performance on Low-Power SBCs",
+    "Enabling full disk encryption (FDE) on low-power single board computers (SBCs) provides essential data-at-rest protection, but it introduces noticeable performance trade-offs due to limited hardware resources. This article outlines the primary impacts of",
+    false
+  ],
+  [
+    332,
+    "Orange Pi 5B: Wi-Fi 6, Bluetooth, and eMMC Storage",
+    "The Orange Pi 5B enhances the standard Orange Pi 5 platform by natively integrating high-speed wireless networking and onboard eMMC flash storage directly onto the circuit board. By incorporating dual-band Wi-Fi 6, Bluetooth 5.0, and eMMC 5.1 capacities",
+    false
+  ],
+  [
+    331,
+    "Mining Single Board Computer Environmental Ratings",
+    "Single board computers (SBCs) deployed in modern mining machinery face some of the world’s harshest operational environments, demanding strict environmental resilience ratings to ensure uninterrupted performance and safety. This article outlines the es",
+    false
+  ],
+  [
+    330,
+    "Offloading SBC CPU Tasks with FPGA Companion Chips",
+    "An FPGA companion chip serves as a dedicated hardware accelerator that relieves a single board computer's (SBC) central processor from executing compute-heavy, time-critical control algorithms. By handling deterministic mathematical operations, high-freq",
+    false
+  ],
+  [
+    329,
+    "Mass OS Cloning for Single Board Computers",
+    "Deploying and cloning operating system images across a massive fleet of single board computers (SBCs) requires scalable deployment strategies to eliminate manual flashing bottlenecks. This article breaks down the primary methods used for rapid mass deplo",
+    false
+  ],
+  [
+    328,
+    "SBCs in Modern Livestock Tracking and Feeding Systems",
+    "Single-board computers (SBCs) are transforming modern agriculture by delivering cost-effective, energy-efficient computational power directly to the farm environment. This article explores how SBCs serve as the backbone for precision livestock tracking a",
+    false
+  ],
+  [
+    327,
+    "USB Differential Signaling on Single Board Computers",
+    "This article provides an overview of the electrical characteristics governing differential signaling on the USB lines of single board computers (SBCs). It examines physical layer parameters across various USB standards, detailing differential voltage lev",
+    false
+  ],
+  [
+    326,
+    "Configure Power States on ARM big.LITTLE SBCs",
+    "Configuring custom power management states on an ARM big.LITTLE single board computer (SBC) enables developers to optimize thermal efficiency, battery life, and processing throughput across asymmetric core clusters. This guide outlines how to define cust",
+    false
+  ],
+  [
+    325,
+    "PC/104 Architecture vs Modern Single Board Computers",
+    "This article explores the fundamental design differences between legacy, stackable PC/104 architectures and modern single board computers (SBCs). While both solutions cater to embedded systems, industrial computing, and rugged environments, they diverge",
+    false
+  ],
+  [
+    324,
+    "How SBCs Interface with Underwater Acoustic Sensors",
+    "Single board computers (SBCs) serve as compact, cost-effective processing hubs that enable real-time data acquisition and edge computing for underwater acoustic sensors in marine science research. By bridging the gap between analog hydrophones and digita",
+    false
+  ],
+  [
+    323,
+    "Read-Only Root Filesystem Strategies for SBCs",
+    "Deploying single board computers (SBCs) in the field requires high reliability against sudden power loss and flash storage degradation. A read-only root filesystem prevents filesystem corruption, eliminates SD card and eMMC write wear, and bolsters secur",
+    false
+  ],
+  [
+    322,
+    "Radxa Rock 5A Thermal Dissipation and Cooling",
+    "The Radxa Rock 5A packs the high-performance Rockchip RK3588S system-on-chip (SoC) into a compact, credit-card-sized form factor. To prevent performance throttling under heavy workloads, the board relies on a combination of strategic component placement,",
+    false
+  ],
+  [
+    321,
+    "Trace Linux System Calls in Real Time on SBCs",
+    "Tracing Linux kernel system calls in real time on embedded single-board computers (SBCs) is essential for diagnosing software bugs, analyzing performance bottlenecks, and auditing system behavior. Because embedded systems often feature constrained CPU ar",
+    false
+  ],
+  [
+    320,
+    "Hardware Decryption Impact on SBC Network Throughput",
+    "Hardware-accelerated cryptographic decryption significantly enhances network throughput on a single board computer (SBC) by offloading computationally intensive mathematical operations from the general-purpose CPU to dedicated silicon engines. This artic",
+    false
+  ],
+  [
+    319,
+    "Industrial SBCs in Rail Transportation Monitoring",
+    "Industrial single board computers (SBCs) are essential components in modern railway infrastructure, providing robust computing power for real-time diagnostics, safety tracking, and asset management. This article examines the key advantages of integrating",
+    false
+  ],
+  [
+    318,
+    "How Hardware RTCs Maintain Time During SBC Power Cycles",
+    "Single board computers (SBCs) typically lack onboard battery-backed clocks, causing them to lose track of time whenever main power is disconnected. An external hardware real-time clock (RTC) maintains accurate timekeeping through power cycles by utilizin",
+    false
+  ],
+  [
+    317,
+    "How Single Board Computers Control LED Billboards",
+    "Single board computers (SBCs) serve as the vital processing and control hubs for modern digital LED billboards. By handling media playback, network communication, hardware synchronization, and environmental monitoring, these compact computing units trans",
+    false
+  ],
+  [
+    316,
+    "Diagnosing SBC Power Reset Issues from Transients",
+    "Diagnosing intermittent power resets on Single Board Computers (SBCs) caused by electrical transients requires a methodical combination of circuit-level probing, high-speed signal capture, and environmental stress testing. Because transients—such as vo",
+    false
+  ],
+  [
+    315,
+    "Best OS Kernel for a Headless Single Board Computer",
+    "Selecting the right operating system kernel for a headless single board computer (SBC) requires balancing hardware support, resource constraints, real-time performance, and remote maintainability. Because headless devices operate without a graphical disp",
+    false
+  ],
+  [
+    314,
+    "LattePanda 3 Delta Power and Performance Balance",
+    "The LattePanda 3 Delta achieves a high level of computing efficiency by combining the 11th-generation Intel mobile architecture with intelligent power scaling, active thermal design, and a dedicated low-power coprocessor. This single-board computer deliv",
+    false
+  ],
+  [
+    313,
+    "Modern 40-Pin SBC GPIO Header Pinout Guide",
+    "Most modern Single Board Computers (SBCs)—such as the Raspberry Pi, Orange Pi, Radxa Rock Pi, and ASUS Tinker Board—utilize a standardized 40-pin GPIO (General Purpose Input/Output) header. This article provides a direct overview of the standard 40-p",
+    false
+  ],
+  [
+    312,
+    "Single Board Computer Edge Data Preprocessing",
+    "Single-board computers (SBCs) act as vital edge gateways in modern Internet of Things (IoT) architectures by ingesting, validating, transforming, and compressing raw sensor data locally before sending it to the cloud. By handling computations on-site, SB",
+    false
+  ],
+  [
+    311,
+    "Benefits of Hardware RNG on Secure Single Board Computers",
+    "Integrating a hardware-based random number generator (HRNG) into a secure single board computer (SBC) provides a dedicated physical foundation for cryptographic operations. This article examines the critical benefits of HRNG integration, including superi",
+    false
+  ],
+  [
+    310,
+    "How to Calibrate I2C Touchscreens on an SBC",
+    "Calibrating an I2C-connected touch controller on a Single Board Computer (SBC) involves verifying hardware communication, capturing raw coordinate data, and applying a mathematical transformation to align touch points with the display. This guide covers",
+    false
+  ],
+  [
+    309,
+    "Auto Mount Network File Systems at Boot on SBC",
+    "Automatically mounting a Network File System (NFS) or Server Message Block (SMB/CIFS) share at boot on a Single Board Computer (SBC) ensures continuous access to remote storage for media servers, backups, or lightweight clustering. This guide covers the",
+    false
+  ],
+  [
+    308,
+    "Pinebook Pro vs Standalone SBC Architecture",
+    "The Pine64 Pinebook Pro utilizes a single-board computer (SBC) design at its core, centered on the Rockchip RK3399 system-on-chip (SoC), but its architecture fundamentally diverges from traditional standalone SBCs. While standalone development boards lik",
+    false
+  ],
+  [
+    307,
+    "Low EMI Design Methods for Single Board Computers",
+    "Single board computers (SBCs) operate at high clock frequencies with densely packed components, making them prone to emitting electromagnetic interference (EMI). To meet stringent electromagnetic compatibility (EMC) regulations, hardware engineers implem",
+    false
+  ],
+  [
+    306,
+    "How SBC Temperature Sensors Trigger Thermal Mitigation",
+    "Single Board Computers (SBCs) rely on closed-loop feedback systems to maintain safe operating temperatures under heavy computational loads. Integrated on-die thermal sensors continuously measure processor temperatures and feed this data into kernel-level",
+    false
+  ],
+  [
+    305,
+    "Causes of Ethernet Jitter in Single Board Computers",
+    "Network jitter, defined as the statistical variation in packet transit delay, significantly impacts time-sensitive applications running on single board computers (SBCs) such as robotics, industrial automation, and real-time audio/video streaming. This ar",
+    false
+  ],
+  [
+    304,
+    "Interfacing SBCs with High-Voltage Industrial Relays",
+    "Single Board Computers (SBCs) such as the Raspberry Pi, BeagleBone, or industrial-grade equivalents control high-voltage industrial machinery by utilizing relay isolation modules. Because standard SBCs operate on low-voltage DC logic (typically 3.3V or 5",
+    false
+  ],
+  [
+    303,
+    "Best Enterprise SNMP Monitoring Software for SBCs",
+    "Modern Single Board Computers (SBCs), such as the Raspberry Pi 4/5, ODROID, and Rockchip-based boards, have enough processing power and memory to serve as enterprise-grade Simple Network Management Protocol (SNMP) network monitors. By pairing energy-effi",
+    false
+  ],
+  [
+    302,
+    "Rock Pi S for Voice-Activated Edge Nodes",
+    "The Rock Pi S provides a high-performance, cost-effective, and ultra-compact platform specifically engineered for audio-driven edge computing and Internet of Things (IoT) deployments. Powered by the Rockchip RK3308 processor, this miniature single-board",
+    false
+  ],
+  [
+    301,
+    "Gold-Plated Edge Contact Durability on SBCs",
+    "Gold-plated edge contacts on single board computers (SBCs) provide critical electrical and mechanical interfaces that ensure long-term signal integrity and system reliability. This article examines the physical durability characteristics of these contact",
+    false
+  ],
+  [
+    300,
+    "How to Configure DMA Channels on Modern SBCs",
+    "Direct Memory Access (DMA) allows hardware peripherals to transfer data directly to and from system memory without continuous CPU intervention, drastically reducing processor overhead in embedded systems. On modern Single Board Computers (SBCs) running e",
+    false
+  ],
+  [
+    299,
+    "Single Board Computers in Automated Sorting Systems",
+    "Single board computers (SBCs) serve as vital, compact computing nodes within modern logistics facilities, directly powering the automated sorting systems that organize and route high volumes of parcel traffic. This article explores how SBCs interface wit",
+    false
+  ],
+  [
+    298,
+    "Memory Bus Timing Verification for High-Speed SBCs",
+    "Verifying timing constraints on the external memory bus of a high-speed single-board computer (SBC) requires a multi-stage approach spanning pre-layout calculations, post-layout simulations, physical hardware measurements, and firmware-level margin testi",
+    false
+  ],
+  [
+    297,
+    "eDP vs LVDS in Industrial Single Board Computers",
+    "This article explores the primary differences between Embedded DisplayPort (eDP) and Low-Voltage Differential Signaling (LVDS) video interfaces used on industrial single-board computers (SBCs). It covers critical technical distinctions, including data ba",
+    false
+  ],
+  [
+    296,
+    "Libre Computer Sweet Peppermint Upstream Linux Support",
+    "This article provides an overview of how the Libre Computer Sweet Peppermint single board computer achieves seamless compatibility with modern upstream Linux kernels. By prioritizing a mainline-first software strategy, standardizing boot firmware, contri",
+    false
+  ],
+  [
+    295,
+    "Single Board Computer Overvoltage Protection Guide",
+    "Single board computers (SBCs) contain sensitive microprocessors and peripheral components that can be permanently damaged by voltage spikes, incorrect power supplies, or electrostatic discharge. To mitigate these risks, hardware designers integrate hardw",
+    false
+  ],
+  [
+    294,
+    "Using Single Board Computers for LEO Satellite Tracking",
+    "Single-board computers (SBCs) offer an affordable, energy-efficient platform for establishing automated ground stations that track, receive, and decode signals from low-Earth-orbit (LEO) amateur satellites. By interfacing with Software Defined Radios (SD",
+    false
+  ],
+  [
+    293,
+    "Thermal Effects of Heavy Multi-Threading on SBCs",
+    "Running sustained, heavy multi-threaded workloads on single-board computers (SBCs) pushes compact System-on-Chip (SoC) architectures to their thermal limits. This article examines the immediate and long-term thermal implications of full-core utilization",
+    false
+  ],
+  [
+    292,
+    "Handling Endianness Porting Network Stacks to RISC-V",
+    "Porting a network stack to a RISC-V single board computer (SBC) requires bridging the gap between host processor endianness and standard network byte order. While the standard internet protocols mandate big-endian format for headers, the vast majority of",
+    false
+  ],
+  [
+    291,
+    "Touchscreen UI Frameworks for Single Board Computers",
+    "Developing touch-enabled user interfaces for single board computers (SBCs) like the Raspberry Pi, BeagleBone, or Odroid requires balancing development speed, system resource usage, and graphics performance. Several modern software frameworks simplify thi",
+    false
+  ],
+  [
+    290,
+    "Banana Pi BPI-P2 Zero for PoE Camera Deployments",
+    "The Banana Pi BPI-P2 Zero is an ultra-compact single board computer (SBC) engineered to simplify Internet of Things (IoT) and embedded surveillance applications. By combining a mini form factor, an onboard Camera Serial Interface (CSI), native 100M Ether",
+    false
+  ],
+  [
+    289,
+    "Tools to Measure SBC Voltage Rail Power Draw",
+    "Measuring real-time power consumption on individual voltage rails of a Single Board Computer (SBC) is essential for power profiling, thermal management, and optimizing energy efficiency. This article details the primary hardware tools, dynamic probes, an",
+    false
+  ],
+  [
+    288,
+    "How SBCs Coordinate Multi-Axis Industrial Robots",
+    "Single Board Computers (SBCs) serve as the central processing unit in light industrial robotics, translating high-level path commands into synchronized, deterministic motor actions across multiple axes. By leveraging real-time computing environments, kin",
+    false
+  ],
+  [
+    287,
+    "Uses of Cryptographic Accelerators on IoT SBCs",
+    "Hardware cryptographic accelerators are dedicated hardware blocks integrated into or attached to an Internet of Things (IoT) Single Board Computer (SBC) to perform complex mathematical encryption tasks. By offloading resource-heavy algorithms such as AES",
+    false
+  ],
+  [
+    286,
+    "Isolating Analog Sensors from Digital Noise on SBCs",
+    "Single board computers (SBCs) pack high-speed digital processors, switching power supplies, and sensitive analog interfaces into compact footprints, often causing digital switching noise to corrupt precision sensor readings. To preserve analog signal int",
+    false
+  ],
+  [
+    285,
+    "Low-Power Computer Vision on Single Board Computers",
+    "Running real-time computer vision on battery-powered Single Board Computers (SBCs) requires minimizing power consumption while maintaining acceptable inference speeds and accuracy. Achieving this balance involves a combination of deep learning model opti",
+    false
+  ],
+  [
+    284,
+    "Odroid-M1 SATA Port Storage Expansion Explained",
+    "The Odroid-M1 single-board computer provides robust local storage expansion capabilities through its dedicated, onboard SATA 3.0 interface. Unlike many single-board computers that require external USB-to-SATA adapters, the Odroid-M1 features a native con",
+    false
+  ],
+  [
+    283,
+    "Commercial vs Open-Source Bootloaders for SBCs",
+    "Single-board computers (SBCs) rely on bootloaders to initialize core hardware, configure low-level registers, and load the main operating system into memory. While open-source bootloaders like U-Boot dominate the hobbyist and general development landscap",
+    false
+  ],
+  [
+    282,
+    "Single Board Computers for SDR Digital Signal Processing",
+    "Single board computers (SBCs) have become essential components in modern software-defined radio (SDR) architectures, bridging the gap between radio frequency (RF) hardware and user-level applications. This article explores how SBCs execute computationall",
+    false
+  ],
+  [
+    281,
+    "Multi-Layer PCB Power Routing Guide for SBCs",
+    "Routing power on a multi-layer printed circuit board (PCB) for a Single Board Computer (SBC) requires a balance between delivering clean power, minimizing electromagnetic interference (EMI), managing heat, and maintaining signal integrity. Modern SBCs in",
+    false
+  ],
+  [
+    280,
+    "How Hardware Encoders Improve SBC Video Surveillance",
+    "Integrated hardware encoders streamline video surveillance on single-board computers (SBCs) by offloading the intensive task of video compression from the central processor to dedicated silicon. This article explores how hardware encoding eliminates syst",
+    false
+  ],
+  [
+    279,
+    "Advantages of x86 SBCs in Industrial PC Migrations",
+    "Migrating legacy industrial PCs to modern computing platforms is critical for maintaining uptime, security, and operational efficiency in manufacturing and automation environments. Transitioning to x86 Single Board Computers (SBCs) provides a streamlined",
+    false
+  ],
+  [
+    278,
+    "Dual-Band Wi-Fi Mesh Setup on Single Board Computers",
+    "Configuring dual-band Wi-Fi mesh networking on an array of single board computers (SBCs) enables resilient, high-throughput decentralized communication for edge computing, IoT clusters, and field deployments. By utilizing both 2.4 GHz and 5 GHz frequenci",
+    false
+  ],
+  [
+    277,
+    "Hardware Interfaces to Capture SBC Boot Logs",
+    "Capturing low-level boot logs from a single board computer (SBC) is essential for diagnosing hardware initialization, bootloader failures, and early kernel panics before the network stack or primary display drivers become active. Because standard operati",
+    false
+  ],
+  [
+    276,
+    "How Khadas VIM3 Handles ARM big.LITTLE Scheduling",
+    "This article provides an overview of how the Khadas VIM3 single board computer manages multi-core ARM big.LITTLE processing. It details the underlying hardware layout of the Amlogic A311D processor, the role of Linux Energy Aware Scheduling (EAS), Per-En",
+    false
+  ],
+  [
+    275,
+    "Best Tools for Custom SBC Root Filesystems",
+    "Creating a minimal custom root file system (rootfs) for a Single Board Computer (SBC) reduces resource usage, enhances security, and improves boot times. This guide covers the top software tools available for generating tailored, lightweight root file sy",
+    false
+  ],
+  [
+    274,
+    "Power Surge Effects on SBC Power Management ICs",
+    "An unmanaged power surge poses an immediate and catastrophic risk to the Power Management Integrated Circuit (PMIC) on a Single Board Computer (SBC). Because the PMIC is responsible for stepping down, regulating, and sequencing the various low-voltage ra",
+    false
+  ],
+  [
+    273,
+    "SBCs in Smart Building Management and HVAC Systems",
+    "Single board computers (SBCs) have emerged as essential hardware in modern building management systems (BMS) and automated heating, ventilation, and air conditioning (HVAC) infrastructure. By providing compact, cost-effective computing power directly at",
+    false
+  ],
+  [
+    272,
+    "Reliable Brownout Detection for Single Board Computers",
+    "Designing reliable brownout detection circuits is critical for field-deployed single board computers (SBCs) operating in unpredictable electrical and environmental conditions. A brownout occurs when the supply voltage drops below the minimum operating th",
+    false
+  ],
+  [
+    271,
+    "Mali vs PowerVR Architecture on Single Board Computers",
+    "Single-board computers (SBCs) rely heavily on integrated GPUs to handle graphical interfaces, multimedia playback, and edge compute workloads. Arm Mali and Imagination Technologies PowerVR represent two of the most prevalent graphics architectures in the",
+    false
+  ],
+  [
+    270,
+    "Emulating Legacy Hardware with Single Board Computers",
+    "Single Board Computers (SBCs) offer a cost-effective, compact, and energy-efficient solution for preserving obsolete hardware architectures. As original historical machines degrade due to component aging and scarce replacement parts, modern SBCs can exec",
+    false
+  ],
+  [
+    269,
+    "Consumer Flash Memory Risks in Industrial SBCs",
+    "Deploying consumer-grade flash memory cards (such as standard SD and microSD cards) in industrial single board computers (SBCs) introduces severe operational vulnerabilities. This article examines the core challenges of this practice, focusing on limited",
+    false
+  ],
+  [
+    268,
+    "Orange Pi 3 LTS 4K Playback on Open-Source Drivers",
+    "The Orange Pi 3 LTS, powered by the Allwinner H6 SoC, is capable of decoding 4K multimedia using mainline open-source Linux drivers, but its effectiveness depends on the specific codec, container, and playback environment. Through the open-source Cedrus",
+    false
+  ],
+  [
+    267,
+    "High-Speed SBC EMC Certification Factors",
+    "Achieving Electromagnetic Compatibility (EMC) certification for a high-speed Single Board Computer (SBC) requires passing rigorous regulatory tests for both radiated and conducted electromagnetic interference (EMI) as well as electromagnetic susceptibili",
+    false
+  ],
+  [
+    266,
+    "Single Board Computers in Automated Test Benches",
+    "Single board computers (SBCs) have become fundamental components in consumer electronics manufacturing, acting as cost-effective, compact, and versatile controllers for automated test benches. By bridging the gap between physical hardware fixtures and ce",
+    false
+  ],
+  [
+    265,
+    "Low-Profile Passive Heat Spreaders for SBC Clusters",
+    "Deploying single board computer (SBC) clusters requires efficient thermal management to maintain optimal performance in high-density environments. Low-profile passive heat spreaders offer an ideal cooling solution by conducting heat away from critical co",
+    false
+  ],
+  [
+    264,
+    "Configure GPIO Permissions on Linux SBC",
+    "Controlling General Purpose Input/Output (GPIO) hardware on a Linux single-board computer (SBC) typically requires root privileges by default, introducing potential security risks to running applications. This guide explains how to safely configure non-r",
+    false
+  ],
+  [
+    263,
+    "Reduce Boot Time on Single Board Computers",
+    "Reducing boot latency on single board computers (SBCs) requires a systematic approach to streamlining the boot pipeline, from hardware initialization to user-space execution. This guide outlines the most effective techniques to achieve sub-second to low-",
+    false
+  ],
+  [
+    262,
+    "Milk-V Duo: Affordable RISC-V Embedded Computing",
+    "The Milk-V Duo is a compact single-board computer that redefines low-cost edge development by bringing capable RISC-V processing down to an ultra-accessible price point. Built on the CV1800B processor, the board offers a dual-core RISC-V architecture cap",
+    false
+  ],
+  [
+    261,
+    "Security Vulnerabilities in Headless SBCs",
+    "Headless single-board computers (SBCs), such as Raspberry Pi, BeagleBone, and Orange Pi devices, operate without a dedicated monitor, keyboard, or mouse, relying entirely on network interfaces for management and deployment. While these devices are vital",
+    false
+  ],
+  [
+    260,
+    "SBC Touchscreen Displays in POS Systems",
+    "Modern Point-of-Sale (POS) systems increasingly rely on Single Board Computers (SBCs) directly driving touchscreen displays to create compact, cost-effective, and energy-efficient transaction terminals. This architecture eliminates the need for bulky ext",
+    false
+  ],
+  [
+    259,
+    "Monitor Linux SBC CPU Frequency and Temperature",
+    "Single Board Computers (SBCs) running Linux often operate under demanding workloads within compact, passively cooled enclosures. Monitoring CPU frequency and core temperatures in real time is essential to prevent thermal throttling and ensure system stab",
+    false
+  ],
+  [
+    258,
+    "SBC High-Throughput Packet Switching in Edge Telecom",
+    "Single Board Computers (SBCs) manage high-throughput packet switching in edge telecom applications by combining specialized hardware acceleration, kernel-bypass software frameworks, high-speed input/output (I/O) interfaces, and real-time multiprocessing",
+    false
+  ],
+  [
+    257,
+    "RF Shield Design Implications on SBC Processors",
+    "Integrating a Radio Frequency (RF) shield over the processor of a Single Board Computer (SBC) is a critical design decision that impacts electromagnetic compatibility, thermal dissipation, printed circuit board (PCB) layout, and manufacturing workflows.",
+    false
+  ],
+  [
+    256,
+    "Evaluating SPI and I2C Bus Contention on SBCs",
+    "This article provides an engineering guide on identifying, measuring, and resolving bus contention when Serial Peripheral Interface (SPI) and Inter-Integrated Circuit (I2C) protocols share physical routing or multiplexed pins on a single board computer (",
+    false
+  ],
+  [
+    255,
+    "32-Bit vs 64-Bit SBC OS Configuration Differences",
+    "Choosing between a 32-bit and a 64-bit operating system on a Single Board Computer (SBC) introduces distinct system-level configuration requirements. This article covers the primary configuration differences, focusing on bootloader and firmware directive",
+    false
+  ],
+  [
+    254,
+    "Radxa CM3 Industrial Carrier Integration",
+    "The Radxa Compute Module 3 (CM3) ecosystem provides a flexible, cost-effective platform for developing custom industrial carrier boards. Powered by the Rockchip RK3566 system-on-chip, the CM3 delivers robust processing, extensive peripheral multiplexing,",
+    false
+  ],
+  [
+    253,
+    "Role of RTC Battery in SBC Power Failures",
+    "An onboard real-time clock (RTC) battery on a single board computer (SBC) ensures continuous, uninterrupted timekeeping when the main power source is lost. Without a dedicated power reserve, an SBC loses its sense of real-world time upon power failure, r",
+    false
+  ],
+  [
+    252,
+    "Single Board Computers in Distributed Acoustic Sensing",
+    "Distributed Acoustic Sensing (DAS) utilizes standard fiber-optic cables as continuous arrays of acoustic and vibration sensors, generating massive volumes of high-frequency data. To manage these computational and logistical demands, researchers increasin",
+    false
+  ],
+  [
+    251,
+    "Flash a New Bootloader on a Bricked ARM SBC",
+    "Recovering a bricked ARM-based single board computer (SBC) requires bypassing corrupted onboard storage and writing a fresh bootloader directly to the target memory using the System-on-Chip's (SoC) built-in hardware recovery mode. This guide outlines the",
+    false
+  ],
+  [
+    250,
+    "Hardware Deinterlacing on Modern SBC Video Ingestion",
+    "Hardware video deinterlacing plays a vital role when ingesting legacy analog video feeds into modern single board computers (SBCs). By offloading the reconstruction of interlaced fields to dedicated video processing units (VPUs) on the system-on-chip (So",
+    false
+  ],
+  [
+    249,
+    "Industrial vs Commercial SBC Lifespan Factors",
+    "Single Board Computers (SBCs) are widely used across diverse sectors, but their operational longevity is fundamentally governed by the structural and physical standards used during their manufacturing. This article explores the primary engineering factor",
+    false
+  ],
+  [
+    248,
+    "Interface GigE Vision Cameras to Single Board Computers",
+    "Interfacing high-speed GigE Vision cameras with single board computers (SBCs) allows developers to build compact, edge-based machine vision systems. Achieving stable image acquisition requires selecting the right SBC hardware, configuring the network sta",
+    false
+  ],
+  [
+    247,
+    "SBC Cluster Thermal Dissipation Challenges",
+    "Single Board Computer (SBC) clusters offer a cost-effective and modular approach to distributed computing, edge processing, and private cloud deployments. However, packing multiple boards into dense configurations creates significant thermal dissipation",
+    false
+  ],
+  [
+    246,
+    "Asus Tinker Board High-Res Audio Capabilities",
+    "The Asus Tinker Board sets itself apart from standard single-board computers by integrating dedicated hardware capable of native high-resolution audio playback. This article explores how the board achieves superior sound quality, detailing its onboard 19",
+    false
+  ],
+  [
+    245,
+    "Reduce SBC Sleep Mode Power Consumption",
+    "Optimizing battery life on a single-board computer (SBC) requires minimizing quiescent current draw during low-power states. This guide outlines actionable strategies to reduce power consumption during sleep modes, covering firmware adjustments, power ra",
+    false
+  ],
+  [
+    244,
+    "How Micro-HDMI Maintains Signal Integrity on SBCs",
+    "High-speed video transmission on compact single board computers (SBCs) presents severe physical and electrical challenges due to dense component layouts and electromagnetic interference. Micro-HDMI connectors maintain signal integrity on these miniature",
+    false
+  ],
+  [
+    243,
+    "Air-Gapped SBCs for Securing Cryptographic Keys",
+    "Deploying an air-gapped single board computer (SBC) to manage cryptographic keys provides a robust defense against modern digital and physical security threats. By disconnecting the hardware entirely from all external networks and stripping it down to es",
+    false
+  ],
+  [
+    242,
+    "Single Board Computers in Oceanic Edge Data Logging",
+    "Single-board computers (SBCs) have become essential tools for modern oceanographic research, providing reliable, low-power edge computing capabilities directly aboard commercial research vessels. These compact devices enable continuous, real-time data co",
+    false
+  ],
+  [
+    241,
+    "How to Set Up an IPSec Tunnel on an Enterprise SBC",
+    "Establishing an encrypted IPSec tunnel on an enterprise-grade Single Board Computer (SBC) enables secure, high-integrity communication for edge computing, remote IoT deployments, and branch networks. This guide walks through the end-to-end technical proc",
+    false
+  ],
+  [
+    240,
+    "Pine64 QuartzPro64 High-Capacity RAM Support",
+    "This article explains how the Pine64 QuartzPro64 single-board computer (SBC) achieves and manages high-capacity memory configurations. It covers the underlying Rockchip RK3588 memory architecture, multi-channel controller capabilities, hardware-level sig",
+    false
+  ],
+  [
+    239,
+    "ZRAM Swap Performance on Single Board Computers",
+    "Using ZRAM as swap storage significantly enhances the multitasking capabilities and responsiveness of memory-constrained single-board computers (SBCs) like the Raspberry Pi. By creating a compressed block device within the existing physical RAM, ZRAM tra",
+    false
+  ],
+  [
+    238,
+    "Configure Thermal Trip Points in Linux for Custom SBCs",
+    "Configuring thermal trip points in the Linux kernel for a custom single board computer (SBC) involves defining thermal zones, trip temperatures, and cooling device behaviors within the Device Tree (DTS). This guide explains how to structure the Device Tr",
+    false
+  ],
+  [
+    237,
+    "Single Board Computers for Museum Installations",
+    "Interactive museum exhibits require reliable, compact, and cost-effective computing hardware to deliver engaging visitor experiences. Single-board computers (SBCs) have emerged as the standard solution for powering these modern installations. This articl",
+    false
+  ],
+  [
+    236,
+    "IEEE 1588 PTP on Industrial Single Board Computers",
+    "The IEEE 1588 Precision Time Protocol (PTP) enables industrial single board computers (SBCs) to achieve sub-microsecond clock synchronization over standard Ethernet networks. This article explains the technical operation of IEEE 1588 PTP, detailing how h",
+    false
+  ],
+  [
+    235,
+    "Preventing Firmware Extraction from SBC Flash Memory",
+    "Extracting firmware from a single board computer (SBC) allows attackers to reverse-engineer proprietary software, expose cryptographic keys, and identify zero-day vulnerabilities. Securing onboard flash memory requires a multi-layered defense model combi",
+    false
+  ],
+  [
+    234,
+    "Writing Custom Sensor Kernel Drivers for SBCs",
+    "Writing a Linux kernel device driver for a custom sensor on a single board computer (SBC) involves identifying the sensor's communication interface, selecting the appropriate kernel subsystem, describing the hardware in a Device Tree, implementing driver",
+    false
+  ],
+  [
+    233,
+    "Key SBC Features for UAV Flight Controllers",
+    "Single board computers (SBCs) powering unmanned aerial vehicle (UAV) flight controllers require a precise balance of low latency, connectivity, efficiency, and durability. This article breaks down the essential hardware and software features that make an",
+    false
+  ],
+  [
+    232,
+    "Smart Meters Using SBCs for Real-Time Grid Telemetry",
+    "Modern smart energy meters increasingly incorporate single-board computers (SBCs) to transform passive utility meters into intelligent edge-computing nodes. By pairing dedicated metrology front-ends with the processing power of an SBC, these meters can s",
+    false
+  ],
+  [
+    231,
+    "UASP External Storage for SBCs: Pros and Cons",
+    "Using USB-Attached SCSI Protocol (UASP) drives for external storage on Single Board Computers (SBCs) provides a significant performance boost over the legacy USB Mass Storage Bulk-Only Transport (BOT) protocol. By enabling command queuing and maximizing",
+    false
+  ],
+  [
+    230,
+    "Odroid-H3 Intel Quad-Core Desktop Virtualization",
+    "The Odroid-H3 single board computer leverages Intel 10nm Jasper Lake quad-core processors to deliver efficient, compact desktop virtualization. By combining hardware-assisted virtualization extensions, high-capacity dual-channel memory, and high-speed I/",
+    false
+  ],
+  [
+    229,
+    "Industrial SBC Display Interfaces Beyond HDMI",
+    "While HDMI and standard DisplayPort are the most common interfaces for external consumer monitors, industrial single board computers (SBCs) must support a diverse range of internal, low-power, and legacy display standards. Industrial applications frequen",
+    false
+  ],
+  [
+    228,
+    "External Watchdog Power Cycling for Unresponsive SBCs",
+    "An external watchdog circuit forcefully power cycles an unresponsive single-board computer (SBC) by continuously monitoring a dedicated \"heartbeat\" signal from the SBC and physically cutting input power if that signal ceases. Unlike internal software wat",
+    false
+  ],
+  [
+    227,
+    "Factors Influencing Open-Hardware SBC BOM Cost",
+    "The bill-of-materials (BOM) cost of an open-hardware single board computer (SBC) represents the direct expense of all physical components required to build the device. This cost is primarily determined by component selection, design complexity, connectiv",
+    false
+  ],
+  [
+    226,
+    "Tuning Linux Scheduler for Real-Time SBC Performance",
+    "This article provides a practical guide on tuning the Linux scheduler and associated kernel parameters to achieve deterministic, low-latency performance on Single Board Computers (SBCs). You will learn how to configure real-time scheduling policies, adju",
+    false
+  ],
+  [
+    225,
+    "Using a Single Board Computer as a PLC Replacement",
+    "Using a single-board computer (SBC) as a programmable logic controller (PLC) replacement offers cost savings, immense computational power, and flexible software options for modern industrial automation. However, transitioning from a hardened industrial P",
+    false
+  ],
+  [
+    224,
+    "Cooling SBCs in Sealed Waterproof Enclosures",
+    "Modern Single Board Computers (SBCs) deployed in sealed, waterproof enclosures face severe thermal challenges due to the complete lack of airflow and convective cooling. Without the ability to intake cool air or vent heat, engineers rely on a combination",
+    false
+  ],
+  [
+    223,
+    "Benefits of Micro-SIM Slots on Telematics SBCs",
+    "Integrating a micro-SIM slot directly onto a telematics single board computer (SBC) enhances cellular connectivity, improves system durability, and streamlines hardware architecture. This integration eliminates the need for external cellular modules or f",
+    false
+  ],
+  [
+    222,
+    "Banana Pi BPI-M5 Simultaneous Network Performance",
+    "This article evaluates the networking capabilities of the Banana Pi BPI-M5 single board computer when handling multiple concurrent network workloads. It analyzes the board's core hardware architecture, throughput under load, CPU efficiency during encrypt",
+    false
+  ],
+  [
+    221,
+    "CPU and NPU Bottlenecks in AI Single Board Computers",
+    "On modern AI-centric single board computers (SBCs), combining a host CPU with a dedicated Neural Processing Unit (NPU) enables efficient edge machine learning inference. However, raw NPU compute power is often hindered by data transfer, synchronization,",
+    false
+  ],
+  [
+    220,
+    "Read Differential Analog Voltages Using an SBC",
+    "Single-board computers (SBCs) like the Raspberry Pi operate purely in the digital domain and lack built-in analog-to-digital converters (ADCs). To read differential analog voltage signals—which measure the voltage difference between two distinct points",
+    false
+  ],
+  [
+    219,
+    "Dual-Core RISC-V SBCs for Low-Power Edge Nodes",
+    "Dual-core RISC-V single board computers (SBCs) are emerging as an optimal hardware platform for low-power edge networking nodes. By pairing energy-efficient, open-standard processor architectures with a dual-core configuration, these boards provide the e",
+    false
+  ],
+  [
+    218,
+    "How ARMv8-A Hardware Virtualization Works on SBCs",
+    "Hardware-level virtualization on an ARMv8-A architecture Single Board Computer (SBC) enables multiple operating systems to run concurrently on a single physical board with near-native performance. This is achieved through dedicated silicon-level extensio",
+    false
+  ],
+  [
+    217,
+    "SBC Design for Explosive Hazardous Environments",
+    "Deploying a single board computer (SBC) in explosive hazardous environments requires a rigorous engineering approach focused on preventing the ignition of flammable gases, vapors, dusts, or fibers. This article explores the critical design considerations",
+    false
+  ],
+  [
+    216,
+    "Medical Device Compliance for Off-the-Shelf SBCs",
+    "Integrating commercial off-the-shelf (COTS) single-board computers (SBCs) into medical devices allows manufacturers to accelerate development cycles and reduce engineering costs. However, incorporating non-custom hardware into life-critical systems requi",
+    false
+  ],
+  [
+    215,
+    "Profiling C++ Memory Leaks on ARM SBCs",
+    "Memory leaks in C++ applications running on ARM single-board computers (SBCs) can quickly exhaust limited system RAM, leading to performance degradation or system crashes. This guide outlines the end-to-end process of detecting, isolating, and fixing mem",
+    false
+  ],
+  [
+    214,
+    "Libre Computer Le Potato Low Idle Power Explained",
+    "The Libre Computer AML-S905X-CC, commonly known as Le Potato, is an energy-efficient single-board computer designed to consume minimal electricity when not under active workloads. By combining a low-power processor architecture, aggressive dynamic freque",
+    false
+  ],
+  [
+    213,
+    "Inter-Board Communication Protocols for SBCs",
+    "Connecting two Single Board Computers (SBCs) requires choosing a communication protocol that balances speed, distance, wiring complexity, and software overhead. This article outlines the most common protocols used for inter-board communication between SB",
+    false
+  ],
+  [
+    212,
+    "How TIM Affects SBC Processor Longevity",
+    "Thermal interface materials (TIM) play a critical role in the lifespan of continuously run single-board computers (SBCs) by bridging the microscopic air gaps between the processor die and the cooling solution. In 24/7 operating environments—such as edg",
+    false
+  ],
+  [
+    211,
+    "System Controller Role in SBC Power Rail Management",
+    "Single-board computers (SBCs) rely on a complex network of power lines to drive diverse components such as processors, memory, and peripheral interfaces. Managing these distinct power domains requires precise oversight, which is handled directly by a sys",
+    false
+  ],
+  [
+    210,
+    "Interfacing SBCs with LiDAR in Autonomous Robotics",
+    "Single Board Computers (SBCs) serve as the computational brain in Autonomous Mobile Robots (AMRs), bridging hardware sensors with autonomous navigation algorithms. Interfacing an SBC with a LiDAR module involves establishing physical hardware communicati",
+    false
+  ],
+  [
+    209,
+    "Advantages of Open-Spec Single Board Computers",
+    "Open-spec single board computers (SBCs) offer significant advantages over closed-source proprietary boards by providing complete transparency into their hardware design, schematics, and software stacks. Choosing an open-spec platform grants developers an",
+    false
+  ],
+  [
+    208,
+    "Custom Splash Screen Configuration on Embedded SBCs",
+    "Configuring a custom splash screen on an embedded single board computer (SBC) involves displaying branded visuals across multiple boot stages to hide technical console output and reduce perceived boot time. Developers achieve this by configuring visual o",
+    false
+  ],
+  [
+    207,
+    "How Rugged SBCs Withstand Heavy Mechanical Shocks",
+    "Ruggedized Single Board Computers (SBCs) are specifically engineered to maintain continuous operational integrity in environments subject to severe kinetic forces, such as defense vehicles, aerospace platforms, and heavy industrial machinery. To survive",
+    false
+  ],
+  [
+    206,
+    "How to Route I2S Audio from an SBC to a DAC",
+    "This article explains how digital audio data is routed from a Single Board Computer (SBC) to an external Digital-to-Analog Converter (DAC) using the Integrated Inter-IC Sound (I2S) protocol. It details the essential physical connections, clock synchroniz",
+    false
+  ],
+  [
+    205,
+    "Limitations of Training Neural Networks on SBCs",
+    "Training deep neural networks (DNNs) directly on single-board computers (SBCs) presents significant challenges due to fundamental hardware and architectural constraints. While SBCs are highly effective for deploying lightweight models for inference at th",
+    false
+  ],
+  [
+    204,
+    "Khadas Edge2 High-Density Connectors Explained",
+    "The Khadas Edge2 single board computer utilizes high-density expansion connectors to route high-speed signals, display interfaces, camera inputs, and general-purpose I/O while preserving an ultra-slim form factor. By replacing bulky traditional pin heade",
+    false
+  ],
+  [
+    203,
+    "Choosing a Power Adapter for Multi-Drive SBCs",
+    "Selecting the correct power adapter for a single board computer (SBC) running multiple drives is essential for maintaining system stability, preventing data corruption, and avoiding hardware damage. Multi-drive SBC setups demand significantly more power",
+    false
+  ],
+  [
+    202,
+    "Implementing PWM LED Dimming on a Custom SBC",
+    "This guide outlines how developers can implement Pulse-Width Modulation (PWM) to control LED brightness on a custom Single Board Computer (SBC). It covers the essential hardware considerations, timer peripheral and register configuration, firmware-level",
+    false
+  ],
+  [
+    201,
+    "Benefits of Hardware Crypto Engines in Secure SBCs",
+    "Integrating a dedicated hardware cryptographic engine into a secure single-board computer (SBC) significantly enhances data protection, offloads processing tasks from the primary CPU, and ensures system integrity at the silicon level. By shifting resourc",
+    false
+  ],
+  [
+    200,
+    "How Distributed SBCs Communicate via MQTT in IIoT",
+    "In an Industrial Internet of Things (IIoT) architecture, distributed Single Board Computers (SBCs) act as intelligent edge nodes that gather, process, and exchange telemetry data with central systems or other devices. By leveraging the MQTT (Message Queu",
+    false
+  ],
+  [
+    199,
+    "Achieving Sub-Second Boot Times on Headless SBCs",
+    "Achieving sub-second boot times on a headless single-board computer (SBC) requires a holistic, bottom-up optimization of the entire boot pipeline. This article explores the core engineering practices needed to eliminate latency across every stage of the",
+    false
+  ],
+  [
+    198,
+    "Rock 5 Model B 8K Video Output Pipeline Explained",
+    "The Rock 5 Model B single-board computer achieves ultra-high-definition 8K video output through the advanced multi-display architecture of the Rockchip RK3588 system on a chip (SoC). Powered by a dedicated hardware video decoding unit (VPU) and the secon",
+    false
+  ],
+  [
+    197,
+    "Causes of SBC Brownout Resets in Field Deployments",
+    "A brownout reset occurs when the input voltage to a Single Board Computer (SBC) drops below the minimum operating threshold, triggering an unexpected system reboot or freeze. In field deployments, these power dips often lead to intermittent failures, dat",
+    false
+  ],
+  [
+    196,
+    "How to Port FreeRTOS to ARM Cortex-M",
+    "Porting FreeRTOS to an ARM Cortex-M single board computer (SBC) involves integrating the FreeRTOS kernel into the target hardware's board support package (BSP), configuring the processor's core system interrupts, and tailoring the RTOS configuration file",
+    false
+  ],
+  [
+    195,
+    "Single Board Computers in Precision Agriculture",
+    "Single Board Computers (SBCs) have become foundational components in modern precision agriculture, bridging the gap between physical farming environments and digital intelligence. These compact, cost-effective computing platforms serve as local data proc",
+    false
+  ],
+  [
+    194,
+    "How Wear-Leveling Prolongs Embedded SBC Lifespan",
+    "Flash memory in embedded Single Board Computers (SBCs) is susceptible to physical degradation caused by continuous write and erase cycles during standard operation. This article explains how flash memory wear-leveling algorithms prevent localized storage",
+    false
+  ],
+  [
+    193,
+    "Dual Mini-PCIe SBC Use Cases and Applications",
+    "Single Board Computers (SBCs) equipped with dual Mini-PCIe sockets offer enhanced hardware versatility and expansion capabilities for embedded systems. By accommodating two modular expansion cards simultaneously, these platforms bridge the gap between fi",
+    false
+  ],
+  [
+    192,
+    "Testing Differential Pair Signal Integrity on an SBC",
+    "Testing signal integrity on high-speed differential pairs of a single board computer (SBC) requires a systematic approach combining high-bandwidth measurement hardware, precise probing techniques, and domain-specific analysis tools. Engineers evaluate pr",
+    false
+  ],
+  [
+    191,
+    "OTA Firmware Update Mechanisms for Remote SBCs",
+    "Over-the-air (OTA) firmware updates are critical for maintaining security, fixing bugs, and deploying new features to remotely deployed Single Board Computers (SBCs) without requiring physical intervention. This article examines the core mechanisms that",
+    false
+  ],
+  [
+    190,
+    "BeagleBone AI-64 Machine Vision Processing",
+    "The BeagleBone AI-64 processes complex machine vision pipelines by leveraging a heterogeneous system-on-chip (SoC) architecture that distributes tasks across specialized processing cores. Powered by the Texas Instruments TDA4VM processor, the board offlo",
+    false
+  ],
+  [
+    189,
+    "Monolithic Firmware vs Modular BIOS on x86 SBCs",
+    "Choosing the right boot firmware for an x86 single board computer (SBC) requires balancing resource constraints, boot performance, and long-term maintainability. This article examines the trade-offs between monolithic firmware—where all initialization",
+    false
+  ],
+  [
+    188,
+    "How to Configure Low-Latency Audio on an SBC",
+    "Configuring a low-latency audio stack on a multimedia Single Board Computer (SBC) requires optimizing the operating system, tuning the Advanced Linux Sound Architecture (ALSA), and configuring the JACK Audio Connection Kit for real-time processing. This",
+    false
+  ],
+  [
+    187,
+    "Single Board Computers in EV Charging Management",
+    "Single board computers (SBCs) act as the central intelligence in localized electric vehicle (EV) charging stations, handling critical operations ranging from power regulation to network communications. By combining processing power, input/output interfac",
+    false
+  ],
+  [
+    186,
+    "Benefits of Dual Gigabit Ethernet in Router SBCs",
+    "Single-board computers (SBCs) designed for software-defined routing gain significant performance, security, and architectural advantages when equipped with dual Gigabit Ethernet ports. Having two dedicated physical network interfaces transforms an SBC in",
+    false
+  ],
+  [
+    185,
+    "Passive Heatsinks vs Fans for Single Board Computers",
+    "Single board computers (SBCs) like the Raspberry Pi or Odroid generate noticeable heat under heavy workloads, requiring an effective thermal management strategy. While active cooling fans deliver direct airflow, passive heatsinks are frequently the super",
+    false
+  ],
+  [
+    184,
+    "How PoDL Impacts Future Low-Voltage SBC Design",
+    "Power-over-Data-Line (PoDL) technology is reshaping the architecture of low-voltage single-board computers (SBCs) by delivering DC power and bidirectional data over a single twisted pair of wires. This article examines how the integration of PoDL through",
+    false
+  ],
+  [
+    183,
+    "Why SBCs Are Ideal for Local Voice Recognition",
+    "Single board computers (SBCs) have become the premier hardware choice for building local voice recognition assistants due to their unique balance of processing power, energy efficiency, compact form factor, and hardware flexibility. By processing audio e",
+    false
+  ],
+  [
+    182,
+    "High-Speed ADC Signal Acquisition on SBCs",
+    "Acquiring high-speed analog signals on a single board computer (SBC) requires augmenting the host system with dedicated Analog-to-Digital Converter (ADC) expansion boards. Because standard SBCs lack the native processing bandwidth and low-latency input p",
+    false
+  ],
+  [
+    181,
+    "Network Audio Synchronization for SBC Devices",
+    "Synchronizing audio playback across multiple networked Single Board Computers (SBCs) requires a combination of precise clock synchronization, adaptive network streaming protocols, and low-level audio buffer management. Because hardware oscillators on dif",
+    false
+  ],
+  [
+    180,
+    "How UDOO Bolt Combines AMD Ryzen and Arduino",
+    "The UDOO Bolt is a high-performance single-board computer that bridges high-end x86 computing and real-time embedded control on a single PCB. It achieves this by pairing an AMD Ryzen Embedded V1000 processor with an onboard Microchip ATmega32U4 microcont",
+    false
+  ],
+  [
+    179,
+    "Risks of Default SSH Keys on Single Board Computers",
+    "Single-board computers (SBCs) like the Raspberry Pi, BeagleBone, and Orange Pi are widely deployed in edge computing, IoT solutions, and enterprise environments. Leaving default SSH keys active on a deployed SBC creates severe security vulnerabilities, e",
+    false
+  ],
+  [
+    178,
+    "How Yocto Streamlines Embedded Linux Image Generation",
+    "An embedded Linux build system like the Yocto Project streamlines the creation of custom operating system images for Single Board Computers (SBCs) by automating the fetching, compilation, and integration of the entire software stack. By utilizing a modul",
+    false
+  ],
+  [
+    177,
+    "What Determines Single Board Computer MTBF?",
+    "Mean Time Between Failures (MTBF) is a foundational reliability metric predicting the elapsed operational time between inherent system failures in a commercial Single Board Computer (SBC). Determining an SBC's MTBF rating involves evaluating multiple eng",
+    false
+  ],
+  [
+    176,
+    "How to Benchmark SBC Flash Storage Performance",
+    "Benchmarking the raw input/output (I/O) performance of flash storage on a single-board computer (SBC) requires testing throughput, IOPS (input/output operations per second), and latency while isolating storage hardware from system memory caching. This gu",
+    false
+  ],
+  [
+    175,
+    "Advantages of SBCs with Built-in Cellular Modems",
+    "Single-board computers (SBCs) featuring onboard cellular modems offer a streamlined, resilient computing platform designed for edge computing and Internet of Things (IoT) deployments. By eliminating the reliance on external modems, local Wi-Fi, or wired",
+    false
+  ],
+  [
+    174,
+    "How to Multiplex MIPI CSI Cameras on an SBC",
+    "Multiplexing a Camera Serial Interface (MIPI CSI-2) across multiple image sensors on a single board computer (SBC) allows developers to connect multiple cameras to hardware with limited native CSI ports. This architecture is achieved by utilizing physica",
+    false
+  ],
+  [
+    173,
+    "Radiation-Tolerant SBC Design for High Altitude",
+    "Designing a Single Board Computer (SBC) for high-altitude environments requires mitigating the effects of ionizing radiation, secondary cosmic rays, and atmospheric neutrons. At altitudes between 10 and 35 kilometers (troposphere to stratosphere), radiat",
+    false
+  ],
+  [
+    172,
+    "How Dual Boot SBCs Switch Between Android and Linux",
+    "Dual-boot single board computers (SBCs) alternate between Android and Linux through a coordinated interaction of partitioned storage, bootloader configurations, and boot-selection triggers. By isolating each operating system's filesystems and kernel imag",
+    false
+  ],
+  [
+    171,
+    "Thermal Mitigation for Outdoor Signage SBCs",
+    "Deploying single board computers (SBCs) inside outdoor signage kiosks exposes sensitive electronics to extreme temperature fluctuations, solar radiation, and internal heat buildup from displays and power supplies. Without adequate thermal planning, SBCs",
+    false
+  ],
+  [
+    170,
+    "How Optical Isolation Protects Industrial SBC GPIO Lines",
+    "Optical isolation circuits safeguard the General-Purpose Input/Output (GPIO) lines of industrial single-board computers (SBCs) by physically separating the sensitive low-voltage processing core from harsh external field signals. By converting electrical",
+    false
+  ],
+  [
+    169,
+    "Computer Vision Edge Inference Stacks for SBCs",
+    "Deploying computer vision on single-board computers (SBCs) requires lightweight, highly optimized software stacks that maximize limited CPU, GPU, and NPU resources. This article outlines the most commonly used inference runtimes, hardware-specific accele",
+    false
+  ],
+  [
+    168,
+    "How Radxa Zero Achieves High Computing Density",
+    "The Radxa Zero packs desktop-class processing power and versatile connectivity into a footprint roughly the size of a USB flash drive. By leveraging an efficient 12nm quad-core system-on-chip (SoC), high-speed LPDDR4 memory, onboard eMMC storage, and an",
+    false
+  ],
+  [
+    167,
+    "Advantages of Single Board Computers in ATM Systems",
+    "Single board computers (SBCs) are transforming Automated Teller Machine (ATM) architectures by replacing bulky, multi-component computing systems with compact, fully integrated platforms. This article examines the primary advantages of integrating SBCs i",
+    false
+  ],
+  [
+    166,
+    "Debugging Kernel Panics via Serial on SBCs",
+    "This guide provides a practical walkthrough for embedded engineers to capture and analyze Linux kernel panic events on Single Board Computers (SBCs) using a hardware serial console. When a kernel panics, graphical displays and network interfaces often fr",
+    false
+  ],
+  [
+    165,
+    "LPDDR4 vs LPDDR5 on Single Board Computers",
+    "As single board computers (SBCs) evolve to handle edge artificial intelligence, 4K multimedia processing, and intensive multitasking, memory architecture plays a crucial role in overall system performance. This article examines the primary differences be",
+    false
+  ],
+  [
+    164,
+    "Integrating BMS with UPS for Single Board Computers",
+    "Integrating a Battery Management System (BMS) with an Uninterruptible Power Supply (UPS) for a Single Board Computer (SBC) creates a dependable power solution that prevents unexpected shutdowns, data corruption, and battery damage. This integration combi",
+    false
+  ],
+  [
+    163,
+    "Interfacing Incremental Rotary Encoders with an SBC",
+    "Interfacing high-resolution incremental rotary encoders with a single-board computer (SBC) requires a robust integration of signal conditioning, hardware decoding, and precise software handling to prevent missed counts and ensure real-time accuracy. Beca",
+    false
+  ],
+  [
+    162,
+    "Configure Static IP Routing on Multi-Homed SBC",
+    "This guide explains how developers can configure static IP routing on a multi-homed single board computer (SBC) running Linux. A multi-homed SBC connects to two or more network interfaces—such as dual Ethernet ports, an Ethernet port and Wi-Fi, or cell",
+    false
+  ],
+  [
+    161,
+    "SBC DIN Rail Enclosure Mounting Requirements",
+    "Mounting a single board computer (SBC) inside a standard DIN rail enclosure requires balancing mechanical fit, thermal dissipation, vibration resistance, and accessible I/O routing. This article outlines the essential structural specifications and design",
+    false
+  ],
+  [
+    160,
+    "Milk-V Pioneer and RISC-V Workstation Computing",
+    "The Milk-V Pioneer marks a transformative milestone for open-source architecture by introducing native, high-core-count workstation computing to the RISC-V ecosystem. Powered by the 64-core SOPHON SG2042 processor in a standard microATX form factor, the",
+    false
+  ],
+  [
+    159,
+    "Industrial SBC Grounding and EMI Shielding Guide",
+    "Deploying a Single Board Computer (SBC) in a factory requires robust protection against severe electrical noise, voltage spikes, and electromagnetic interference (EMI) generated by heavy machinery, drives, and motors. Ensuring continuous, reliable operat",
+    false
+  ],
+  [
+    158,
+    "x86 vs ARM SBCs for Running Legacy Software",
+    "When running legacy software—typically built for older 32-bit or 64-bit Windows and DOS environments—x86-based single board computers (SBCs) consistently outperform ARM equivalents in compatibility, execution speed, and ease of deployment. While ARM",
+    false
+  ],
+  [
+    157,
+    "U-Boot Bootloader Role in SBC Initialization",
+    "Das U-Boot (Universal Boot Loader) acts as the critical intermediary between raw hardware and the operating system during the startup sequence of a single board computer (SBC). Upon power-on, an SBC lacks the operational context required to run a full op",
+    false
+  ],
+  [
+    156,
+    "EMC Certification Testing for Single Board Computers",
+    "EMC certification testing for a newly designed single board computer (SBC) is a structured verification process that ensures the device does not emit excessive electromagnetic interference (EMI) and operates reliably in the presence of external electroma",
+    false
+  ],
+  [
+    155,
+    "Running Microservices on Edge SBCs: Key Challenges",
+    "Deploying containerized microservices on edge Single Board Computers (SBCs) allows organizations to process data locally, reduce latency, and minimize bandwidth costs. However, bringing cloud-native paradigms to resource-constrained hardware introduces s",
+    false
+  ],
+  [
+    154,
+    "Hardware H.265 Encoding on Video Streaming SBCs",
+    "Hardware-accelerated H.265 (HEVC) encoding allows single board computers (SBCs) to process and transmit high-definition video efficiently by shifting computationally heavy compression tasks from the central processor to specialized onboard silicon. This",
+    false
+  ],
+  [
+    153,
+    "Commercial vs Open Source Single Board Computers",
+    "Single-board computers (SBCs) power everything from DIY hobby electronics to mission-critical industrial automation. While both commercial and open-source hardware (OSHW) single-board computers integrate a processor, memory, and input/output interfaces o",
+    false
+  ],
+  [
+    152,
+    "SBC Integration in Smart City Environmental Nodes",
+    "Single Board Computers (SBCs) serve as the core processing and communication hubs in smart city environmental sensing nodes. By combining processing power, versatile input/output interfaces, and low energy consumption into a compact form factor, SBCs col",
+    false
+  ],
+  [
+    151,
+    "E-Paper Displays on Low-Power SBCs: Top Trade-Offs",
+    "Combining electronic paper (e-paper) displays with low-power single-board computers (SBCs) offers an exceptional solution for energy-efficient, daylight-readable embedded systems. While this hardware pairing significantly extends battery life and improve",
+    false
+  ],
+  [
+    150,
+    "How Power Supply Ripple Affects SBC ADC Accuracy",
+    "Power supply ripple voltage introduces electrical noise into the internal Analog-to-Digital Converter (ADC) of a single-board computer (SBC), leading to reduced measurement precision, erratic sensor readings, and compromised data integrity. This article",
+    false
+  ],
+  [
+    149,
+    "Cross-Compile Custom Linux for ARM Single Board Computers",
+    "Cross-compiling a custom Linux distribution involves building the operating system components on a fast host architecture (typically x8664) to run on a target ARM-based single board computer (SBC). This guide outlines the essential phases of the process,",
+    false
+  ],
+  [
+    148,
+    "How Military Single Board Computers Survive High Vibration",
+    "Single Board Computers (SBCs) deployed in defense systems must deliver continuous, mission-critical processing power while exposed to the intense mechanical stresses of combat vehicles, aircraft, and naval vessels. Operating under severe vibration profil",
+    false
+  ],
+  [
+    147,
+    "Common Protocols Bridged by Interface-Rich SBCs",
+    "Interface-rich single board computers (SBCs) frequently serve as multi-protocol gateways, translating data streams between isolated hardware layers, legacy systems, and modern networks. This article outlines the most common communication protocols bridge",
+    false
+  ],
+  [
+    146,
+    "Orange Pi 5 Plus RK3588 Performance and Features",
+    "The Orange Pi 5 Plus maximizes the potential of the Rockchip RK3588 system-on-chip (SoC) by translating its advanced processing, artificial intelligence, and multimedia engines into a versatile single-board computer. By combining an octa-core CPU archite",
+    false
+  ],
+  [
+    145,
+    "Headless Bluetooth Provisioning on IoT SBCs",
+    "Headless Bluetooth provisioning enables single board computers (SBCs) deployed in IoT environments to receive initial network credentials, authentication tokens, and configuration parameters wirelessly without requiring external displays, keyboards, or p",
+    false
+  ],
+  [
+    144,
+    "How SBCs Accelerate Prototyping in Engineering Labs",
+    "Single-board computers (SBCs) have transformed university engineering laboratories by offering compact, highly accessible platforms that drastically shorten product development cycles. By integrating processors, memory, and input/output interfaces onto a",
+    false
+  ],
+  [
+    143,
+    "How to Debug a Custom SBC Using JTAG",
+    "Debugging a custom Single Board Computer (SBC) through a JTAG interface requires a systematic approach that isolates issues across hardware, signal integrity, and software configurations. When bringing up a new board, communication failures between the J",
+    false
+  ],
+  [
+    142,
+    "Libre Computer Renegade Video Decoding Explained",
+    "The Libre Computer Renegade (ROC-RK3328-CC) manages high-definition and ultra-high-definition digital video decoding primarily through the dedicated hardware Video Processing Unit (VPU) integrated into its Rockchip RK3328 system-on-chip (SoC). Instead of",
+    false
+  ],
+  [
+    141,
+    "Selecting Fanless Enclosures for Industrial SBCs",
+    "Choosing the right fanless enclosure for an industrial Single Board Computer (SBC) is vital to ensure long-term system reliability, prevent thermal throttling, and protect sensitive electronics from harsh operating conditions. This guide covers the essen",
+    false
+  ],
+  [
+    140,
+    "User Space Hardware Interrupts on Embedded SBCs",
+    "Handling hardware interrupts directly within user-space applications on embedded single board computers (SBCs) allows developers to bypass complex custom kernel module development while maintaining responsive systems. This guide details the standard kern",
+    false
+  ],
+  [
+    139,
+    "Benefits of ECC RAM SBCs in Aerospace Systems",
+    "Mission-critical aerospace installations demand extreme reliability, compact architectures, and robust fault tolerance to operate in harsh environments. Single Board Computers (SBCs) equipped with Error-Correcting Code (ECC) RAM have become a foundationa",
+    false
+  ],
+  [
+    138,
+    "How DVFS Works on Multi-Core Single Board Computers",
+    "Dynamic Voltage and Frequency Scaling (DVFS) is a critical power-management technique used in modern multi-core single-board computers (SBCs) to dynamically balance computational performance, thermal limits, and energy efficiency. By constantly adjusting",
+    false
+  ],
+  [
+    137,
+    "MIPI-CSI PCB Layout Guidelines for Custom SBCs",
+    "Routing high-speed Mobile Industry Processor Interface Camera Serial Interface (MIPI-CSI) lines on a custom single-board computer (SBC) requires strict adherence to high-speed PCB design principles. Because MIPI-CSI protocols—such as D-PHY and C-PHY—",
+    false
+  ],
+  [
+    136,
+    "Pine64 Quartz64 Open-Source Firmware Ecosystem",
+    "The Pine64 Quartz64 is a single-board computer powered by the Rockchip RK3566 SoC that relies heavily on a community-driven, open-source firmware ecosystem. Unlike traditional embedded platforms that depend on closed vendor board support packages (BSPs),",
+    false
+  ],
+  [
+    135,
+    "Prevent File System Corruption on SBC Power Loss",
+    "Abrupt power loss is one of the leading causes of storage failure and data corruption on Single Board Computers (SBCs). Because devices like the Raspberry Pi and similar boards frequently perform background write operations to flash storage, sudden power",
+    false
+  ],
+  [
+    134,
+    "Audio DSP on Multimedia Single Board Computers",
+    "Audio Digital Signal Processing (DSP) on a dedicated multimedia single board computer (SBC) is handled through a combination of specialized coprocessors, optimized CPU instruction sets, dedicated audio buses, and low-latency software frameworks. These sy",
+    false
+  ],
+  [
+    133,
+    "Software Requirements for Kubernetes on SBC Nodes",
+    "Running a Kubernetes cluster across a fleet of Single Board Computers (SBCs)—such as Raspberry Pi, Orange Pi, or Rockchip-based boards—requires a resource-conscious software stack optimized for ARM architectures. Because SBCs typically have limited C",
+    false
+  ],
+  [
+    132,
+    "Banana Pi BPI-R3 Wi-Fi 6 Networking Capabilities",
+    "The Banana Pi BPI-R3 is an open-source single board computer (SBC) engineered specifically for high-performance routing and wireless networking. Designed around the MediaTek Filogic 830 platform, the board delivers concurrent dual-band Wi-Fi 6 (AX6000) c",
+    false
+  ],
+  [
+    131,
+    "Securing Single Board Computers with Onboard TPM",
+    "An onboard Trusted Platform Module (TPM) serves as a dedicated, hardware-based root of trust that fundamentally secures single board computer (SBC) deployments. In remote, edge, and industrial environments where physical and network security cannot alway",
+    false
+  ],
+  [
+    130,
+    "Accelerating DSP with FPGA Single Board Computers",
+    "Field-Programmable Gate Array (FPGA)-integrated single board computers (SBCs) dramatically accelerate specialized digital signal processing (DSP) by merging standard processor flexibility with hardware-level parallel execution. This hybrid architecture o",
+    false
+  ],
+  [
+    129,
+    "ESP32 Power Consumption: Modes and Current Draw",
+    "The ESP32 is a popular, feature-rich microcontroller board widely used in Internet of Things (IoT) applications due to its integrated Wi-Fi, Bluetooth, and advanced power management capabilities. Understanding its power consumption characteristics is ess",
+    false
+  ],
+  [
+    128,
+    "Device Tree Hardware Initialization on ARM SBCs",
+    "This article provides an overview of how Device Tree configuration is utilized in ARM single board computers (SBCs) to discover, configure, and initialize non-discoverable peripheral hardware. It covers the fundamental role of the Device Tree, the struct",
+    false
+  ],
+  [
+    127,
+    "Dual-Ethernet SBC as a Dedicated Firewall",
+    "A dual-Ethernet single board computer (SBC) functions as a dedicated network firewall by physically separating local and external networks, controlling data flow through kernel-level packet inspection, and utilizing specialized routing software. By posit",
+    false
+  ],
+  [
+    126,
+    "Khadas VIM4 Multi-Camera Input for Computer Vision",
+    "The Khadas VIM4 single board computer (SBC) handles multi-channel camera inputs through its integrated Amlogic A311D2 processor, dual MIPI-CSI interfaces, a hardware Image Signal Processor (ISP), and an onboard Neural Processing Unit (NPU). This article",
+    false
+  ],
+  [
+    125,
+    "Pico-ITX vs 3.5-Inch SBC: Key Differences",
+    "When designing embedded systems, selecting the correct form factor is critical to balancing physical constraints with processing capabilities. Both Pico-ITX and 3.5-inch single board computers (SBCs) are widely used industrial computing standards, yet th",
+    false
+  ],
+  [
+    124,
+    "How Memory Bandwidth Limits GPU Performance on SBCs",
+    "Integrated single board computers (SBCs) rely on shared system memory to power both CPU and GPU operations, creating a significant performance bottleneck. When handling data-heavy workloads such as machine learning inference, computer vision, and high-re",
+    false
+  ],
+  [
+    123,
+    "How to Set Up RS-485 on a Single Board Computer",
+    "Establishing an RS-485 serial communication link on a single board computer (SBC) requires interfacing a UART-to-RS-485 transceiver, wiring the differential data bus, enabling hardware serial interfaces within the operating system, and managing transmit/",
+    false
+  ],
+  [
+    122,
+    "LattePanda: Native Windows and Coprocessor Explained",
+    "LattePanda single board computers bridge the gap between high-performance desktop computing and hardware-level embedded development through a hybrid hardware architecture. Unlike most single board computers that rely on ARM processors, LattePanda boards",
+    false
+  ],
+  [
+    121,
+    "CAN Bus Integration in Industrial SBCs Explained",
+    "Integrating a Controller Area Network (CAN bus) interface into an industrial single board computer (SBC) enables robust, real-time communication between the SBC and various microcontrollers, sensors, and actuators in electrically harsh environments. This",
+    false
+  ],
+  [
+    120,
+    "Optimizing Low-Power SBCs for Remote Solar",
+    "Deploying single board computers (SBCs) in remote, off-grid locations requires balancing continuous operation with strict energy constraints. This guide outlines actionable strategies to maximize energy efficiency and system reliability when powering an",
+    false
+  ],
+  [
+    119,
+    "Real-Time Linux on Single Board Computers",
+    "Deploying a real-time Linux kernel—typically patched with PREEMPTRT—on a Single Board Computer (SBC) enables deterministic, low-latency task execution for robotics, industrial control, and data acquisition. However, transforming a low-cost, general-p",
+    false
+  ],
+  [
+    118,
+    "How Rock Pi 4 and SBCs Implement NVMe SSD Support",
+    "This article explores how single-board computers (SBCs) like the Rock Pi 4 implement support for high-speed NVMe M.2 solid-state drives. It examines the hardware integration of PCIe lanes from the main processor, the physical interface and power delivery",
+    false
+  ],
+  [
+    117,
+    "COM Carrier Systems vs Single Board Computers",
+    "When selecting embedded hardware for industrial, commercial, or IoT applications, the two primary architectural approaches are Computer-on-Module (COM) carrier systems and standalone Single Board Computers (SBCs). While both solutions provide full proces",
+    false
+  ],
+  [
+    116,
+    "Odroid-N2+ Home Automation Server Performance",
+    "The Odroid-N2+ is a high-performance single-board computer (SBC) that excels as a dedicated home automation server, offering superior processing power, exceptional thermal efficiency, and reliable storage options compared to standard alternatives like th",
+    false
+  ],
+  [
+    115,
+    "Driving High-Current Loads from SBC Headers",
+    "Driving high-current peripherals directly from a Single Board Computer (SBC) header introduces risks such as logic pin burnout, system brownouts, and thermal damage. This article covers the essential electrical considerations for interfacing high-load de",
+    false
+  ],
+  [
+    114,
+    "How to Implement Secure Boot on Commercial SBCs",
+    "Implementing hardware-level secure boot on a commercial single board computer (SBC) requires establishing an unbroken chain of trust that starts with on-chip hardware and extends through the operating system kernel. This article outlines the architectura",
+    false
+  ],
+  [
+    113,
+    "Why Nvidia Jetson Nano is Ideal for Edge AI",
+    "The Nvidia Jetson Nano is a compact, cost-effective single-board computer specifically engineered to bring modern artificial intelligence to the network edge. By combining a dedicated GPU architecture, optimized software support, and exceptional power ef",
+    false
+  ],
+  [
+    112,
+    "How BeagleBone Black Uses Programmable Real-Time Units",
+    "The BeagleBone Black features two integrated 32-bit microcontrollers known as Programmable Real-Time Units (PRUs) embedded directly alongside its primary ARM Cortex-A8 processor. This article explains how the BeagleBone Black utilizes these PRUs to execu",
+    false
+  ],
+  [
+    111,
+    "eMMC vs MicroSD on Single Board Computers",
+    "This article explores the primary function and advantages of embedded MultiMediaCard (eMMC) storage compared to microSD media in single board computers (SBCs). It highlights how storage architecture affects boot performance, data reliability, read/write",
+    false
+  ],
+  [
+    110,
+    "Using Hardware Watchdog Timers on Single Board Computers",
+    "Hardware watchdog timers (WDTs) are critical components used by embedded developers to ensure that single board computers (SBCs) recover automatically from software crashes, deadlocks, and system freezes. This article explores how developers configure an",
+    false
+  ],
+  [
+    109,
+    "What Causes Thermal Throttling in High-End SBCs?",
+    "High-performance single board computers (SBCs) pack powerful processing capabilities into compact footprints, making thermal management a critical design challenge. This article examines the primary factors that dictate thermal throttling behavior in mod",
+    false
+  ],
+  [
+    108,
+    "Power Delivery via PoE on Single Board Computers",
+    "Power over Ethernet (PoE) allows a single board computer (SBC) to receive both high-speed data and electrical power through a single standard Ethernet cable (Cat5e or better). This eliminates the need for a separate DC power supply or USB cable, simplify",
+    false
+  ],
+  [
+    107,
+    "Automotive SBC vs Hobbyist Board Differences",
+    "While hobbyist single board computers (SBCs) like the Raspberry Pi are ideal for DIY projects, education, and light prototyping, automotive-grade SBCs are engineered for mission-critical vehicular environments. The fundamental differences lie in environm",
+    false
+  ],
+  [
+    106,
+    "How PCIe Lanes Impact SBC Expansion Capabilities",
+    "Peripheral Component Interconnect Express (PCIe) lane availability is one of the most critical factors determining the performance, versatility, and hardware scalability of a single board computer (SBC). This article examines how the number and generatio",
+    false
+  ],
+  [
+    105,
+    "RISC-V SBC Advantages for Open-Source Hardware Research",
+    "RISC-V single board computers (SBCs) have become pivotal tools in academic and industrial laboratories exploring computer architecture, embedded systems, and system-on-chip (SoC) design. By combining an unencumbered, royalty-free instruction set architec",
+    false
+  ],
+  [
+    104,
+    "Industrial SBC Reliability in Extreme Temperatures",
+    "Industrial-grade single board computers (SBCs) are specialized computing platforms engineered to deliver uninterrupted performance in environments subjected to severe thermal extremes, typically ranging from -40°C to 85°C (-40°F to 185°F) or higher.",
+    false
+  ],
+  [
+    103,
+    "Role of an NPU in Modern AI Single Board Computers",
+    "Modern AI single-board computers (SBCs) increasingly integrate dedicated Neural Processing Units (NPUs) to accelerate machine learning workloads directly at the hardware level. This article explores the specific functions of an NPU, detailing how it opti",
+    false
+  ],
+  [
+    102,
+    "x86 vs ARM SBC: Performance Comparison",
+    "Single-board computers (SBCs) built on x86 and ARM architectures offer fundamentally different performance profiles tailored to distinct computing demands. While ARM-based SBCs dominate in energy efficiency and low-power processing, x86-based models typi",
+    false
+  ],
+  [
+    101,
+    "Historical Significance of the KIM-1 Microcomputer",
+    "The KIM-1 (Keyboard Input Monitor) microcomputer, released in 1976 by MOS Technology, holds a pivotal place in computing history as one of the first affordable, fully assembled single-board computers available to the public. Designed initially as an eval",
+    false
+  ],
+  [
+    100,
+    "Wiring Arcade Controls to a Raspberry Pi GPIO",
+    "Building a custom arcade cabinet around a Raspberry Pi is a rewarding DIY project that blends woodworking, electronics, and retro gaming. To establish a connection between your classic microswitch arcade joysticks and buttons and the Raspberry Pi, you ca",
+    false
+  ],
+  [
+    99,
+    "How to Turn a Raspberry Pi into a Tor Routing Node",
+    "Turning a Raspberry Pi into an anonymous routing node—often called an onion router or a \"Pi-hole\" style privacy gateway—allows you to route your network traffic through the Tor network, masking your IP address and encrypting your data. This process t",
+    false
+  ],
+  [
+    98,
+    "Connecting a GPS Module to Raspberry Pi",
+    "Interfacing a GPS module with a Raspberry Pi enables a wide range of mobile location tracking applications, from vehicle fleet monitoring to open-source asset management. By establishing a physical hardware serial connection and configuring Linux to read",
+    false
+  ],
+  [
+    97,
+    "Raspberry Pi Model B Board Dimensions Guide",
+    "This article provides the comprehensive physical specifications and dimensions for the standard Raspberry Pi Model B form factor. It outlines the exact printed circuit board (PCB) footprint, mounting hole placements, and the height profiles of key compon",
+    false
+  ],
+  [
+    96,
+    "Continuous Solar Power for Off-Grid Raspberry Pi",
+    "Operating a Raspberry Pi on a continuous, 24/7 basis using solar energy is entirely achievable, but it cannot be done reliably by simply wiring a solar panel directly to the microcomputer. Achieving enterprise-grade reliability for an off-grid single-boa",
+    false
+  ],
+  [
+    95,
+    "How to Route Raspberry Pi Audio to Bluetooth",
+    "Configuring your Raspberry Pi to stream all audio through a paired Bluetooth speaker is a great way to cut the cords on your media projects. While older versions of Raspberry Pi OS required complex manual setup via PulseAudio or ALSA, modern versions bui",
+    false
+  ],
+  [
+    94,
+    "Browser Application Graphical Limits on Raspberry Pi",
+    "Running web applications on a Raspberry Pi often pushes the compact hardware to its limits, particularly when handling intensive visual elements. While the Raspberry Pi has evolved significantly across its generations, browser-based graphics remain const",
+    false
+  ],
+  [
+    93,
+    "Tracking International Flights via Raspberry Pi",
+    "This article explains how a Raspberry Pi can be transformed into a local radar station to track international flights using radio signals. By decoding Automatic Dependent Surveillance-Broadcast (ADS-B) signals transmitted from commercial aircraft, a Rasp",
+    false
+  ],
+  [
+    92,
+    "Raspberry Pi Hardware Watchdog Timer Explained",
+    "The hardware watchdog timer on a Raspberry Pi is a built-in safety mechanism designed to automatically restart the system if it freezes, crashes, or becomes unresponsive. By continuously monitoring the operating system's activity, this dedicated hardware",
+    false
+  ],
+  [
+    91,
+    "Enable Hardware Video Acceleration on Raspberry Pi",
+    "Enabling hardware-accelerated video playback on a Raspberry Pi offloads video decoding from the CPU to the dedicated Graphics Processing Unit (GPU). This process drastically reduces CPU usage, lowers operating temperatures, and prevents stuttering or dro",
+    false
+  ],
+  [
+    90,
+    "Raspberry Pi Digital Signage Software for Businesses",
+    "The Raspberry Pi has become a staple for businesses seeking cost-effective digital signage solutions, transforming basic screens into dynamic displays for menu boards, advertisements, and corporate dashboards. To achieve this, companies rely on specializ",
+    false
+  ],
+  [
+    89,
+    "Connecting a Motion Sensor to a Raspberry Pi",
+    "This article provides a straightforward guide on how to connect a PIR (Passive Infrared) motion sensor to a Raspberry Pi to build a basic DIY security system. You will learn about the necessary hardware components, how to wire the sensor to the Pi's GPIO",
+    false
+  ],
+  [
+    88,
+    "Benefits of Raspberry Pi Network Print Servers",
+    "Using a compact Raspberry Pi as a dedicated network print server offers a cost-effective, energy-efficient way to modernize older printers and streamline wireless printing across an entire household or office. By running lightweight server software like",
+    false
+  ],
+  [
+    87,
+    "Building a Dedicated Raspberry Pi Internet Radio",
+    "Transforming a Raspberry Pi into a dedicated internet radio player is a highly rewarding DIY project that allows you to stream global radio stations, podcasts, and digital music without the need for a subscription or a constant connection to a computer o",
+    false
+  ],
+  [
+    86,
+    "Optimizing a Raspberry Pi Survival Game Server",
+    "Running a multiplayer survival game server on a Raspberry Pi is an excellent way to achieve low-cost, energy-efficient hosting, but the hardware limitations of a single-board computer require strict configuration choices to maintain a lag-free experience",
+    false
+  ],
+  [
+    85,
+    "Control Home Appliances with Raspberry Pi Relays",
+    "Using a Raspberry Pi to control electronic relays is a powerful and cost-effective way to automate standard home appliances. By connecting the Pi’s General Purpose Input/Output (GPIO) pins to a relay module, you can safely bridge the gap between low-vo",
+    false
+  ],
+  [
+    84,
+    "How to Install MagicMirror on Raspberry Pi",
+    "This article provides a straightforward, step-by-step guide to installing and running the open-source MagicMirror² software on a Raspberry Pi. You will learn how to prepare your Raspberry Pi, run the automated installation script, and configure the soft",
+    false
+  ],
+  [
+    83,
+    "Raspberry Pi Smart Home Voice Assistant Integration",
+    "Integrating a Raspberry Pi into your smart home ecosystem allows you to build a privacy-focused, highly customizable voice assistant. This article explores how to select the right open-source software, connect essential microphone and speaker hardware, a",
+    false
+  ],
+  [
+    82,
+    "Setup a USB Webcam for Streaming on Raspberry Pi",
+    "Setting up a USB webcam on a Raspberry Pi for live streaming is a straightforward process that involves connecting the hardware, installing streaming software, and configuring the video feed. This guide walks you through verifying your webcam connection,",
+    false
+  ],
+  [
+    81,
+    "Connecting a Character LCD to a Raspberry Pi",
+    "Connecting a standard character LCD (like the popular HD44780 16x2 screen) to a Raspberry Pi allows your projects to display real-time data, system status, or custom text without needing a full monitor. This article provides a straightforward guide to wi",
+    false
+  ],
+  [
+    80,
+    "Raspberry Pi vs Arduino for Educational Robotics",
+    "Choosing the right microcontroller or microcomputer is a critical decision for building educational robots. This article compares the Raspberry Pi and Arduino platforms, evaluating their processing power, ease of use, hardware interfacing, and cost to he",
+    false
+  ],
+  [
+    79,
+    "Learning to Code on Raspberry Pi: Beginner Resources",
+    "The Raspberry Pi is an exceptional, budget-friendly microcomputer designed to make learning to code accessible to everyone. This article highlights the best official platforms, interactive websites, and community-driven resources available to help beginn",
+    false
+  ],
+  [
+    78,
+    "Impact of the Low-Cost Raspberry Pi on DIY Electronics",
+    "The launch of the Raspberry Pi completely transformed the landscape of DIY electronics by making programmable hardware affordable for everyone. Originally designed to teach school-aged children computer science, the ultra-low-cost single-board computer q",
+    false
+  ],
+  [
+    77,
+    "What is a Raspberry Jam and How Does It Benefit Enthusiasts?",
+    "Raspberry Jams are community-led, family-friendly events centered around the Raspberry Pi microcomputer, offering a space for people of all ages and skill levels to share projects, learn coding, and collaborate on digital making. These global gatherings",
+    false
+  ],
+  [
+    76,
+    "How The MagPi Supports Global Raspberry Pi Makers",
+    "The MagPi magazine—officially known as The Raspberry Pi Official Magazine—serves as a vital pillar for the global Raspberry Pi community by providing free accessible learning materials, showcasing user-submitted innovation, and bridging the gap betwe",
+    false
+  ],
+  [
+    75,
+    "Best Online Communities for Raspberry Pi Tutorials",
+    "Finding the right community can completely change your Raspberry Pi journey, whether you are building a simple media server or a complex robotics project. This article highlights the top online platforms where makers of all skill levels share step-by-ste",
+    false
+  ],
+  [
+    74,
+    "Teaching With Raspberry Pi: A Classroom Guide",
+    "The Raspberry Pi offers an affordable, versatile gateway for bringing hands-on technology into the classroom. This article explores how educators can effectively integrate these credit-card-sized computers into their curriculum, shifting students from pa",
+    false
+  ],
+  [
+    73,
+    "Raspberry Pi’s Role in Computer Science Education",
+    "The Raspberry Pi Foundation has fundamentally transformed global computer science education by lowering the barriers to entry for students, teachers, and hobbyists alike. Founded with the mission to put the power of computing and digital making into the",
+    false
+  ],
+  [
+    72,
+    "Scratch on Raspberry Pi: Performance and Architecture",
+    "This article explores how the Scratch visual programming environment operates on the Raspberry Pi hardware platform. It covers the transition from early Squeak-based implementations to modern web-tech versions, how the system leverages the Pi’s Linux-b",
+    false
+  ],
+  [
+    71,
+    "What Was the Original Goal of the Raspberry Pi?",
+    "The Raspberry Pi has become a global phenomenon, powering everything from DIY robotics to home servers, but its origins lie in a humble academic mission. This article explores how a group of Cambridge computer scientists sought to address a stark decline",
+    false
+  ],
+  [
+    70,
+    "RTOS on Raspberry Pi: Real-Time Efficiency Explained",
+    "The Raspberry Pi can handle real-time operating systems (RTOS) efficiently, but its performance depends significantly on whether you are using a Single Board Computer (SBC) like the Raspberry Pi 4 or 5, or a microcontroller like the Raspberry Pi Pico. Wh",
+    false
+  ],
+  [
+    69,
+    "PWM Servo Control with Raspberry Pi",
+    "Pulse-Width Modulation (PWM) is a highly efficient technique used to control the precise position of servo motors by varying the width of electrical pulses. This article provides a comprehensive guide on how to utilize a Raspberry Pi to generate PWM sign",
+    false
+  ],
+  [
+    68,
+    "What is the Raspberry Pi DSI Port Used For?",
+    "The Display Serial Interface (DSI) port on a Raspberry Pi is a dedicated ribbon cable connector designed for plugging a liquid crystal display (LCD) panel directly into the microcomputer's circuit board. Unlike standard HDMI outputs that send audio and v",
+    false
+  ],
+  [
+    67,
+    "Boot Raspberry Pi From USB SSD",
+    "Booting your Raspberry Pi from a USB solid-state drive (SSD) instead of a traditional microSD card significantly boosts system performance, reliability, and storage capacity. This guide provides a straightforward, step-by-step walkthrough on how to confi",
+    false
+  ],
+  [
+    66,
+    "What is the Raspberry Pi 4 Bootloader EEPROM?",
+    "The Raspberry Pi 4 introduces a significant architectural shift from its predecessors by utilizing an onboard EEPROM (Electrically Erasable Programmable Read-Only Memory) to store its bootloader configuration, rather than relying solely on code stored on",
+    false
+  ],
+  [
+    65,
+    "Raspberry Pi 4 Dual-Display Output Explained",
+    "The Raspberry Pi 4 Model B represents a massive leap forward from its predecessors, notably introducing support for dual-display outputs at up to 4K resolution. This functionality is driven by a combination of upgraded Broadcom hardware, dual micro-HDMI",
+    false
+  ],
+  [
+    64,
+    "Optimized Machine Learning Frameworks for Raspberry Pi",
+    "Deploying artificial intelligence directly onto a Raspberry Pi allows developers to build low-power, private, and latency-free edge applications. Because the single-board computer relies on ARM-based architectures and lacks the massive parallel processin",
+    false
+  ],
+  [
+    63,
+    "Headless Raspberry Pi Configuration Guide",
+    "Setting up a Raspberry Pi \"headless\"—without a monitor, keyboard, or mouse—allows you to get your device up and running using only a network connection and another computer. This guide covers the essential steps to configure a Raspberry Pi completely",
+    false
+  ],
+  [
+    62,
+    "Run Docker Containers on Raspberry Pi",
+    "Running Docker containers on a Raspberry Pi allows you to transform a compact, low-power credit-card-sized computer into a versatile home server or development environment. By leveraging containerization, you can deploy self-hosted applications, database",
+    false
+  ],
+  [
+    61,
+    "Interfacing an ADC with a Raspberry Pi",
+    "This article provides a comprehensive guide on how to interface an Analog-to-Digital Converter (ADC) with a Raspberry Pi. Since the Raspberry Pi lacks native analog input pins, utilizing an external ADC chip is essential for reading data from analog sens",
+    false
+  ],
+  [
+    60,
+    "Raspberry Pi SPI Bus Functionality Explained",
+    "The Serial Peripheral Interface (SPI) bus on the Raspberry Pi GPIO header serves as a synchronous, full-duplex serial communication interface used to connect the Pi to high-speed peripheral devices over short distances. This article explores how the SPI",
+    false
+  ],
+  [
+    59,
+    "How Raspberry Pi Uses I2C to Connect Devices",
+    "The Raspberry Pi utilizes the Inter-Integrated Circuit (I2C) protocol to communicate with multiple peripheral devices using only two wires: a serial data line (SDA) and a serial clock line (SCL). This master-slave architecture allows the Raspberry Pi to",
+    false
+  ],
+  [
+    58,
+    "How to Port Forward a Raspberry Pi Web Server",
+    "Hosting a web server on a Raspberry Pi is an excellent way to deploy websites or applications from home, but making it accessible from the internet requires configuring your network router. This article provides a step-by-step guide to setting up port fo",
+    false
+  ],
+  [
+    57,
+    "How to Host a VPN on a Raspberry Pi",
+    "Transforming a Raspberry Pi into a self-hosted Virtual Private Network (VPN) is an excellent, cost-effective way to secure your internet connection and access your home network remotely. This guide provides a straightforward overview of how to set up you",
+    false
+  ],
+  [
+    56,
+    "Can Raspberry Pi Connect to 5GHz Wi-Fi?",
+    "This article provides a direct answer to whether a Raspberry Pi can connect to a 5GHz Wi-Fi network, details which specific models support this higher frequency, and offers quick troubleshooting steps for those facing connectivity issues. While older ver",
+    false
+  ],
+  [
+    55,
+    "How to Pair a Bluetooth Keyboard or Mouse with Raspberry Pi",
+    "Connecting a Bluetooth keyboard or mouse to a Raspberry Pi is a straightforward process that can be completed either through the graphical desktop interface or via the command line terminal. This guide provides a step-by-step walkthrough for both methods",
+    false
+  ],
+  [
+    54,
+    "Best Secure File Transfer Protocols for Raspberry Pi",
+    "Transferring files securely to a Raspberry Pi is essential for protecting sensitive data and system credentials from interception on a network. While standard FTP and unencrypted network shares expose data to vulnerability, several modern cryptographic p",
+    false
+  ],
+  [
+    53,
+    "How to Turn a Raspberry Pi into a Wi-Fi Access Point",
+    "Configuring a Raspberry Pi to act as a wireless access point is an excellent way to extend your home network, create a standalone local network, or build a dedicated IoT gateway. This setup leverages the Raspberry Pi's built-in Wi-Fi module to broadcast",
+    false
+  ],
+  [
+    52,
+    "Raspberry Pi 4 Maximum Gigabit Ethernet Throughput",
+    "The Raspberry Pi 4 features a significant networking upgrade over its predecessors by introducing a full, non-throttled onboard Gigabit Ethernet port. This article provides an overview of the maximum real-world data throughput achievable on the Raspberry",
+    false
+  ],
+  [
+    51,
+    "How to Set a Static IP Address on Raspberry Pi",
+    "Assigning a static IP address to a Raspberry Pi ensures it maintains the same network location every time it boots, which is essential for hosting servers, SSH access, or running home automation. This guide covers the two most reliable methods for lockin",
+    false
+  ],
+  [
+    50,
+    "Securing a Publicly Exposed Raspberry Pi",
+    "Exposing a Raspberry Pi to the public internet opens up incredible possibilities for hosting services, but it also invites constant security threats from automated bots and hackers. To protect your device and your home network from unauthorized access, y",
+    false
+  ],
+  [
+    49,
+    "How to Change the Raspberry Pi Default Password",
+    "Securing your Raspberry Pi by changing the default credentials is the most critical first step in protecting your device from unauthorized network access. This article provides a straightforward, step-by-step guide on how to change the default password f",
+    false
+  ],
+  [
+    48,
+    "Why Does Raspberry Pi Show a Lightning Bolt?",
+    "If you see a flashing or solid yellow lightning bolt icon in the top-right corner of your Raspberry Pi screen, your board is suffering from under-voltage. This diagnostic warning indicates that the Pi is receiving less than the required 4.63V to 4.7V, wh",
+    false
+  ],
+  [
+    47,
+    "How to Back Up an Entire Raspberry Pi System Image",
+    "This article provides a comprehensive guide on the recommended methods for backing up an entire Raspberry Pi system image. You will learn how to create a complete, cloneable backup of your microSD card using native tools and reliable third-party software",
+    false
+  ],
+  [
+    46,
+    "Recovering Data from Corrupted Raspberry Pi SD Cards",
+    "If your Raspberry Pi suddenly refuses to boot or throws read-only errors, your SD card may be corrupted. This article provides a quick overview of why this corruption happens and walks you through step-by-step methods to recover your valuable data. We wi",
+    false
+  ],
+  [
+    45,
+    "Troubleshooting Raspberry Pi Wi-Fi Connection Issues",
+    "If your Raspberry Pi refuses to connect to a Wi-Fi network, the issue usually stems from incorrect network credentials, misconfigured region settings, insufficient power, or temporary software glitches. This guide provides a systematic troubleshooting ap",
+    false
+  ],
+  [
+    44,
+    "Installing an Active Cooling Fan on Raspberry Pi",
+    "This article provides a straightforward, step-by-step guide to installing an active cooling fan on a Raspberry Pi to prevent thermal throttling and ensure optimal performance. You will learn how to identify the correct GPIO pins, securely mount the fan t",
+    false
+  ],
+  [
+    43,
+    "Signs a Raspberry Pi Is Thermal Throttling",
+    "This article provides a quick overview of how to detect thermal throttling on a Raspberry Pi, a protective mechanism that reduces processor speed to prevent overheating. It covers the primary visual indicators in the operating system, command-line tools",
+    false
+  ],
+  [
+    42,
+    "Safely Shut Down a Raspberry Pi",
+    "To prevent SD card corruption on your Raspberry Pi, you must always perform a controlled software shutdown rather than simply pulling the power plug. This article covers the essential terminal commands, desktop methods, and hardware solutions to safely p",
+    false
+  ],
+  [
+    41,
+    "Fixing a Solid Red LED on Raspberry Pi",
+    "When a Raspberry Pi boots, a solid red LED typically indicates that the board is receiving power, but if it refuses to boot further and the green ACT LED remains unlit, it signals a critical hardware or software issue. This article provides a quick overv",
+    false
+  ],
+  [
+    40,
+    "Raspberry Pi HAT Compatibility Guide",
+    "Older Raspberry Pi HATs (Hardware Attached on Top) are not universally compatible with the latest Raspberry Pi models due to evolving hardware layouts, power management configurations, and software architectures. While the fundamental 40-pin GPIO layout",
+    false
+  ],
+  [
+    39,
+    "Significance of RP2040 in Raspberry Pi Pico",
+    "The RP2040 microcontroller chip is the defining component of the Raspberry Pi Pico, marking Raspberry Pi's historic shift from using third-party processors to deploying its own custom-designed silicon. This chip fundamentally changed the microcontroller",
+    false
+  ],
+  [
+    38,
+    "How the PoE HAT Powers a Raspberry Pi",
+    "The Power over Ethernet (PoE) Hardware Attached on Top (HAT) allows a Raspberry Pi to receive both high-speed network connectivity and electrical power through a single standard Ethernet cable. By utilizing the unused wires or phantom power techniques of",
+    false
+  ],
+  [
+    37,
+    "Raspberry Pi HQ Camera Use Cases",
+    "The Raspberry Pi High Quality (HQ) Camera module, featuring a 12.3-megapixel Sony IMX477 sensor and support for interchangeable C- and CS-mount lenses, elevates credit-card-sized computing into the realm of professional digital imaging. Unlike standard f",
+    false
+  ],
+  [
+    36,
+    "Raspberry Pi 3 Model A+ Ethernet Port Guide",
+    "The Raspberry Pi 3 Model A+ does not have a built-in Ethernet port, a design choice made to reduce its physical footprint and cost compared to the larger Model B+. While it lacks a hardwired network jack, it compensates with integrated dual-band 802.11ac",
+    false
+  ],
+  [
+    35,
+    "Raspberry Pi 5 Processor Clock Speed",
+    "The Raspberry Pi 5 introduces massive performance upgrades over its predecessor, driven by an entirely new architecture and silicon design. This article provides a quick overview of the official processor specifications for the flagship single-board comp",
+    false
+  ],
+  [
+    34,
+    "Raspberry Pi Zero vs Pi 4 Size Comparison",
+    "Choosing the right Raspberry Pi for your project often comes down to balancing computational power with physical constraints. This article provides a direct size and form factor comparison between the ultra-compact Raspberry Pi Zero series and the full-s",
+    false
+  ],
+  [
+    33,
+    "Raspberry Pi 400 Features and Upgrades",
+    "The Raspberry Pi 400 marked a significant departure from previous Raspberry Pi models by integrating a complete computer directly inside a compact keyboard chassis. While built on the foundation of the Raspberry Pi 4 architecture, this model introduced s",
+    false
+  ],
+  [
+    32,
+    "Choosing a Raspberry Pi Compute Module Over a Standard Board",
+    "The Raspberry Pi Compute Module (CM) series offers a flexible alternative to the standard Raspberry Pi Single Board Computer (SBC). While the standard board is an all-in-one solution complete with fixed ports, the Compute Module strips away the physical",
+    false
+  ],
+  [
+    31,
+    "Raspberry Pi 3 vs Pi 4 Architecture Differences",
+    "The Raspberry Pi 3 and Raspberry Pi 4 represent two distinct generations of single-board computers, with the Pi 4 introducing massive architectural upgrades. While the Raspberry Pi 3 relies on an older processing core and shares bandwidth across its USB",
+    false
+  ],
+  [
+    30,
+    "Can You Profit Mining Crypto on a Raspberry Pi?",
+    "Using a Raspberry Pi to mine cryptocurrency is a popular weekend project for tech enthusiasts, but it is not a profitable venture. While these credit-card-sized computers are capable of joining blockchain networks and executing the necessary hashing algo",
+    false
+  ],
+  [
+    29,
+    "Connecting and Reading a Raspberry Pi Temperature Sensor",
+    "This guide provides a straightforward walkthrough for connecting a DS18B20 digital temperature sensor to a Raspberry Pi and reading its data using Python. You will learn about the necessary hardware components, how to wire the sensor to the Pi's GPIO pin",
+    false
+  ],
+  [
+    28,
+    "Raspberry Pi Home Automation Hub Software",
+    "Transforming a Raspberry Pi into a centralized smart home hub requires specialized operating systems or application suites that unify disparate IoT devices into a single control plane. These software platforms replace closed corporate cloud ecosystems wi",
+    false
+  ],
+  [
+    27,
+    "Programming Raspberry Pi LED Arrays",
+    "Controlling an array of LED lights with a Raspberry Pi is an excellent way to learn the basics of hardware programming and electronics. This article provides a straightforward guide on how to wire an LED matrix or strip to your Pi, set up the necessary P",
+    false
+  ],
+  [
+    26,
+    "Why Raspberry Pi Zero W Excels for Embedded IoT",
+    "The Raspberry Pi Zero W has established itself as a premier microcontroller-alternative for embedded Internet of Things (IoT) projects due to its unique blend of affordability, compact form factor, and full Linux capabilities. While traditional microcont",
+    false
+  ],
+  [
+    25,
+    "How to Monitor Local Weather with Raspberry Pi",
+    "Building your own local weather station using a Raspberry Pi is an engaging project that allows you to collect precise, real-time climate data from your immediate environment. By connecting specialized sensors to the microcomputer, you can track paramete",
+    false
+  ],
+  [
+    24,
+    "How to Turn a Raspberry Pi Into a Web Server",
+    "Transforming a Raspberry Pi into a dedicated web server is an affordable and rewarding way to host websites, test web applications, or build a personal cloud. This guide provides a step-by-step walkthrough of the entire process, including preparing your",
+    false
+  ],
+  [
+    23,
+    "How to Build a Raspberry Pi NAS",
+    "This article provides a comprehensive guide on transforming a Raspberry Pi into a low-cost, energy-efficient Network Attached Storage (NAS) device. We will explore the necessary hardware components, step-by-step software configuration using OpenMediaVaul",
+    false
+  ],
+  [
+    22,
+    "DIY Raspberry Pi Smart Mirror Components",
+    "Building a smart mirror is a popular and rewarding DIY project that combines a two-way mirror, a display monitor, and a Raspberry Pi to create a futuristic, data-driven home display. This article provides a comprehensive breakdown of the essential hardwa",
+    false
+  ],
+  [
+    21,
+    "Turn Your Raspberry Pi into a Kodi Media Center",
+    "Setting up a Raspberry Pi as a home media center using Kodi is an affordable and efficient way to stream your favorite movies, TV shows, and music. By installing a dedicated, Kodi-focused operating system like LibreELEC, you can transform your credit-car",
+    false
+  ],
+  [
+    20,
+    "Can Raspberry Pi Run Full Windows 10?",
+    "The Raspberry Pi can technically run a full desktop version of Windows 10, but doing so requires third-party workarounds rather than an officially supported method from Microsoft. While Microsoft initially provided \"Windows 10 IoT Core\" for the microcomp",
+    false
+  ],
+  [
+    19,
+    "What Is the Raspi-Config Tool in Raspberry Pi OS?",
+    "The raspi-config tool is a built-in configuration utility in Raspberry Pi OS designed to let users easily modify system settings through a straightforward, text-based interface. Instead of forcing users to manually edit complex configuration files or use",
+    false
+  ],
+  [
+    18,
+    "How to Set Up Pi-hole on a Raspberry Pi",
+    "This article provides a step-by-step guide on how to transform a Raspberry Pi into a network-wide ad blocker using Pi-hole. By routing your network's Domain Name System (DNS) traffic through the Raspberry Pi, you can block advertisements and tracking scr",
+    false
+  ],
+  [
+    17,
+    "Best Software to Turn a Raspberry Pi Into a Retro Console",
+    "Transforming a credit card-sized Raspberry Pi into a retro gaming powerhouse is easily achieved using dedicated, open-source emulation operating systems. This article highlights the leading software suites available for classic gaming enthusiasts, detail",
+    false
+  ],
+  [
+    16,
+    "How to Update Raspberry Pi OS Packages",
+    "Keeping your Raspberry Pi updated ensures your system has the latest security patches, bug fixes, and software features. This guide provides a quick, step-by-step walkthrough on how to update your system packages using the terminal, automate the process,",
+    false
+  ],
+  [
+    15,
+    "Primary Language of Raspberry Pi",
+    "The Raspberry Pi Foundation has revolutionized computing education, and at the heart of its mission is a single, powerful programming language: Python. While the versatile microcomputer supports dozens of languages, Python was chosen from the project's i",
+    false
+  ],
+  [
+    14,
+    "Remote Access to Raspberry Pi via SSH",
+    "Accessing a Raspberry Pi remotely without a dedicated monitor, keyboard, or mouse—a setup known as \"headless mode\"—is an efficient way to manage your device. By enabling Secure Shell (SSH), you can establish a secure command-line connection to your P",
+    false
+  ],
+  [
+    13,
+    "What Does NOOBS Stand For on Raspberry Pi?",
+    "The acronym NOOBS stands for New Out of Box Software. It is an official operating system installation manager designed by the Raspberry Pi Foundation to make the initial setup process incredibly easy for beginners. This article explains what NOOBS is, ho",
+    false
+  ],
+  [
+    12,
+    "Flashing Raspberry Pi OS with Raspberry Pi Imager",
+    "Setting up a Raspberry Pi requires installing an operating system onto a microSD card, a process made incredibly simple by using the official Raspberry Pi Imager software. This article provides a straightforward, step-by-step guide on how to download the",
+    false
+  ],
+  [
+    11,
+    "What is the Default Raspberry Pi OS?",
+    "This article provides a quick overview of the official and recommended operating system for the Raspberry Pi. It covers the history of the OS, its key features, the different versions available for download, and how to easily install it using the officia",
+    false
+  ],
+  [
+    10,
+    "Can You Upgrade Raspberry Pi RAM After Buying It?",
+    "When purchasing a Raspberry Pi, choosing the right amount of Random Access Memory (RAM) is a critical decision because you cannot upgrade the RAM on a Raspberry Pi after purchasing it. Unlike traditional desktop computers or some laptops that feature mod",
+    false
+  ],
+  [
+    9,
+    "Raspberry Pi Primary Storage Guide",
+    "The Raspberry Pi requires a reliable storage medium to house its operating system, applications, and user data. Unlike traditional desktop computers that rely on internal mechanical hard drives or solid-state drives (SSDs), a standard Raspberry Pi utiliz",
+    false
+  ],
+  [
+    8,
+    "How Many USB Ports Does a Raspberry Pi Have?",
+    "Choosing the right Raspberry Pi for your project often depends on how many peripherals you need to connect. This article provides a quick overview of the standard USB port configurations found across different generations of full-sized Raspberry Pi board",
+    false
+  ],
+  [
+    7,
+    "What is the Raspberry Pi CSI Port Used For?",
+    "The Camera Serial Interface (CSI) port on a Raspberry Pi motherboard is a dedicated, high-speed interface designed specifically for connecting official and compatible camera modules. Unlike general-purpose USB ports, the CSI port links directly to the Ra",
+    false
+  ],
+  [
+    6,
+    "Raspberry Pi Model With Built-In Wi-Fi",
+    "The introduction of built-in wireless connectivity was a major milestone for single-board computing, eliminating the need for external USB dongles. This article identifies the specific Raspberry Pi model that first integrated onboard Wi-Fi and Bluetooth,",
+    false
+  ],
+  [
+    5,
+    "Raspberry Pi 4 Micro-HDMI Resolution Limits",
+    "The Raspberry Pi 4 Model B represents a significant leap in video output capabilities compared to its predecessors, introducing dual display support via two micro-HDMI ports. This article provides a detailed breakdown of the maximum display resolutions a",
+    false
+  ],
+  [
+    4,
+    "Raspberry Pi Pico vs Raspberry Pi Boards",
+    "The Raspberry Pi Pico and the standard Raspberry Pi board lineup serve entirely different purposes in the tech world despite sharing a brand name. While the main Raspberry Pi models are fully functional single-board computers (SBCs) running a complete op",
+    false
+  ],
+  [
+    3,
+    "Powering a Raspberry Pi 4 Reliably",
+    "Choosing the right power supply for the Raspberry Pi 4 is crucial for system stability, as inadequate power can cause crashes, corrupted SD cards, and data loss. This article covers the exact voltage and amperage requirements, the risks of using underpow",
+    false
+  ],
+  [
+    2,
+    "Raspberry Pi 4 Base Model RAM Capacity",
+    "The Raspberry Pi 4 Model B represented a major leap forward for the popular single-board computer series, particularly in terms of memory options. While previous generations offered fixed, lower memory capacities, the Pi 4 introduced multiple configurati",
+    false
+  ],
+  [
+    1,
+    "Understanding Raspberry Pi GPIO Pins",
+    "This article provides an overview of the General Purpose Input/Output (GPIO) pins on a Raspberry Pi, explaining their primary functions, how they enable interaction with external hardware, and their common use cases in electronics projects. The primary f",
+    false
+  ]
+]

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Dedicated Raspberry Pi Internet Radio - sbc</title>
+    <meta name="description" content="Transforming a Raspberry Pi into a dedicated internet radio player is a highly rewarding DIY project that allows you to stream global radio stations, podcasts, and digital music without the need for a subscription or a constant connection to a computer o">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/building-a-dedicated-raspberry-pi-internet-radio">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Building a Dedicated Raspberry Pi Internet Radio - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/building-a-dedicated-raspberry-pi-internet-radio" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Transforming a Raspberry Pi into a dedicated internet radio player is a highly rewarding DIY project that allows you to stream global radio stations, podcasts, and digital music without the need for a subscription or a constant connection to a computer o" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="building-a-dedicated-raspberry-pi-internet-radio">Building a
+Dedicated Raspberry Pi Internet Radio</h1>
+<p>Transforming a Raspberry Pi into a dedicated internet radio player is
+a highly rewarding DIY project that allows you to stream global radio
+stations, podcasts, and digital music without the need for a
+subscription or a constant connection to a computer or smartphone. By
+flashing a specialized audio operating system or configuring a
+lightweight Linux daemon onto a Raspberry Pi, users can construct an
+energy-efficient, always-on music device. This article details the
+essential hardware requirements, explores the top software options, and
+outlines the step-by-step assembly process to get your standalone radio
+up and running.</p>
+<h3 id="required-hardware-components">Required Hardware Components</h3>
+<p>Building an internet radio can be as simple or as complex as your
+budget and design preferences allow. At minimum, the project requires
+the following hardware essentials:</p>
+<ul>
+<li><strong>Raspberry Pi Board:</strong> A Raspberry Pi Zero 2 W, Pi 3,
+Pi 4, or Pi 5 will work perfectly. Because streaming audio demands
+minimal processing power, even a lower-spec Pi Zero W is
+sufficient.</li>
+<li><strong>MicroSD Card:</strong> An 8GB or larger MicroSD card with a
+high speed rating (Class 10) to store the operating system and station
+data.</li>
+<li><strong>Power Supply:</strong> An official Raspberry Pi power
+adapter capable of providing stable electricity to prevent audio
+stuttering.</li>
+<li><strong>Audio Output Device:</strong> Depending on the Pi model, you
+can use the built-in 3.5mm audio jack, a USB audio adapter, or a
+dedicated I2S DAC (Digital-to-Analog Converter) HAT—such as a
+HiFiBerry—for high-fidelity sound.</li>
+<li><strong>Speakers:</strong> Active computer speakers, a portable
+speaker via AUX/Bluetooth, or a custom amplifier module paired with
+passive bookshelf speakers.</li>
+</ul>
+<h3 id="selecting-your-software-platform">Selecting Your Software
+Platform</h3>
+<p>The easiest way to control your new radio is by choosing an
+open-source audio operating system that can be flashed directly onto the
+MicroSD card.</p>
+<h4 id="volumio">Volumio</h4>
+<p>Volumio is a highly polished, audiophile-focused operating system. It
+boots directly into a headless state, meaning you do not need a monitor
+connected to the Pi. Instead, Volumio broadcasts a local web interface
+that you can access from any smartphone, tablet, or PC browser on your
+Wi-Fi network. It features built-in directories for thousands of free
+internet radio stations.</p>
+<h4 id="moode-audio">moOde Audio</h4>
+<p>Similar to Volumio, moOde Audio is a free, highly customizable media
+player designed for the Raspberry Pi. It provides a beautiful,
+responsive web interface, supports a vast index of global radio streams,
+and offers deep configuration settings for custom digital audio
+converters and equalization.</p>
+<h4 id="music-player-daemon-mpd">Music Player Daemon (MPD)</h4>
+<p>For advanced tinkerers who prefer a lightweight, custom-coded setup
+on top of standard Raspberry Pi OS, installing MPD along with
+<code>mpc</code> (Music Player Client) allows you to control audio
+playback entirely via command line scripts. This method is ideal if you
+want to write Python scripts to tie physical buttons or an LCD screen
+directly to your station controls.</p>
+<h3 id="step-by-step-installation-and-configuration">Step-by-Step
+Installation and Configuration</h3>
+<p>Once you have gathered your components and chosen your platform, you
+can begin assembling and configuring the radio.</p>
+<ol type="1">
+<li><strong>Flash the Image:</strong> Insert your MicroSD card into a
+computer. Download the Raspberry Pi Imager tool, select your chosen
+audio OS (or upload its downloaded .img file), choose your storage card,
+and click write. If using Volumio or moOde, you can often pre-configure
+your home Wi-Fi credentials in the imager settings.</li>
+<li><strong>First Boot and Network Connection:</strong> Insert the
+MicroSD card into the Raspberry Pi, attach your speakers or DAC, and
+plug in the power supply. Allow a few minutes for the initial boot. If
+you did not pre-configure Wi-Fi, the Pi will broadcast its own hotspot.
+Connect your smartphone to this hotspot (usually named after the OS) to
+configure your home Wi-Fi network.</li>
+<li><strong>Access the Control Dashboard:</strong> Once the Pi connects
+to your home network, open a web browser on your phone or computer and
+type in the device's network address (such as
+<code>http://volumio.local</code> or
+<code>http://moode.local</code>).</li>
+<li><strong>Add Radio Streams:</strong> Navigate to the Web Radio
+section of the interface to browse pre-loaded worldwide stations
+categorized by genre and country. If a specific niche station is
+missing, you can look up its streaming URL (ending in .m3u, .pls, or
+.mp3) and manually save it to your favorites list.</li>
+</ol>
+<h3 id="enhancing-your-radio-build">Enhancing Your Radio Build</h3>
+<p>To elevate your project from a bare motherboard into a consumer-grade
+appliance, consider housing your components in a custom enclosure, such
+as a hollowed-out vintage radio chassis or a custom 3D-printed case. To
+make the device entirely standalone without relying on a smartphone web
+browser, you can attach physical hardware controls. Wiring simple
+tactile pushbuttons or a rotary encoder to the Raspberry Pi’s GPIO pins
+allows you to skip tracks, change stations, and adjust the volume
+manually. Adding a small I2C OLED display or an official touchscreen
+panel will round out the build by providing real-time information on the
+current station, track titles, and artist names.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

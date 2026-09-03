@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Port FreeRTOS to ARM Cortex-M - sbc</title>
+    <meta name="description" content="Porting FreeRTOS to an ARM Cortex-M single board computer (SBC) involves integrating the FreeRTOS kernel into the target hardware's board support package (BSP), configuring the processor's core system interrupts, and tailoring the RTOS configuration file">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-port-freertos-to-arm-cortex-m">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Port FreeRTOS to ARM Cortex-M - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-port-freertos-to-arm-cortex-m" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Porting FreeRTOS to an ARM Cortex-M single board computer (SBC) involves integrating the FreeRTOS kernel into the target hardware's board support package (BSP), configuring the processor's core system interrupts, and tailoring the RTOS configuration file" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-port-freertos-to-arm-cortex-m">How to Port FreeRTOS to
+ARM Cortex-M</h1>
+<p>Porting FreeRTOS to an ARM Cortex-M single board computer (SBC)
+involves integrating the FreeRTOS kernel into the target hardware's
+board support package (BSP), configuring the processor's core system
+interrupts, and tailoring the RTOS configuration file to match the
+board’s hardware specifications. This guide outlines the essential steps
+to prepare the source code, map the necessary exception vectors,
+configure the kernel, and verify the real-time operating system on
+target hardware.</p>
+<h3 id="1-gather-required-files-and-toolchain">1. Gather Required Files
+and Toolchain</h3>
+<p>Before beginning the port, prepare your development environment and
+collect the required source trees:</p>
+<ul>
+<li><strong>Toolchain/IDE:</strong> An ARM-supported toolchain such as
+GCC (via Arm GNU Toolchain), Keil MDK, or IAR Embedded Workbench.</li>
+<li><strong>Vendor BSP/CMSIS:</strong> The board-specific startup code,
+linker script, and CMSIS (Cortex Microcontroller Software Interface
+Standard) core header files provided by the silicon vendor.</li>
+<li><strong>FreeRTOS Kernel Source:</strong> Download the latest
+FreeRTOS release.</li>
+</ul>
+<h3 id="2-organize-freertos-source-directory">2. Organize FreeRTOS
+Source Directory</h3>
+<p>Extract the kernel source and include only the necessary components
+in your project:</p>
+<ul>
+<li><strong>Core Kernel:</strong> Add <code>tasks.c</code>,
+<code>queue.c</code>, <code>list.c</code>, <code>timers.c</code>
+(optional), and <code>event_groups.c</code> (optional) from the
+<code>FreeRTOS/Source/</code> directory.</li>
+<li><strong>Port Layer:</strong> Cortex-M architecture-specific code is
+already provided by FreeRTOS. Navigate to
+<code>FreeRTOS/Source/portable/[Compiler]/[Architecture]/</code> (e.g.,
+<code>portable/GCC/ARM_CM4F/</code> for a Cortex-M4 with FPU using GCC)
+and add <code>port.c</code> and <code>portmacro.h</code>.</li>
+<li><strong>Memory Management:</strong> Add one memory allocation scheme
+from <code>FreeRTOS/Source/portable/MemMang/</code> (e.g.,
+<code>heap_4.c</code>).</li>
+</ul>
+<h3 id="3-configure-freertosconfigh">3. Configure
+<code>FreeRTOSConfig.h</code></h3>
+<p>Create or adapt a <code>FreeRTOSConfig.h</code> file in your
+application's include path. This header tailors the kernel to your
+specific board:</p>
+<ul>
+<li><strong>CPU Clock Rate:</strong> Define
+<code>configCPU_CLOCK_HZ</code> with the actual system core clock
+frequency (e.g., <code>SystemCoreClock</code>).</li>
+<li><strong>Tick Rate:</strong> Define <code>configTICK_RATE_HZ</code>
+(typically set between <code>100</code> and <code>1000</code> Hz).</li>
+<li><strong>Heap Size:</strong> Set <code>configTOTAL_HEAP_SIZE</code>
+based on the available SRAM on your board.</li>
+<li><strong>Interrupt Priorities:</strong> Define
+<code>configKERNEL_INTERRUPT_PRIORITY</code> and
+<code>configMAX_SYSCALL_INTERRUPT_PRIORITY</code> according to the
+number of interrupt priority bits implemented in your Cortex-M variant
+(typically 3 to 4 bits).</li>
+</ul>
+<h3 id="4-map-cortex-m-exception-handlers">4. Map Cortex-M Exception
+Handlers</h3>
+<p>FreeRTOS relies on three core Cortex-M exception handlers to manage
+context switching and time tracking:</p>
+<ol type="1">
+<li><strong><code>vPortSVCHandler</code> (SVC):</strong> Used to start
+the first task.</li>
+<li><strong><code>xPortPendSVHandler</code> (PendSV):</strong> Used to
+perform context switches between tasks.</li>
+<li><strong><code>xPortSysTickHandler</code> (SysTick):</strong> Used to
+generate the RTOS tick interrupt.</li>
+</ol>
+<p>Map these handlers in your project using one of two methods:</p>
+<ul>
+<li><strong>Preprocessor Mapping (Recommended):</strong> Add the
+following defines to <code>FreeRTOSConfig.h</code>:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define vPortSVCHandler     SVC_Handler</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define xPortPendSVHandler  PendSV_Handler</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define xPortSysTickHandler SysTick_Handler</span></span></code></pre></div></li>
+<li><strong>Vector Table Editing:</strong> Alternatively, edit the
+interrupt vector table in the startup assembly file
+(<code>startup_*.s</code>) to directly reference
+<code>vPortSVCHandler</code>, <code>xPortPendSVHandler</code>, and
+<code>xPortSysTickHandler</code>.</li>
+</ul>
+<h3 id="5-initialize-hardware-and-start-the-scheduler">5. Initialize
+Hardware and Start the Scheduler</h3>
+<p>Set up the application entry point in <code>main.c</code>:</p>
+<ol type="1">
+<li>Initialize the board's system clocks, GPIOs, and debug
+peripherals.</li>
+<li>Create at least one initial task using <code>xTaskCreate()</code> or
+<code>xTaskCreateStatic()</code>.</li>
+<li>Call <code>vTaskStartScheduler()</code> to start multitasking.</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;FreeRTOS.h&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;task.h&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> vBlinkTask<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>pvParameters<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(;;)</span> <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Toggle an onboard LED</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        vTaskDelay<span class="op">(</span>pdMS_TO_TICKS<span class="op">(</span><span class="dv">500</span><span class="op">));</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 1. Board hardware initialization</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    Hardware_Init<span class="op">();</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 2. Task creation</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    xTaskCreate<span class="op">(</span>vBlinkTask<span class="op">,</span> <span class="st">&quot;Blink&quot;</span><span class="op">,</span> configMINIMAL_STACK_SIZE<span class="op">,</span> NULL<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 3. Start Scheduler</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    vTaskStartScheduler<span class="op">();</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Should never reach here if scheduler started successfully</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(;;);</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="6-build-flash-and-validate">6. Build, Flash, and Validate</h3>
+<p>Compile the project, flash the binary to the board using a debugger
+(e.g., J-Link, ST-LINK, or OpenOCD), and verify the port:</p>
+<ul>
+<li>Ensure the tick counter increments by checking the return value of
+<code>xTaskGetTickCount()</code>.</li>
+<li>Verify that task delays work correctly with
+<code>vTaskDelay()</code>.</li>
+<li>Enable stack overflow detection
+(<code>configCHECK_FOR_STACK_OVERFLOW = 2</code>) during debugging to
+catch memory issues.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

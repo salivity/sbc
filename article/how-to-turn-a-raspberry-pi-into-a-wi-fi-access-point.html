@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Turn a Raspberry Pi into a Wi-Fi Access Point - sbc</title>
+    <meta name="description" content="Configuring a Raspberry Pi to act as a wireless access point is an excellent way to extend your home network, create a standalone local network, or build a dedicated IoT gateway. This setup leverages the Raspberry Pi's built-in Wi-Fi module to broadcast">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-turn-a-raspberry-pi-into-a-wi-fi-access-point">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Turn a Raspberry Pi into a Wi-Fi Access Point - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-turn-a-raspberry-pi-into-a-wi-fi-access-point" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring a Raspberry Pi to act as a wireless access point is an excellent way to extend your home network, create a standalone local network, or build a dedicated IoT gateway. This setup leverages the Raspberry Pi's built-in Wi-Fi module to broadcast" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-turn-a-raspberry-pi-into-a-wi-fi-access-point">How to
+Turn a Raspberry Pi into a Wi-Fi Access Point</h1>
+<p>Configuring a Raspberry Pi to act as a wireless access point is an
+excellent way to extend your home network, create a standalone local
+network, or build a dedicated IoT gateway. This setup leverages the
+Raspberry Pi's built-in Wi-Fi module to broadcast a network SSID and
+route traffic, transforming the compact computer into a fully functional
+wireless router. By utilizing standard Linux networking tools, you can
+easily share an existing wired internet connection or host a completely
+isolated private network.</p>
+<h3 id="prerequisites-and-initial-preparation">Prerequisites and Initial
+Preparation</h3>
+<p>Before diving into the configuration, ensure you have a Raspberry Pi
+3, 4, 5, or Zero 2 W, as these models include onboard Wi-Fi. You will
+need Raspberry Pi OS (Lite or Desktop) installed and updated. For the
+initial setup, connect your Pi to your main router using an Ethernet
+cable to ensure uninterrupted internet access while downloading the
+necessary software packages. Open a terminal or SSH into your Pi to
+begin the process.</p>
+<h3 id="installing-the-required-software">Installing the Required
+Software</h3>
+<p>The transformation relies on two primary software packages:
+<code>hostapd</code> (Host Access Point Daemon), which handles the
+wireless access point creation, and <code>dnsmasq</code>, which provides
+DHCP ip address assignment and DNS services to connected devices.
+Install them by executing the following commands in your terminal:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install hostapd dnsmasq</span></code></pre></div>
+<p>Once installed, stop the services temporarily so you can configure
+them without interference:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop hostapd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop dnsmasq</span></code></pre></div>
+<h3 id="configuring-the-static-ip">Configuring the Static IP</h3>
+<p>The Raspberry Pi needs a permanent, static IP address on its wireless
+interface (<code>wlan0</code>) to act as the gateway for your new
+network. Edit the DHCP client configuration file using a text editor
+like Nano:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/dhcpcd.conf</span></code></pre></div>
+<p>Go to the bottom of the file and append the following lines to define
+the static configuration for <code>wlan0</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">interface</span> wlan0</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">static</span> ip_address=192.168.4.1/24</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">nohook</span> wpa_supplicant</span></code></pre></div>
+<p>Save and exit the file, then restart the DHCP daemon to apply the
+changes:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart dhcpcd</span></code></pre></div>
+<h3 id="setting-up-the-dhcp-server">Setting Up the DHCP Server</h3>
+<p>Next, configure <code>dnsmasq</code> to distribute IP addresses to
+devices that connect to your Pi's Wi-Fi. It is best to back up the
+default configuration file and create a fresh one:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/dnsmasq.conf</span></code></pre></div>
+<p>Add the following configuration to define the IP range, subnet mask,
+and lease duration for connected clients:</p>
+<pre class="text"><code>interface=wlan0
+dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+</code></pre>
+<h3 id="configuring-the-wireless-network-details">Configuring the
+Wireless Network Details</h3>
+<p>Now you must configure <code>hostapd</code> to define your network
+name (SSID) and password. Create a new configuration file:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/hostapd/hostapd.conf</span></code></pre></div>
+<p>Populate the file with your network preferences. Ensure you choose a
+secure password for the <code>wpa_passphrase</code> field:</p>
+<pre class="text"><code>interface=wlan0
+driver=nl80211
+ssid=Pi_Access_Point
+hw_mode=g
+channel=7
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=YourSecurePassword
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+</code></pre>
+<p>Point the system daemon to this new configuration file by editing the
+hostapd default environment file:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/default/hostapd</span></code></pre></div>
+<p>Find the line <code>#DAEMON_CONF=""</code>, uncomment it by removing
+the <code>#</code>, and change it to:</p>
+<pre class="text"><code>DAEMON_CONF=&quot;/etc/hostapd/hostapd.conf&quot;
+</code></pre>
+<h3 id="enabling-routing-and-internet-sharing">Enabling Routing and
+Internet Sharing</h3>
+<p>If you want devices connected to your Raspberry Pi to access the
+internet via the Pi's Ethernet port (<code>eth0</code>), you must enable
+IP forwarding. Edit the system control configuration file:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano /etc/sysctl.conf</span></code></pre></div>
+<p>Uncomment the following line to enable packet forwarding:</p>
+<pre class="text"><code>net.ipv4.ip_forward=1
+</code></pre>
+<p>To bridge the traffic from the wireless network to your wired
+internet connection immediately, configure a masquerade firewall rule
+using <code>iptables</code>:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> iptables <span class="at">-t</span> nat <span class="at">-A</span> POSTROUTING <span class="at">-o</span> eth0 <span class="at">-j</span> MASQUERADE</span></code></pre></div>
+<p>To ensure this firewall rule persists after a reboot, install the
+<code>iptables-persistent</code> utility:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install iptables-persistent</span></code></pre></div>
+<h3 id="starting-the-access-point">Starting the Access Point</h3>
+<p>With all configurations in place, unmask, start, and enable the
+network services so they launch automatically every time your Raspberry
+Pi boots up:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl unmask hostapd</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start hostapd</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start dnsmasq</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable hostapd</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable dnsmasq</span></code></pre></div>
+<p>Your Raspberry Pi is now broadcasting its new Wi-Fi network. You can
+search for "Pi_Access_Point" on your smartphone or laptop, enter the
+password you specified, and enjoy your custom-built wireless access
+point.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

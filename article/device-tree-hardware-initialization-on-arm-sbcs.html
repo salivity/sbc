@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Tree Hardware Initialization on ARM SBCs - sbc</title>
+    <meta name="description" content="This article provides an overview of how Device Tree configuration is utilized in ARM single board computers (SBCs) to discover, configure, and initialize non-discoverable peripheral hardware. It covers the fundamental role of the Device Tree, the struct">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/device-tree-hardware-initialization-on-arm-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Device Tree Hardware Initialization on ARM SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/device-tree-hardware-initialization-on-arm-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of how Device Tree configuration is utilized in ARM single board computers (SBCs) to discover, configure, and initialize non-discoverable peripheral hardware. It covers the fundamental role of the Device Tree, the struct" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="device-tree-hardware-initialization-on-arm-sbcs">Device Tree
+Hardware Initialization on ARM SBCs</h1>
+<p>This article provides an overview of how Device Tree configuration is
+utilized in ARM single board computers (SBCs) to discover, configure,
+and initialize non-discoverable peripheral hardware. It covers the
+fundamental role of the Device Tree, the structure of hardware
+description nodes, the matching process between the Linux kernel and
+device drivers, and how Device Tree overlays enable modular hardware
+expansion.</p>
+<hr />
+<h3 id="the-role-of-the-device-tree-in-arm-architecture">The Role of the
+Device Tree in ARM Architecture</h3>
+<p>Unlike traditional x86 computer architectures that rely on
+discoverable buses (such as PCI/PCIe) or standard ACPI tables to
+identify connected hardware, ARM-based systems typically integrate
+peripherals directly via non-discoverable memory-mapped registers, GPIO
+pins, and serial buses (I2C, SPI, UART).</p>
+<p>Because the Linux kernel cannot automatically detect these components
+at runtime, it relies on a <strong>Device Tree (DT)</strong>. The Device
+Tree is a structured, hierarchical database that describes the exact
+physical hardware layout of the board to the operating system,
+decoupling the kernel binary from board-specific hardware
+implementations.</p>
+<hr />
+<h3 id="device-tree-components-and-workflow">Device Tree Components and
+Workflow</h3>
+<p>The lifecycle of a Device Tree involves three primary formats:</p>
+<ol type="1">
+<li><strong>Device Tree Source (<code>.dts</code> /
+<code>.dtsi</code>):</strong> Human-readable text files written by board
+vendors or developers. <code>.dtsi</code> files contain shared SoC-level
+definitions (like CPU cores and built-in controllers), while
+<code>.dts</code> files define board-specific connections and
+peripherals.</li>
+<li><strong>Device Tree Compiler (<code>dtc</code>):</strong> A utility
+that compiles <code>.dts</code> files into a binary format.</li>
+<li><strong>Device Tree Blob (<code>.dtb</code>):</strong> The compiled,
+machine-readable binary file read by the bootloader and the operating
+system kernel during startup.</li>
+</ol>
+<hr />
+<h3 id="anatomy-of-a-peripheral-node">Anatomy of a Peripheral Node</h3>
+<p>A peripheral in a Device Tree is represented as a node with specific
+properties describing its connectivity and resource allocation:</p>
+<pre class="dts"><code>&amp;i2c1 {
+    status = &quot;okay&quot;;
+
+    temperature_sensor: sensor@48 {
+        compatible = &quot;ti,tmp102&quot;;
+        reg = &lt;0x48&gt;;
+        interrupt-parent = &lt;&amp;gpio1&gt;;
+        interrupts = &lt;16 2&gt;; /* GPIO 16, falling-edge trigger */
+    };
+};</code></pre>
+<p>Key properties used for peripheral initialization include:</p>
+<ul>
+<li><strong><code>compatible</code></strong>: A string (or list of
+strings) that links the hardware node to its corresponding device driver
+in the kernel (e.g., <code>"ti,tmp102"</code>).</li>
+<li><strong><code>reg</code></strong>: The base memory address and range
+for memory-mapped peripherals, or the bus address (such as
+<code>0x48</code> for an I2C client).</li>
+<li><strong><code>interrupts</code> /
+<code>interrupt-parent</code></strong>: Specifies the interrupt line and
+trigger type for peripheral signaling.</li>
+<li><strong><code>clocks</code> and <code>clock-names</code></strong>:
+References to clock controllers providing timing signals to the
+hardware.</li>
+<li><strong><code>pinctrl-*</code></strong>: Pin multiplexing settings
+required to route signals to the correct physical pins.</li>
+<li><strong><code>status</code></strong>: Indicates whether the device
+is operational (<code>"okay"</code>) or disabled
+(<code>"disabled"</code>).</li>
+</ul>
+<hr />
+<h3 id="the-initialization-process-in-the-linux-kernel">The
+Initialization Process in the Linux Kernel</h3>
+<p>When an ARM SBC boots, the bootloader (such as U-Boot) loads both the
+kernel image and the <code>.dtb</code> file into RAM, passing the memory
+address of the Device Tree to the kernel.</p>
+<p>The kernel then initializes hardware through the following
+sequence:</p>
+<ol type="1">
+<li><strong>Unflattening the Tree:</strong> The kernel converts the
+binary <code>.dtb</code> into an in-memory tree of
+<code>device_node</code> structures.</li>
+<li><strong>Platform Device Creation:</strong> The kernel traverses the
+tree and creates a <code>struct platform_device</code> (or
+subsystem-specific device, such as <code>i2c_client</code> or
+<code>spi_device</code>) for each active peripheral node.</li>
+<li><strong>Driver Matching:</strong> The kernel's driver core iterates
+through registered drivers and compares their
+<code>of_match_table</code> against the <code>compatible</code> strings
+in the Device Tree nodes.</li>
+<li><strong>Driver Probing:</strong> Once a match is found, the kernel
+calls the driver's <code>probe()</code> function. The driver parses the
+properties in the node (memory resources, interrupts, GPIOs, clocks)
+using Open Firmware (OF) helper functions, configures the hardware,
+allocates buffers, and exposes the peripheral to user space.</li>
+</ol>
+<hr />
+<h3 id="dynamic-hardware-configuration-via-overlays">Dynamic Hardware
+Configuration via Overlays</h3>
+<p>For SBCs with general-purpose expansion headers (such as Raspberry
+Pi, BeagleBone, or Orange Pi), hardware can change dynamically depending
+on the attached add-on board (HAT, Cape, or shield).</p>
+<p><strong>Device Tree Overlays (<code>.dtbo</code>)</strong> allow
+small fragments of Device Tree code to be merged into the base Device
+Tree either during the bootloader stage or at runtime via the kernel's
+configfs interface. This modifies pin states and activates the necessary
+peripheral drivers without requiring a complete recompilation of the
+base system's Device Tree.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

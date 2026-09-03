@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best CLI Packet Inspection Tools for SBCs - sbc</title>
+    <meta name="description" content="Headless single-board computers (SBCs) such as the Raspberry Pi, BeagleBone, and Orange Pi are frequently deployed as compact network probes, firewalls, and diagnostic devices. Because these systems run without a graphical desktop environment and have li">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/best-cli-packet-inspection-tools-for-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Best CLI Packet Inspection Tools for SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/best-cli-packet-inspection-tools-for-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Headless single-board computers (SBCs) such as the Raspberry Pi, BeagleBone, and Orange Pi are frequently deployed as compact network probes, firewalls, and diagnostic devices. Because these systems run without a graphical desktop environment and have li" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="best-cli-packet-inspection-tools-for-sbcs">Best CLI Packet
+Inspection Tools for SBCs</h1>
+<p>Headless single-board computers (SBCs) such as the Raspberry Pi,
+BeagleBone, and Orange Pi are frequently deployed as compact network
+probes, firewalls, and diagnostic devices. Because these systems run
+without a graphical desktop environment and have limited CPU and RAM
+resources, network analysis must be performed efficiently via the
+terminal. This article examines the best command-line interface (CLI)
+software tools available for capturing, filtering, and inspecting
+network packets on headless single-board computers.</p>
+<hr />
+<h3 id="1-tcpdump">1. tcpdump</h3>
+<p><code>tcpdump</code> is the standard tool for command-line packet
+analysis across Unix-like operating systems. It is extremely
+lightweight, consumes minimal system memory, and is often pre-installed
+or available in standard package repositories.</p>
+<ul>
+<li><strong>Key Features:</strong> Uses <code>libpcap</code> to capture
+raw packets; supports complex Berkeley Packet Filters (BPF) to isolate
+specific traffic by IP, port, or protocol; outputs captures directly to
+standard <code>.pcap</code> files for offline analysis.</li>
+<li><strong>Best Used For:</strong> Low-overhead live captures and
+initial troubleshooting on hardware with strict memory and CPU
+constraints.</li>
+<li><strong>Basic Command:</strong>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tcpdump <span class="at">-i</span> eth0 <span class="at">-nn</span> <span class="at">-c</span> 100 port 80</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="2-tshark">2. TShark</h3>
+<p><code>TShark</code> is the terminal-based counterpart to Wireshark.
+It utilizes the same packet dissection engine as the GUI version,
+allowing deep inspection of hundreds of network protocols directly from
+the shell.</p>
+<ul>
+<li><strong>Key Features:</strong> Advanced protocol dissection;
+powerful display filters matching Wireshark syntax; ability to export
+dissected fields directly to text, CSV, or JSON formats.</li>
+<li><strong>Best Used For:</strong> Complex protocol decoding (e.g.,
+inspecting TLS handshakes, DNS queries, or HTTP headers) directly from
+the command line.</li>
+<li><strong>Basic Command:</strong>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tshark <span class="at">-i</span> eth0 <span class="at">-Y</span> <span class="st">&quot;http.request.method == GET&quot;</span> <span class="at">-T</span> fields <span class="at">-e</span> http.host <span class="at">-e</span> http.request.uri</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="3-termshark">3. Termshark</h3>
+<p><code>Termshark</code> provides a terminal user interface (TUI)
+inspired by the layout of Wireshark. Built on top of <code>TShark</code>
+using Go, it offers an interactive three-pane interface (packet list,
+packet details, and packet hex/bytes) inside an SSH session.</p>
+<ul>
+<li><strong>Key Features:</strong> Keyboard and mouse navigation inside
+the terminal; real-time filtering; visual inspection of protocol layers
+without needing an X11 server or exporting <code>.pcap</code> files to a
+local machine.</li>
+<li><strong>Best Used For:</strong> Interactive packet analysis over SSH
+when a graphical environment is not available.</li>
+<li><strong>Basic Command:</strong>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">termshark</span> <span class="at">-i</span> eth0</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="4-ngrep-network-grep">4. ngrep (Network Grep)</h3>
+<p><code>ngrep</code> combines the packet-matching capabilities of BPF
+filters with the text-matching capabilities of GNU <code>grep</code>. It
+allows users to search for specific strings or regular expressions
+across unencrypted payload data.</p>
+<ul>
+<li><strong>Key Features:</strong> Real-time payload matching; intuitive
+syntax for filtering application-layer protocols such as plain HTTP,
+SIP, or SMTP; low resource overhead.</li>
+<li><strong>Best Used For:</strong> Quickly searching for specific text
+patterns, authentication strings, or error codes passing through network
+interfaces.</li>
+<li><strong>Basic Command:</strong>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ngrep <span class="at">-q</span> <span class="at">-W</span> byline <span class="st">&quot;USER|PASS&quot;</span> port 21</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="5-netsniff-ng">5. netsniff-ng</h3>
+<p><code>netsniff-ng</code> is a high-performance network sniffer and
+toolkit designed for Linux. It utilizes a zero-copy packet capture
+mechanism via memory-mapped rings (<code>mmap(2)</code>), significantly
+reducing CPU overhead and kernel-to-userspace context switches.</p>
+<ul>
+<li><strong>Key Features:</strong> Minimal packet drop rates under heavy
+network load; native support for BPF filters; optimized for
+high-throughput packet captures.</li>
+<li><strong>Best Used For:</strong> High-speed packet capture on
+resource-limited SBCs monitoring saturated 1Gbps interfaces.</li>
+<li><strong>Basic Command:</strong>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> netsniff-ng <span class="at">--in</span> eth0 <span class="at">--out</span> capture.pcap</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="tool-selection-guide">Tool Selection Guide</h3>
+<ul>
+<li><strong>For minimal resource footprint:</strong> Use
+<code>tcpdump</code>.</li>
+<li><strong>For detailed protocol dissection:</strong> Use
+<code>TShark</code>.</li>
+<li><strong>For an interactive, visual terminal workflow:</strong> Use
+<code>Termshark</code>.</li>
+<li><strong>For payload text searching:</strong> Use
+<code>ngrep</code>.</li>
+<li><strong>For high-throughput capture with zero packet loss:</strong>
+Use <code>netsniff-ng</code>.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

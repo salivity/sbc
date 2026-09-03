@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Benchmark SBC Flash Storage Performance - sbc</title>
+    <meta name="description" content="Benchmarking the raw input/output (I/O) performance of flash storage on a single-board computer (SBC) requires testing throughput, IOPS (input/output operations per second), and latency while isolating storage hardware from system memory caching. This gu">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-benchmark-sbc-flash-storage-performance">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Benchmark SBC Flash Storage Performance - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-benchmark-sbc-flash-storage-performance" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Benchmarking the raw input/output (I/O) performance of flash storage on a single-board computer (SBC) requires testing throughput, IOPS (input/output operations per second), and latency while isolating storage hardware from system memory caching. This gu" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-benchmark-sbc-flash-storage-performance">How to Benchmark
+SBC Flash Storage Performance</h1>
+<p>Benchmarking the raw input/output (I/O) performance of flash storage
+on a single-board computer (SBC) requires testing throughput, IOPS
+(input/output operations per second), and latency while isolating
+storage hardware from system memory caching. This guide covers the
+essential command-line tools and methodologies developers use to
+evaluate microSD cards, eMMC modules, and NVMe SSDs connected to
+Linux-based SBCs.</p>
+<h3 id="mitigating-the-linux-page-cache">Mitigating the Linux Page
+Cache</h3>
+<p>Accurate storage benchmarking requires bypassing the operating
+system's RAM cache. When write operations hit RAM instead of flash
+memory, reported speeds appear artificially high. Developers bypass this
+by:</p>
+<ol type="1">
+<li><strong>Using Direct I/O:</strong> Specifying flags that force
+processes to read from and write directly to the physical storage
+device.</li>
+<li><strong>Dropping Caches:</strong> Manually clearing cached data
+between tests with the following command:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sync</span><span class="kw">;</span> <span class="bu">echo</span> 3 <span class="kw">|</span> <span class="fu">sudo</span> tee /proc/sys/vm/drop_caches</span></code></pre></div></li>
+</ol>
+<hr />
+<h3 id="method-1-flexible-io-tester-fio">Method 1: Flexible I/O Tester
+(<code>fio</code>)</h3>
+<p><code>fio</code> is the industry-standard benchmarking tool for Linux
+because it provides granular control over block sizes, queue depths, and
+thread counts.</p>
+<h4 id="1-random-4k-readwrite-performance-iops">1. Random 4K Read/Write
+Performance (IOPS)</h4>
+<p>Random 4K read and write speeds represent the most critical metric
+for general OS responsiveness, database queries, and small-file access
+on SBCs.</p>
+<ul>
+<li><strong>Random 4K Write:</strong>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fio</span> <span class="at">--name</span><span class="op">=</span>randwrite <span class="at">--ioengine</span><span class="op">=</span>libaio <span class="at">--iodepth</span><span class="op">=</span>16 <span class="at">--rw</span><span class="op">=</span>randwrite <span class="at">--bs</span><span class="op">=</span>4k <span class="at">--direct</span><span class="op">=</span>1 <span class="at">--size</span><span class="op">=</span>512M <span class="at">--numjobs</span><span class="op">=</span>1 <span class="at">--runtime</span><span class="op">=</span>60 <span class="at">--group_reporting</span> <span class="at">--filename</span><span class="op">=</span>testfile</span></code></pre></div></li>
+<li><strong>Random 4K Read:</strong>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fio</span> <span class="at">--name</span><span class="op">=</span>randread <span class="at">--ioengine</span><span class="op">=</span>libaio <span class="at">--iodepth</span><span class="op">=</span>16 <span class="at">--rw</span><span class="op">=</span>randread <span class="at">--bs</span><span class="op">=</span>4k <span class="at">--direct</span><span class="op">=</span>1 <span class="at">--size</span><span class="op">=</span>512M <span class="at">--numjobs</span><span class="op">=</span>1 <span class="at">--runtime</span><span class="op">=</span>60 <span class="at">--group_reporting</span> <span class="at">--filename</span><span class="op">=</span>testfile</span></code></pre></div></li>
+</ul>
+<h4 id="2-sequential-readwrite-performance-throughput">2. Sequential
+Read/Write Performance (Throughput)</h4>
+<p>Sequential speeds determine how fast the storage handles large
+continuous files, such as video streams or disk images.</p>
+<ul>
+<li><strong>Sequential Write (1MB Block Size):</strong>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fio</span> <span class="at">--name</span><span class="op">=</span>seqwrite <span class="at">--ioengine</span><span class="op">=</span>libaio <span class="at">--iodepth</span><span class="op">=</span>4 <span class="at">--rw</span><span class="op">=</span>write <span class="at">--bs</span><span class="op">=</span>1M <span class="at">--direct</span><span class="op">=</span>1 <span class="at">--size</span><span class="op">=</span>1G <span class="at">--numjobs</span><span class="op">=</span>1 <span class="at">--runtime</span><span class="op">=</span>60 <span class="at">--group_reporting</span> <span class="at">--filename</span><span class="op">=</span>testfile</span></code></pre></div></li>
+<li><strong>Sequential Read (1MB Block Size):</strong>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fio</span> <span class="at">--name</span><span class="op">=</span>seqread <span class="at">--ioengine</span><span class="op">=</span>libaio <span class="at">--iodepth</span><span class="op">=</span>4 <span class="at">--rw</span><span class="op">=</span>read <span class="at">--bs</span><span class="op">=</span>1M <span class="at">--direct</span><span class="op">=</span>1 <span class="at">--size</span><span class="op">=</span>1G <span class="at">--numjobs</span><span class="op">=</span>1 <span class="at">--runtime</span><span class="op">=</span>60 <span class="at">--group_reporting</span> <span class="at">--filename</span><span class="op">=</span>testfile</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="method-2-quick-sanity-checks-with-dd">Method 2: Quick Sanity
+Checks with <code>dd</code></h3>
+<p>While <code>dd</code> lacks the advanced metrics of <code>fio</code>,
+it offers a quick method for measuring raw sequential write throughput
+without installing third-party utilities.</p>
+<ul>
+<li><strong>Write Test (Direct I/O):</strong>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dd</span> if=/dev/zero of=temp_test bs=1M count=1024 oflag=direct status=progress</span></code></pre></div></li>
+<li><strong>Read Test:</strong> Clear caches, then read the created file
+back into memory:
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sync</span><span class="kw">;</span> <span class="bu">echo</span> 3 <span class="kw">|</span> <span class="fu">sudo</span> tee /proc/sys/vm/drop_caches</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dd</span> if=temp_test of=/dev/null bs=1M status=progress</span></code></pre></div></li>
+<li><strong>Cleanup:</strong>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> temp_test</span></code></pre></div></li>
+</ul>
+<hr />
+<h3 id="method-3-hardware-read-testing-with-hdparm">Method 3: Hardware
+Read Testing with <code>hdparm</code></h3>
+<p><code>hdparm</code> provides a fast assessment of sequential read
+capabilities directly from the block device (such as
+<code>/dev/mmcblk0</code> for SD/eMMC or <code>/dev/nvme0n1</code> for
+NVMe).</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> hdparm <span class="at">-tT</span> /dev/mmcblk0</span></code></pre></div>
+<ul>
+<li><strong>Cached Reads (<code>-T</code>):</strong> Measures read speed
+from the Linux page cache directly to CPU/RAM.</li>
+<li><strong>Buffered Disk Reads (<code>-t</code>):</strong> Measures the
+throughput of reads coming directly through the storage controller
+without cache assistance.</li>
+</ul>
+<hr />
+<h3 id="key-metrics-to-evaluate">Key Metrics to Evaluate</h3>
+<ul>
+<li><strong>Random 4K Read/Write IOPS:</strong> Higher numbers indicate
+smoother multitasking, faster boot times, and better database
+performance.</li>
+<li><strong>Sequential Throughput (MB/s):</strong> Indicates speed for
+streaming media, bulk file backups, and firmware flashing.</li>
+<li><strong>Latency (p95/p99):</strong> Reported by <code>fio</code>,
+95th and 99th percentile latency reveals whether the storage medium
+suffers from micro-stutters or unpredictable I/O bottlenecks.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

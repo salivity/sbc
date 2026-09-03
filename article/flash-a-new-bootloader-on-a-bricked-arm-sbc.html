@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash a New Bootloader on a Bricked ARM SBC - sbc</title>
+    <meta name="description" content="Recovering a bricked ARM-based single board computer (SBC) requires bypassing corrupted onboard storage and writing a fresh bootloader directly to the target memory using the System-on-Chip's (SoC) built-in hardware recovery mode. This guide outlines the">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/flash-a-new-bootloader-on-a-bricked-arm-sbc">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Flash a New Bootloader on a Bricked ARM SBC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/flash-a-new-bootloader-on-a-bricked-arm-sbc" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Recovering a bricked ARM-based single board computer (SBC) requires bypassing corrupted onboard storage and writing a fresh bootloader directly to the target memory using the System-on-Chip's (SoC) built-in hardware recovery mode. This guide outlines the" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="flash-a-new-bootloader-on-a-bricked-arm-sbc">Flash a New
+Bootloader on a Bricked ARM SBC</h1>
+<p>Recovering a bricked ARM-based single board computer (SBC) requires
+bypassing corrupted onboard storage and writing a fresh bootloader
+directly to the target memory using the System-on-Chip's (SoC) built-in
+hardware recovery mode. This guide outlines the essential steps to
+revive your board, including identifying recovery modes, establishing a
+hardware interface, forcing low-level execution states, and flashing a
+working bootloader image such as U-Boot via vendor-specific flashing
+tools.</p>
+<h3 id="step-1-identify-the-soc-and-native-recovery-protocol">Step 1:
+Identify the SoC and Native Recovery Protocol</h3>
+<p>ARM SoCs contain an immutable on-chip Boot ROM (BROM) that executes
+before any external storage is read. When the standard boot sequence
+fails, the BROM can be triggered to expose a vendor-specific low-level
+interface over USB. Determine your SoC manufacturer and corresponding
+tool:</p>
+<ul>
+<li><strong>Rockchip (RK3399, RK3588, etc.):</strong> Uses Maskrom mode
+via <code>rkdeveloptool</code> or <code>upgrade_tool</code>.</li>
+<li><strong>Allwinner (H3, H6, etc.):</strong> Uses FEL mode via
+<code>sunxi-fel</code>.</li>
+<li><strong>NXP (i.MX series):</strong> Uses Serial Download Protocol
+(SDP) via <code>uuu</code> (Universal Update Utility).</li>
+<li><strong>Broadcom / Amlogic:</strong> Uses USB Burning Tool or
+DFU/Amlogic tools.</li>
+</ul>
+<h3 id="step-2-gather-required-tools-and-files">Step 2: Gather Required
+Tools and Files</h3>
+<p>Ensure you have the following prerequisites ready:</p>
+<ol type="1">
+<li>A Linux or Windows host computer with appropriate vendor flashing
+utilities installed.</li>
+<li>A high-quality USB data cable to connect the host PC to the SBC's
+OTG/recovery port.</li>
+<li>A USB-to-UART serial adapter (connected to the SBC’s TX/RX/GND pins)
+running at the board’s default baud rate (commonly 115200 or 1500000) to
+monitor debug output.</li>
+<li>Correct, validated bootloader binaries compiled for your specific
+board model (typically <code>u-boot.bin</code>,
+<code>u-boot-spl.bin</code>, or vendor-packed loader images like
+<code>idbloader.img</code>).</li>
+</ol>
+<h3 id="step-3-force-the-board-into-boot-rom--maskrom-mode">Step 3:
+Force the Board into Boot ROM / Maskrom Mode</h3>
+<p>If corrupt code in eMMC or SPI flash is preventing normal recovery,
+you must prevent the SoC from reading that invalid memory so it falls
+back to hardware recovery mode:</p>
+<ul>
+<li><strong>Dedicated Button:</strong> Many boards feature a "Maskrom"
+or "FEL" hardware button. Hold this button down while plugging the board
+into your host PC via the USB OTG port.</li>
+<li><strong>Storage Removal:</strong> If the bootloader was on a MicroSD
+card, simply remove the card.</li>
+<li><strong>Hardware Short (Clock/Data to Ground):</strong> If corrupt
+firmware resides on soldered SPI NOR flash or eMMC and no button is
+available, carefully short the SPI clock (CLK) pin or eMMC data pin (D0)
+to Ground (GND) using tweezers while applying power. This forces a read
+error, causing the BROM to fall back to recovery mode. Remove the short
+immediately after the host PC detects the device.</li>
+</ul>
+<h3 id="step-4-verify-host-communication">Step 4: Verify Host
+Communication</h3>
+<p>Open a terminal on your host PC and confirm the connection:</p>
+<ul>
+<li>Run <code>lsusb</code> to ensure the device appears in its
+respective recovery state (e.g.,
+<code>Rockchip Electronics Fuzhou Rockchip Device</code> or
+<code>Allwinner Technology FEL mode</code>).</li>
+<li>Test communication using the vendor tool (for example:
+<code>rkdeveloptool ld</code> for Rockchip or <code>sunxi-fel ver</code>
+for Allwinner).</li>
+</ul>
+<h3 id="step-5-flash-the-new-bootloader">Step 5: Flash the New
+Bootloader</h3>
+<p>Execute the appropriate command sequence to initialize RAM and flash
+the bootloader to the onboard storage:</p>
+<p><strong>For Rockchip:</strong></p>
+<ol type="1">
+<li>Download DDR initialization binary:
+<code>rkdeveloptool db rk3588_ddr_*.bin</code></li>
+<li>Flash the loader: <code>rkdeveloptool wl 0x40 idbloader.img</code>
+<code>rkdeveloptool wl 0x4000 u-boot.itb</code></li>
+</ol>
+<p><strong>For Allwinner:</strong></p>
+<ol type="1">
+<li>Write directly to onboard SPI or eMMC via FEL:
+<code>sunxi-fel spiflash-write 0 u-boot-sunxi-with-spl.bin</code></li>
+</ol>
+<p><strong>For NXP i.MX:</strong></p>
+<ol type="1">
+<li>Execute UUU to flash the bootloader:
+<code>uuu -b emmc imx-boot-tagged</code></li>
+</ol>
+<h3 id="step-6-reboot-and-monitor-via-uart">Step 6: Reboot and Monitor
+via UART</h3>
+<p>Disconnect the USB OTG cable and power-cycle the SBC while observing
+the serial console via your terminal emulator (such as Minicom or
+PuTTY). A successful recovery will display U-Boot SPL initialization
+logs, followed by the main U-Boot prompt, allowing the system to boot
+operating systems normally again.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBC DIN Rail Enclosure Mounting Requirements - sbc</title>
+    <meta name="description" content="Mounting a single board computer (SBC) inside a standard DIN rail enclosure requires balancing mechanical fit, thermal dissipation, vibration resistance, and accessible I/O routing. This article outlines the essential structural specifications and design">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/sbc-din-rail-enclosure-mounting-requirements">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SBC DIN Rail Enclosure Mounting Requirements - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/sbc-din-rail-enclosure-mounting-requirements" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Mounting a single board computer (SBC) inside a standard DIN rail enclosure requires balancing mechanical fit, thermal dissipation, vibration resistance, and accessible I/O routing. This article outlines the essential structural specifications and design" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="sbc-din-rail-enclosure-mounting-requirements">SBC DIN Rail
+Enclosure Mounting Requirements</h1>
+<p>Mounting a single board computer (SBC) inside a standard DIN rail
+enclosure requires balancing mechanical fit, thermal dissipation,
+vibration resistance, and accessible I/O routing. This article outlines
+the essential structural specifications and design requirements needed
+to securely house an SBC within an industrial DIN rail setup.</p>
+<h3 id="dimensional-standards-and-module-sizing">Dimensional Standards
+and Module Sizing</h3>
+<p>Standard DIN rail enclosures are built around modular unit widths
+(often referred to as 'M' or 'TE', where 1 module is typically 17.5 mm
+to 18 mm) designed to fit onto standard 35 mm DIN rails (EN 50022 / IEC
+60715). The enclosure must provide sufficient internal depth and width
+to accommodate the SBC's footprint without contacting internal housing
+walls. Standard commercial SBCs often require at least a 3M to 6M wide
+enclosure to accommodate the board, mounting hardware, and internal
+wiring.</p>
+<h3 id="pcb-standoffs-and-mounting-points">PCB Standoffs and Mounting
+Points</h3>
+<p>The internal carrier plate or base shell must feature properly
+aligned mounting bosses that correspond to the SBC's mounting holes.</p>
+<ul>
+<li><strong>Fasteners:</strong> Most SBCs use M2.5 or M3 screws.
+Standoffs should be constructed from threaded brass, stainless steel, or
+rigid polyamide.</li>
+<li><strong>Height Clearance:</strong> Standoffs must provide a minimum
+clearance of 2 mm to 4 mm between the bottom of the PCB and the
+enclosure base to prevent component collisions, solder-tail bridging,
+and short circuits.</li>
+<li><strong>Board Support:</strong> All manufacturer-designated mounting
+holes must be supported to prevent PCB flexing when external cables or
+daughterboards (HATs/capes) are attached.</li>
+</ul>
+<h3 id="thermal-dissipation-and-ventilation">Thermal Dissipation and
+Ventilation</h3>
+<p>Industrial SBCs generate heat that must be safely evacuated within a
+sealed or semi-sealed cabinet.</p>
+<ul>
+<li><strong>Passive Convection:</strong> DIN rail enclosures are mounted
+vertically, allowing natural thermal convection. Enclosures require
+ventilation slots at the bottom and top surfaces to facilitate vertical
+airflow.</li>
+<li><strong>Thermal Interface Material (TIM) and Heat Sinks:</strong> If
+passive convective airflow is insufficient, structural clearance must
+allow for aluminum heat sinks. In sealed enclosures, the design may
+require an internal aluminum heat block that structurally links the SBC
+processor directly to a metal DIN rail carrier or an external finned
+surface.</li>
+</ul>
+<h3 id="connector-alignment-and-cutout-tolerances">Connector Alignment
+and Cutout Tolerances</h3>
+<p>The structural housing must provide precisely positioned openings for
+power inputs, communication ports (Ethernet, USB, RS-485), and indicator
+LEDs.</p>
+<ul>
+<li><strong>I/O Access:</strong> Cutouts should account for port plug
+dimensions, strain relief, and plug-in screw terminal blocks without
+exposing internal electronics to excessive dust or accidental tool
+contact.</li>
+<li><strong>Mechanical Tolerances:</strong> Maintain a 0.5 mm to 1.0 mm
+tolerance margin around fixed board connectors to accommodate
+manufacturing variances across different board revisions.</li>
+</ul>
+<h3 id="mechanical-rigidity-and-vibration-resistance">Mechanical
+Rigidity and Vibration Resistance</h3>
+<p>Industrial control cabinets are subjected to operational vibrations
+from motors, contactors, and nearby machinery.</p>
+<ul>
+<li><strong>Latching Mechanism:</strong> The DIN rail mounting foot must
+feature a robust spring-loaded or screw-tightened latch that prevents
+the assembly from sliding or unseating under vibration.</li>
+<li><strong>Internal Retention:</strong> The SBC must be firmly fixed to
+the chassis using locking washers or thread-locking compound to prevent
+screws from backing out over time. Heavy peripheral boards or cables
+must have independent structural anchors to prevent stress on the SBC’s
+headers.</li>
+</ul>
+<h3 id="electrical-isolation-and-grounding">Electrical Isolation and
+Grounding</h3>
+<p>The mechanical mounting scheme must maintain appropriate creepage and
+clearance distances according to industrial safety standards (such as
+IEC 61010-1). If using a conductive metal enclosure or mounting plate,
+non-conductive standoffs or dedicated insulating barriers must be used,
+unless the board design explicitly mandates a common chassis ground
+through the mounting points. Where required, a designated structural
+ground lug or DIN-rail grounding contact must be integrated into the
+chassis.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

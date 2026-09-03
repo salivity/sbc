@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factors Influencing Open-Hardware SBC BOM Cost - sbc</title>
+    <meta name="description" content="The bill-of-materials (BOM) cost of an open-hardware single board computer (SBC) represents the direct expense of all physical components required to build the device. This cost is primarily determined by component selection, design complexity, connectiv">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/factors-influencing-open-hardware-sbc-bom-cost">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Factors Influencing Open-Hardware SBC BOM Cost - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/factors-influencing-open-hardware-sbc-bom-cost" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The bill-of-materials (BOM) cost of an open-hardware single board computer (SBC) represents the direct expense of all physical components required to build the device. This cost is primarily determined by component selection, design complexity, connectiv" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="factors-influencing-open-hardware-sbc-bom-cost">Factors
+Influencing Open-Hardware SBC BOM Cost</h1>
+<p>The bill-of-materials (BOM) cost of an open-hardware single board
+computer (SBC) represents the direct expense of all physical components
+required to build the device. This cost is primarily determined by
+component selection, design complexity, connectivity requirements, and
+production volume. Understanding these underlying drivers allows
+hardware designers and engineering teams to optimize expenses while
+maintaining system performance and the open-source integrity of the
+hardware.</p>
+<h3 id="1-system-on-chip-soc-and-power-management">1. System on Chip
+(SoC) and Power Management</h3>
+<p>The main processor or System on Chip (SoC) is typically the single
+most expensive component on an SBC, often accounting for 30% to 50% of
+the raw silicon cost. Pricing varies drastically depending on the
+architecture (such as ARM, RISC-V, or x86), core count, clock speeds,
+and integrated hardware accelerators (like GPUs or Neural Processing
+Units). Furthermore, complex SoCs require dedicated Power Management
+Integrated Circuits (PMICs) to supply multiple stable voltage rails with
+precise power sequencing, which adds substantial cost compared to
+simpler, discrete linear regulators.</p>
+<h3 id="2-memory-configuration-ram-and-storage">2. Memory Configuration
+(RAM and Storage)</h3>
+<p>Memory choices introduce both high baseline costs and market
+volatility to the BOM:</p>
+<ul>
+<li><strong>System RAM:</strong> High-speed memory, such as LPDDR4 or
+DDR4, increases cost as capacity rises. LPDDR (low-power) variants
+demand more expensive routing and packaging compared to standard
+DDR.</li>
+<li><strong>Onboard Storage:</strong> Integrating onboard eMMC flash,
+UFS, or SPI NOR/NAND flash adds direct cost. Designers frequently omit
+onboard flash in favor of an external microSD card slot to keep initial
+BOM costs lower, transferring the storage expense to the end user.</li>
+</ul>
+<h3 id="3-printed-circuit-board-pcb-complexity">3. Printed Circuit Board
+(PCB) Complexity</h3>
+<p>The physical circuit board itself is a major BOM factor driven by
+layout requirements:</p>
+<ul>
+<li><strong>Layer Count:</strong> High-density SoCs utilizing fine-pitch
+Ball Grid Array (BGA) packaging often require 6-layer, 8-layer, or
+higher PCB stackups to route high-speed memory and differential pairs,
+significantly raising bare-board fabrication costs compared to standard
+2-layer or 4-layer designs.</li>
+<li><strong>Fabrication Tolerances:</strong> Requirements for controlled
+impedance, microvias, blind/buried vias, and premium surface finishes
+(such as Electroless Nickel Immersion Gold, or ENIG) escalate bare-board
+production expenses.</li>
+</ul>
+<h3 id="4-networking-and-wireless-modules">4. Networking and Wireless
+Modules</h3>
+<p>Adding connectivity incurs component and integration costs:</p>
+<ul>
+<li><strong>Ethernet:</strong> Implementing Gigabit Ethernet requires an
+external physical layer transceiver (PHY) chip and specialized RJ45
+connectors with integrated magnetics (MagJacks), which are noticeably
+more expensive than standard passive connectors.</li>
+<li><strong>Wi-Fi and Bluetooth:</strong> Designers must choose between
+discrete radio chipsets or pre-certified integrated modules. While
+pre-certified modules increase the physical BOM cost, they significantly
+lower downstream regulatory testing expenses (such as FCC and CE
+compliance).</li>
+</ul>
+<h3 id="5-physical-connectors-and-high-speed-io">5. Physical Connectors
+and High-Speed I/O</h3>
+<p>Physical interfaces represent a substantial portion of the total
+component count and cost:</p>
+<ul>
+<li><strong>Display and Video:</strong> Standard HDMI, DisplayPort, and
+MIPI-DSI/CSI connectors require dedicated protection circuitry, level
+shifters, and ESD diodes to ensure reliability.</li>
+<li><strong>Expansion Headers and USB:</strong> Multi-pin GPIO headers,
+USB Type-C controllers, and PCIe connectors add incremental costs both
+in raw material pricing and the pick-and-place assembly process.</li>
+</ul>
+<h3 id="6-component-availability-and-sourcing-scale">6. Component
+Availability and Sourcing Scale</h3>
+<p>Open-hardware designs rely heavily on publicly available components
+that can be purchased through distribution channels. Unlike proprietary
+manufacturers that negotiate private, high-volume tier pricing directly
+with silicon vendors, open-hardware projects often order at lower
+volumes (MOQs). Sourcing standard components via global distributors
+subjects the design to spot-market pricing, supply chain fluctuations,
+and distributor markups, directly inflating the per-unit BOM.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

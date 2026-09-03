@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBC Firmware License Management Best Practices - sbc</title>
+    <meta name="description" content="Deploying commercial hardware built on single board computers (SBCs) requires strict firmware license management to protect intellectual property, prevent copyright infringement, and ensure regulatory compliance. Commercializing SBC-based systems involve">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/sbc-firmware-license-management-best-practices">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SBC Firmware License Management Best Practices - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/sbc-firmware-license-management-best-practices" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Deploying commercial hardware built on single board computers (SBCs) requires strict firmware license management to protect intellectual property, prevent copyright infringement, and ensure regulatory compliance. Commercializing SBC-based systems involve" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="sbc-firmware-license-management-best-practices">SBC Firmware
+License Management Best Practices</h1>
+<p>Deploying commercial hardware built on single board computers (SBCs)
+requires strict firmware license management to protect intellectual
+property, prevent copyright infringement, and ensure regulatory
+compliance. Commercializing SBC-based systems involves navigating a
+layered software stack containing proprietary code, permissive
+open-source packages, copyleft licenses, and hardware vendor binary
+blobs. This guide outlines the essential best practices for tracking,
+isolating, and managing firmware licenses throughout your product's
+lifecycle.</p>
+<h3 id="1-maintain-an-automated-software-bill-of-materials-sbom">1.
+Maintain an Automated Software Bill of Materials (SBOM)</h3>
+<p>An accurate, up-to-date Software Bill of Materials (SBOM) is the
+foundation of license compliance. Because SBC operating systems
+encompass everything from low-level bootloaders to high-level
+application code, tracking must occur at every build stage.</p>
+<ul>
+<li><strong>Use Embedded Build System Features:</strong> Embedded build
+systems like the Yocto Project and Buildroot include built-in mechanisms
+to track licenses. In Yocto, enable
+<code>INHERIT += "create-spdx"</code> or <code>archiver.bbclass</code>
+to generate machine-readable SPDX (Software Package Data Exchange)
+manifests automatically during compilation.</li>
+<li><strong>Scan for Transitive Dependencies:</strong> Use software
+composition analysis (SCA) tools within your continuous integration (CI)
+pipeline to catch unlisted sub-dependencies and license mismatches
+before code is flashed onto hardware.</li>
+</ul>
+<h3 id="2-isolate-proprietary-ip-from-copyleft-code">2. Isolate
+Proprietary IP from Copyleft Code</h3>
+<p>SBC platforms typically rely on U-Boot and the Linux kernel, which
+are licensed under GPLv2. Using these components commercially is
+permitted, but your proprietary business logic must be carefully
+architected to avoid unintentional copyleft obligations.</p>
+<ul>
+<li><strong>Architectural Separation:</strong> Keep proprietary
+application code in user space. Use clean boundaries such as
+Inter-Process Communication (IPC), network sockets, or dynamically
+linked standard POSIX interfaces rather than linking directly with
+GPL-licensed libraries.</li>
+<li><strong>Kernel Module Precautions:</strong> Avoid linking
+proprietary kernel modules into the Linux kernel if they rely on
+non-exported (<code>EXPORT_SYMBOL_GPL</code>) symbols, as this can
+legally deem your driver a derivative work of the kernel.</li>
+<li><strong>Kernel and Bootloader Modifications:</strong> Accept that
+any bug fixes or hardware adaptations made directly to U-Boot, the Linux
+kernel, or standard device trees must be shared under their respective
+GPL licenses upon product distribution.</li>
+</ul>
+<h3 id="3-verify-hardware-vendor-binary-blobs-and-bsps">3. Verify
+Hardware Vendor Binary Blobs and BSPs</h3>
+<p>SBC silicon vendors (such as Broadcom, NXP, or Rockchip) frequently
+supply board support packages (BSPs) containing proprietary binary blobs
+for GPU acceleration, Wi-Fi/Bluetooth, and video decoders.</p>
+<ul>
+<li><strong>Review Redistribution Clauses:</strong> Vendor End User
+License Agreements (EULAs) often permit development but require specific
+commercial agreements for redistributing binary blobs in retail or
+industrial products.</li>
+<li><strong>Monitor Patent and Royalty Requirements:</strong> Certain
+multimedia codecs or wireless stacks included in SBC BSPs carry patent
+pool obligations (e.g., MPEG LA, Access Advance) that apply regardless
+of whether the software itself is open source.</li>
+</ul>
+<h3 id="4-implement-cryptographic-licensing-and-ip-protection">4.
+Implement Cryptographic Licensing and IP Protection</h3>
+<p>For commercial systems where software value needs to be tied strictly
+to sold hardware units, implement technical protections alongside legal
+agreements.</p>
+<ul>
+<li><strong>Bind Software to Hardware IDs:</strong> Cryptographically
+bind your proprietary runtime licenses to hardware identifiers, such as
+the processor's unique eFuse ID or an onboard secure element (e.g.,
+ATECC608).</li>
+<li><strong>Enable Secure Boot:</strong> Use the SBC's SoC secure boot
+capabilities to verify that only authorized, correctly licensed firmware
+images execute on the board. This prevents unauthorized cloning or
+tampering of your proprietary firmware.</li>
+</ul>
+<h3 id="5-automate-compliance-and-documentation-distribution">5.
+Automate Compliance and Documentation Distribution</h3>
+<p>License compliance requires providing attribution and corresponding
+source code to end users where applicable.</p>
+<ul>
+<li><strong>Package License Notices in Firmware:</strong> Include a
+<code>/usr/share/licenses</code> or <code>/etc/licenses</code> directory
+within the root filesystem containing all relevant open-source license
+texts, copyrights, and notices.</li>
+<li><strong>Provide Written Source Code Offers:</strong> If your SBC
+device distributes GPLv2/v3-licensed binaries without providing full
+source code on the physical storage, include a clear, legally compliant
+written offer within the product documentation stating how customers can
+obtain the corresponding source code.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

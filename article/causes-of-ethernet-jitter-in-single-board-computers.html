@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Causes of Ethernet Jitter in Single Board Computers - sbc</title>
+    <meta name="description" content="Network jitter, defined as the statistical variation in packet transit delay, significantly impacts time-sensitive applications running on single board computers (SBCs) such as robotics, industrial automation, and real-time audio/video streaming. This ar">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/causes-of-ethernet-jitter-in-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Causes of Ethernet Jitter in Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/causes-of-ethernet-jitter-in-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Network jitter, defined as the statistical variation in packet transit delay, significantly impacts time-sensitive applications running on single board computers (SBCs) such as robotics, industrial automation, and real-time audio/video streaming. This ar" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="causes-of-ethernet-jitter-in-single-board-computers">Causes of
+Ethernet Jitter in Single Board Computers</h1>
+<p>Network jitter, defined as the statistical variation in packet
+transit delay, significantly impacts time-sensitive applications running
+on single board computers (SBCs) such as robotics, industrial
+automation, and real-time audio/video streaming. This article examines
+the primary hardware, operating system, driver, and network factors that
+introduce jitter over an SBC's Ethernet interface and provides a clear
+breakdown of why these variations occur.</p>
+<h2 id="1-hardware-architecture-and-bus-bottlenecks">1. Hardware
+Architecture and Bus Bottlenecks</h2>
+<p>The internal architecture of a single board computer plays a major
+role in packet transmission timing:</p>
+<ul>
+<li><strong>Ethernet Controller Implementation:</strong> Many budget or
+older SBCs do not have native Ethernet controllers connected directly to
+the system bus (like PCIe). Instead, they route Ethernet traffic through
+an internal USB bus (USB-to-LAN bridges). This adds USB protocol
+overhead, packet serialization delays, and variable bus polling latency,
+which drastically increases jitter.</li>
+<li><strong>Shared Bus Contention:</strong> When the Ethernet interface
+shares internal buses with high-bandwidth peripherals (such as USB
+ports, Wi-Fi modules, or storage devices), data transfers compete for
+bandwidth, causing random transmission delays.</li>
+<li><strong>Direct Memory Access (DMA) Limits:</strong> Low-tier SBCs
+may lack dedicated multi-channel DMA controllers for network traffic,
+forcing the CPU to handle packet transfers between network buffers and
+memory manually.</li>
+</ul>
+<h2 id="2-operating-system-scheduling-and-kernel-latency">2. Operating
+System Scheduling and Kernel Latency</h2>
+<p>Standard general-purpose operating systems (like standard Linux
+distributions) are optimized for overall throughput rather than
+deterministic latency:</p>
+<ul>
+<li><strong>Non-Real-Time Kernels:</strong> Default Linux kernels use
+completely fair schedulers (CFS) that can preempt networking tasks to
+run background system operations. Without a real-time patch (such as
+<code>PREEMPT_RT</code>), the time it takes the kernel to service a
+network event can vary widely.</li>
+<li><strong>Dynamic Voltage and Frequency Scaling (DVFS):</strong>
+Power-saving governors dynamically scale the CPU frequency up and down
+based on load. The delay incurred when the processor transitions between
+low-power and high-performance states introduces measurable latency
+spikes.</li>
+<li><strong>Interrupt Handling (IRQs):</strong> If network interface
+interrupts are handled by overloaded CPU cores or delayed by
+high-priority system tasks, incoming and outgoing packets sit in queues,
+causing jitter.</li>
+</ul>
+<h2 id="3-network-stack-and-driver-configuration">3. Network Stack and
+Driver Configuration</h2>
+<p>The configuration of the network stack and the network interface card
+(NIC) driver directly influences packet processing consistency:</p>
+<ul>
+<li><strong>Interrupt Coalescing:</strong> Network drivers often delay
+generating an interrupt until a certain number of packets arrive or a
+timer expires, a technique used to save CPU cycles. While this improves
+throughput, it creates jitter for low-latency, sparse traffic.</li>
+<li><strong>Queue Management and Bufferbloat:</strong> Large network
+buffers (TX/RX ring buffers and socket buffers) can lead to bufferbloat.
+If packets queue up behind larger data bursts, latency fluctuates based
+on queue depth.</li>
+<li><strong>Socket Options and Offloading:</strong> Lacking hardware
+checksum offloading or ignoring real-time socket priority flags (such as
+<code>SO_PRIORITY</code> or packet timestamping) forces the CPU to spend
+varying amounts of time processing packet headers.</li>
+</ul>
+<h2 id="4-physical-layer-and-external-network-conditions">4. Physical
+Layer and External Network Conditions</h2>
+<p>External factors outside the SBC hardware also contribute to jitter
+at the Ethernet interface:</p>
+<ul>
+<li><strong>Network Congestion and Switch Queuing:</strong> Intermediate
+network switches process packets using store-and-forward mechanisms.
+When multiple devices send traffic across the same switch or VLAN, queue
+contention introduces variable transit times.</li>
+<li><strong>Ethernet PHY and Cable Quality:</strong> Poor-quality
+cabling, electromagnetic interference (EMI), or improper grounding can
+cause frame checksum errors. The physical layer (PHY) or transport
+protocol (TCP) must then handle retransmissions, leading to severe
+latency variations.</li>
+<li><strong>Link Speed and Duplex Mismatches:</strong> Operating in
+half-duplex or suffering from auto-negotiation mismatches causes packet
+collisions and backoff delays, introducing extreme jitter compared to a
+stable, full-duplex Gigabit or Fast Ethernet connection.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

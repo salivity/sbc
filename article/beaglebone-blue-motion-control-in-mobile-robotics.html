@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeagleBone Blue Motion Control in Mobile Robotics - sbc</title>
+    <meta name="description" content="The BeagleBone Blue is an all-in-one, Linux-enabled single-board computer (SBC) specifically engineered to streamline the development of mobile robotics. By embedding inertial measurement units, barometric sensors, motor drivers, and real-time processing">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/beaglebone-blue-motion-control-in-mobile-robotics">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="BeagleBone Blue Motion Control in Mobile Robotics - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/beaglebone-blue-motion-control-in-mobile-robotics" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The BeagleBone Blue is an all-in-one, Linux-enabled single-board computer (SBC) specifically engineered to streamline the development of mobile robotics. By embedding inertial measurement units, barometric sensors, motor drivers, and real-time processing" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="beaglebone-blue-motion-control-in-mobile-robotics">BeagleBone
+Blue Motion Control in Mobile Robotics</h1>
+<p>The BeagleBone Blue is an all-in-one, Linux-enabled single-board
+computer (SBC) specifically engineered to streamline the development of
+mobile robotics. By embedding inertial measurement units, barometric
+sensors, motor drivers, and real-time processing units directly onto a
+single printed circuit board, the platform eliminates the need for
+external shields and complex wiring. This article explains the hardware
+and software architecture that allows the BeagleBone Blue to seamlessly
+integrate motion control sensors for autonomous mobile robots, rovers,
+and aerial drones.</p>
+<h3 id="on-board-inertial-and-environmental-sensors">On-Board Inertial
+and Environmental Sensors</h3>
+<p>At the heart of the BeagleBone Blue's motion sensing capability is
+the integrated 9-axis InvenSense MPU-9250 Inertial Measurement Unit
+(IMU). This chip combines a 3-axis accelerometer, a 3-axis gyroscope,
+and a 3-axis digital compass (magnetometer).</p>
+<ul>
+<li><strong>Orientation and Inertial Tracking:</strong> The
+accelerometer and gyroscope provide continuous data on linear
+acceleration and angular velocity, which are critical for balance
+algorithms, dead reckoning, and dead-angle corrections.</li>
+<li><strong>Heading and Attitude Estimation:</strong> The internal
+magnetometer assists in absolute heading detection, reducing long-term
+rotational drift in navigation systems.</li>
+<li><strong>Altitude Sensing:</strong> The board also incorporates a
+Bosch BMP280 barometric pressure sensor, allowing mobile
+robots—particularly unmanned aerial vehicles (UAVs)—to detect changes in
+atmospheric pressure for precise altitude holding.</li>
+</ul>
+<p>These sensors communicate directly with the main system-on-chip via
+dedicated high-speed I2C and SPI buses, reducing external latency and
+signal interference.</p>
+<h3 id="dedicated-real-time-processing-via-prus">Dedicated Real-Time
+Processing via PRUs</h3>
+<p>One of the primary challenges in mobile robotics is managing
+high-frequency sensor readings while running a full operating system.
+The BeagleBone Blue solves this using its Octavo OSD3358
+System-in-Package, which contains two 32-bit Programmable Real-Time
+Units (PRUs) alongside an ARM Cortex-A8 processor.</p>
+<p>The PRUs operate independently of the Linux kernel, running at a
+deterministic 200 MHz. They directly read high-speed feedback, handle
+precision pulse-width modulation (PWM) generation, and execute real-time
+proportional-integral-derivative (PID) control loops. By offloading
+sensor polling and motor timing to the PRUs, the main ARM processor
+remains free to run high-level tasks like path planning, machine vision,
+and Robot Operating System (ROS) nodes.</p>
+<h3 id="closed-loop-feedback-with-quadrature-encoders">Closed-Loop
+Feedback with Quadrature Encoders</h3>
+<p>Reliable motion control requires constant verification of physical
+movement. The BeagleBone Blue features dedicated hardware quadrature
+encoder inputs (eQEP). These inputs continuously decode signals from
+optical or magnetic wheel encoders without consuming CPU cycles. When
+combined with the on-board dual H-bridge motor drivers, the system forms
+a complete, closed-loop motion control system capable of executing
+precise wheel velocity and position adjustments.</p>
+<h3 id="unified-software-architecture">Unified Software
+Architecture</h3>
+<p>The BeagleBone Blue bridges its sensor hardware and motion control
+drivers through the native <code>librobotcontrol</code> C library. This
+library provides pre-configured, low-overhead APIs for:</p>
+<ul>
+<li>Calibrating and reading the IMU and barometer.</li>
+<li>Managing discrete-time digital filters (such as complementary or
+Kalman filters) directly on sensor streams.</li>
+<li>Controlling 8 standard servo outputs and 4 DC motor channels based
+on real-time sensor feedback.</li>
+<li>Interfacing natively with ROS and ArduPilot platforms.</li>
+</ul>
+<p>By uniting real-time microcontrollers, embedded sensor suites, and
+high-level computing on a single board, the BeagleBone Blue delivers a
+compact, high-efficiency framework for mobile robot navigation and
+control.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

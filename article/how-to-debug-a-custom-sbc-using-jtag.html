@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Debug a Custom SBC Using JTAG - sbc</title>
+    <meta name="description" content="Debugging a custom Single Board Computer (SBC) through a JTAG interface requires a systematic approach that isolates issues across hardware, signal integrity, and software configurations. When bringing up a new board, communication failures between the J">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-debug-a-custom-sbc-using-jtag">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Debug a Custom SBC Using JTAG - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-debug-a-custom-sbc-using-jtag" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Debugging a custom Single Board Computer (SBC) through a JTAG interface requires a systematic approach that isolates issues across hardware, signal integrity, and software configurations. When bringing up a new board, communication failures between the J" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-debug-a-custom-sbc-using-jtag">How to Debug a Custom SBC
+Using JTAG</h1>
+<p>Debugging a custom Single Board Computer (SBC) through a JTAG
+interface requires a systematic approach that isolates issues across
+hardware, signal integrity, and software configurations. When bringing
+up a new board, communication failures between the JTAG probe and the
+target processor are common. This guide outlines the essential
+troubleshooting steps to diagnose connection faults, detect scan chain
+errors, and establish a reliable debugging session on custom
+hardware.</p>
+<h3 id="1-verify-power-rails-and-grounding">1. Verify Power Rails and
+Grounding</h3>
+<p>Before probing data lines, ensure the target board is powered
+correctly.</p>
+<ul>
+<li><strong>Target Reference Voltage (<span
+class="math inline">\(V_{REF}\)</span> / <span
+class="math inline">\(V_{TARGET}\)</span>):</strong> Verify that the
+JTAG probe detects the correct I/O voltage (e.g., 3.3V, 1.8V) from the
+target board. If this pin is floating or unpowered, the debugger’s level
+shifters will not function.</li>
+<li><strong>Common Ground:</strong> Confirm a solid ground connection
+between the JTAG adapter and the custom SBC to prevent ground loop
+offsets and floating logic levels.</li>
+<li><strong>Core and I/O Rails:</strong> Ensure all System-on-Chip (SoC)
+or Microcontroller (MCU) power rails are stable and within operational
+tolerances using a digital multimeter or oscilloscope.</li>
+</ul>
+<h3 id="2-check-jtag-pinout-and-physical-connections">2. Check JTAG
+Pinout and Physical Connections</h3>
+<p>Wiring mistakes are the most frequent cause of failure on custom
+revisions.</p>
+<ul>
+<li><strong>Pin Mapping:</strong> Double-check the schematic and PCB
+layout against the debug probe’s standard pinout (e.g., ARM 10-pin, ARM
+20-pin, or standard MIPS/RISC-V headers). Common errors include swapped
+TDI/TDO lines or mirrored pin numbering.</li>
+<li><strong>Pull-Up and Pull-Down Resistors:</strong> Verify that
+standard pull-up or pull-down termination resistors are installed
+according to the target processor’s hardware design guide (typically on
+TMS, TDI, and TCK).</li>
+<li><strong>Cable Length:</strong> Keep ribbon cables short (under 15–20
+cm) to minimize parasitic capacitance and cross-talk.</li>
+</ul>
+<h3 id="3-lower-the-jtag-clock-frequency-tck">3. Lower the JTAG Clock
+Frequency (TCK)</h3>
+<p>High-speed clocking can fail on prototype boards with unoptimized
+trace routing.</p>
+<ul>
+<li>Lower the JTAG adapter clock speed (TCK) in your debugging software
+(such as OpenOCD, J-Link Commander, or GDB) to a conservative value,
+such as 100 kHz or 500 kHz.</li>
+<li>If communication succeeds at lower frequencies, the issue is related
+to trace capacitance, poor termination, or excessive line length.</li>
+</ul>
+<h3 id="4-analyze-signal-integrity-with-an-oscilloscope">4. Analyze
+Signal Integrity with an Oscilloscope</h3>
+<p>If the probe still fails to detect the target, inspect the physical
+waveforms.</p>
+<ul>
+<li><strong>Inspect TCK, TMS, and TDI:</strong> Probe these lines close
+to the SoC pins to check for clean square waves, ringing, slow rise
+times, or excessive overshoot.</li>
+<li><strong>Observe TDO:</strong> The Target Data Out (TDO) pin should
+toggle in response to scan chain commands. If TDO remains continuously
+high, low, or floating, the Test Access Port (TAP) controller inside the
+SoC is not processing commands.</li>
+</ul>
+<h3 id="5-validate-reset-signals-and-boot-modes">5. Validate Reset
+Signals and Boot Modes</h3>
+<p>Reset states and boot configurations can prevent the debug unit from
+taking control of the core.</p>
+<ul>
+<li><strong>nSRST and nTRST Lines:</strong> Verify whether your target
+uses System Reset (nSRST), Test Reset (nTRST), or both. Ensure the
+debugger is not holding the SoC in permanent reset.</li>
+<li><strong>Boot Strapping Pins:</strong> Ensure the processor’s
+hardware bootstrap pins are configured correctly. Some SoCs disable JTAG
+functionality in certain secure boot modes or enter low-power sleep
+states immediately after power-up, severing the JTAG link.</li>
+<li><strong>Under-Reset Halting:</strong> Configure the debugger to halt
+the processor immediately out of reset (<code>reset halt</code> or
+<code>connect under reset</code>) to prevent faulty firmware from
+crashing the CPU or reconfiguring JTAG pins as standard GPIOs.</li>
+</ul>
+<h3 id="6-test-the-scan-chain-and-idcode-extraction">6. Test the Scan
+Chain and IDCODE Extraction</h3>
+<p>Once basic signaling works, use your debug utility to query the JTAG
+Test Access Port (TAP).</p>
+<ul>
+<li>Run a basic scan chain autodetection command (e.g.,
+<code>scan_chain</code> in OpenOCD).</li>
+<li>Verify that the returned Device ID (IDCODE) matches the silicon
+manufacturer's datasheet.</li>
+<li>A readback value of <code>0x00000000</code> or
+<code>0xFFFFFFFF</code> indicates a physical line fault (such as a
+disconnected or shorted TDO line).</li>
+</ul>
+<h3 id="7-confirm-debugger-configuration-files">7. Confirm Debugger
+Configuration Files</h3>
+<p>Software misconfigurations can cause initial attachment failures even
+when hardware is intact.</p>
+<ul>
+<li>Ensure your OpenOCD, PyOCD, or proprietary debugger scripts
+reference the exact SoC variant, core type (e.g., Cortex-M4,
+Cortex-A53), and memory map.</li>
+<li>Verify that the debug software is configured for JTAG mode rather
+than Serial Wire Debug (SWD) or cJTAG, unless your hardware specifically
+uses those alternative protocols.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

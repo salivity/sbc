@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashing Raspberry Pi OS with Raspberry Pi Imager - sbc</title>
+    <meta name="description" content="Setting up a Raspberry Pi requires installing an operating system onto a microSD card, a process made incredibly simple by using the official Raspberry Pi Imager software. This article provides a straightforward, step-by-step guide on how to download the">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/flashing-raspberry-pi-os-with-raspberry-pi-imager">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Flashing Raspberry Pi OS with Raspberry Pi Imager - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/flashing-raspberry-pi-os-with-raspberry-pi-imager" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Setting up a Raspberry Pi requires installing an operating system onto a microSD card, a process made incredibly simple by using the official Raspberry Pi Imager software. This article provides a straightforward, step-by-step guide on how to download the" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="flashing-raspberry-pi-os-with-raspberry-pi-imager">Flashing
+Raspberry Pi OS with Raspberry Pi Imager</h1>
+<p>Setting up a Raspberry Pi requires installing an operating system
+onto a microSD card, a process made incredibly simple by using the
+official Raspberry Pi Imager software. This article provides a
+straightforward, step-by-step guide on how to download the tool, select
+your preferred operating system and storage device, configure advanced
+settings like Wi-Fi and SSH, and successfully flash the card to get your
+mini-computer up and running.</p>
+<h3 id="step-1-download-and-install-raspberry-pi-imager">Step 1:
+Download and Install Raspberry Pi Imager</h3>
+<p>Before you begin, you need to download the official flashing tool
+provided by the Raspberry Pi Foundation.</p>
+<ul>
+<li>Visit the official Raspberry Pi software website.</li>
+<li>Download the installer compatible with your host computer's
+operating system (Windows, macOS, or Linux).</li>
+<li>Run the installer and follow the on-screen prompts to complete the
+installation.</li>
+</ul>
+<h3 id="step-2-prepare-your-hardware">Step 2: Prepare Your Hardware</h3>
+<p>To write the data successfully, you need to connect your storage
+media to your computer.</p>
+<ul>
+<li>Insert your microSD card into an SD card adapter or a USB card
+reader.</li>
+<li>Plug the adapter or reader into an available USB port on your
+computer.</li>
+<li>Ensure any important data on the SD card is backed up, as this
+process will completely erase the drive.</li>
+</ul>
+<h3 id="step-3-select-your-raspberry-pi-device-and-os">Step 3: Select
+Your Raspberry Pi Device and OS</h3>
+<p>Launch the Raspberry Pi Imager application to begin configuring your
+installation images.</p>
+<ul>
+<li>Click on <strong>CHOOSE DEVICE</strong> and select your specific
+Raspberry Pi model (for example, Raspberry Pi 4 or Raspberry Pi 5) from
+the list to ensure compatibility.</li>
+<li>Click on <strong>CHOOSE OS</strong>.</li>
+<li>Select the recommended <strong>Raspberry Pi OS (64-bit)</strong> for
+a standard desktop experience, or browse through the sub-menus for
+alternative options like Ubuntu, media centers, or retro gaming
+systems.</li>
+</ul>
+<h3 id="step-4-choose-your-storage-media">Step 4: Choose Your Storage
+Media</h3>
+<p>Targeting the correct drive ensures you do not accidentally overwrite
+internal system files.</p>
+<ul>
+<li>Click on <strong>CHOOSE STORAGE</strong>.</li>
+<li>Identify and select your microSD card from the list of available
+drives by checking the storage capacity size.</li>
+</ul>
+<h3 id="step-5-configure-os-customization-optional">Step 5: Configure OS
+Customization (Optional)</h3>
+<p>Raspberry Pi Imager allows you to pre-configure system settings,
+saving you from needing a keyboard and monitor attached to the Pi during
+its first boot.</p>
+<ul>
+<li>After selecting your OS and Storage, click
+<strong>NEXT</strong>.</li>
+<li>A prompt will appear asking if you would like to apply OS
+customization settings. Click <strong>EDIT SETTINGS</strong>.</li>
+<li>In the <strong>General</strong> tab, you can set a custom username
+and password, enter your local Wi-Fi credentials, and set your time
+zone.</li>
+<li>In the <strong>Services</strong> tab, you can enable SSH if you plan
+to control your Raspberry Pi remotely over the network.</li>
+<li>Click <strong>SAVE</strong> when you are finished customizing.</li>
+</ul>
+<h3 id="step-6-flash-and-verify-the-sd-card">Step 6: Flash and Verify
+the SD Card</h3>
+<p>With all parameters set, you are ready to write the operating system
+files to the card.</p>
+<ul>
+<li>Click <strong>YES</strong> to confirm that you want to apply the
+customization settings.</li>
+<li>A final warning will appear stating that all existing data on the SD
+card will be erased. Click <strong>YES</strong> to proceed.</li>
+<li>The software will now download the OS image and write it to the
+card. A progress bar will track the writing phase, followed by a
+verification phase to ensure data integrity.</li>
+<li>Once the process is complete, a pop-up window will inform you that
+it is safe to remove the card. Unplug the card reader, insert the
+microSD card into your Raspberry Pi, and power it on.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspberry Pi HAT Compatibility Guide - sbc</title>
+    <meta name="description" content="Older Raspberry Pi HATs (Hardware Attached on Top) are not universally compatible with the latest Raspberry Pi models due to evolving hardware layouts, power management configurations, and software architectures. While the fundamental 40-pin GPIO layout">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/raspberry-pi-hat-compatibility-guide">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Raspberry Pi HAT Compatibility Guide - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/raspberry-pi-hat-compatibility-guide" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Older Raspberry Pi HATs (Hardware Attached on Top) are not universally compatible with the latest Raspberry Pi models due to evolving hardware layouts, power management configurations, and software architectures. While the fundamental 40-pin GPIO layout" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="raspberry-pi-hat-compatibility-guide">Raspberry Pi HAT
+Compatibility Guide</h1>
+<p>Older Raspberry Pi HATs (Hardware Attached on Top) are not
+universally compatible with the latest Raspberry Pi models due to
+evolving hardware layouts, power management configurations, and software
+architectures. While the fundamental 40-pin GPIO layout has remained a
+staple since the Raspberry Pi Model B+ in 2014, generational leaps—most
+notably seen in the Raspberry Pi 5—introduce specific hardware
+relocations and software changes that can prevent older expansion boards
+from functioning seamlessly or fitting physically without
+modification.</p>
+<h3 id="physical-and-mechanical-constraints">Physical and Mechanical
+Constraints</h3>
+<p>The physical layout of the Raspberry Pi has shifted over recent
+generations. For example, on the Raspberry Pi 5, the 4-pin Power over
+Ethernet (PoE) header was relocated to accommodate the new PCIe
+interface and processing layout. As a result, older PoE HATs designed
+for the Raspberry Pi 4 or 3B+ cannot physically connect to the newer
+board. Furthermore, the inclusion of tall components like active coolers
+or specific port rearrangements can physically block flush installation,
+requiring the use of custom GPIO stacking headers or risers to clear
+components.</p>
+<h3 id="software-and-chipset-evolution">Software and Chipset
+Evolution</h3>
+<p>The underlying mechanism for handling input/output saw a massive
+redesign starting with the Raspberry Pi 5. Previous iterations relied on
+direct access via the Broadcom SoC, but newer architectures route the
+40-pin GPIO lines through an entirely separate custom southbridge chip
+called the RP1.</p>
+<p>While the electrical 3.3V logic levels remain identical, older
+software libraries that bypass the operating system kernel to directly
+manipulate hardware registers will fail on modern models. Modern
+Raspberry Pi OS setups utilize the standard <code>libgpiod</code>
+abstraction layer rather than legacy libraries like
+<code>WiringPi</code>. If an older HAT relies on proprietary or
+unmaintained software drivers written for older microprocessors, it will
+require manual firmware updates or rewriting configuration scripts to
+function properly.</p>
+<h3 id="the-hat-standard-and-stacking-addresses">The HAT+ Standard and
+Stacking Addresses</h3>
+<p>Older HAT specifications were never designed with hardware stacking
+in mind. Legacy HATs share an identical I2C address (0x50) for their
+onboard ID EEPROMs, meaning connecting more than one older HAT
+simultaneously causes address conflicts that confuse the operating
+system during boot probing.</p>
+<p>To address this limitation, the newer <strong>HAT+
+specification</strong> introduces modern power profiles and dynamic I2C
+address mapping (such as 0x51 for stackable cards). While you can
+generally run a single legacy HAT alongside newer stackable hardware,
+mixing multiple older components requires physical modifications—such as
+desoldering the onboard EEPROM chip—and manually forcing the device tree
+overlays within the configuration files.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluating SPI and I2C Bus Contention on SBCs - sbc</title>
+    <meta name="description" content="This article provides an engineering guide on identifying, measuring, and resolving bus contention when Serial Peripheral Interface (SPI) and Inter-Integrated Circuit (I2C) protocols share physical routing or multiplexed pins on a single board computer (">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/evaluating-spi-and-i2c-bus-contention-on-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Evaluating SPI and I2C Bus Contention on SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/evaluating-spi-and-i2c-bus-contention-on-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an engineering guide on identifying, measuring, and resolving bus contention when Serial Peripheral Interface (SPI) and Inter-Integrated Circuit (I2C) protocols share physical routing or multiplexed pins on a single board computer (" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="evaluating-spi-and-i2c-bus-contention-on-sbcs">Evaluating SPI
+and I2C Bus Contention on SBCs</h1>
+<p>This article provides an engineering guide on identifying, measuring,
+and resolving bus contention when Serial Peripheral Interface (SPI) and
+Inter-Integrated Circuit (I2C) protocols share physical routing or
+multiplexed pins on a single board computer (SBC). It outlines the core
+electrical conflicts between push-pull and open-drain architectures,
+protocol analysis techniques using oscilloscopes and logic analyzers,
+software-level pin multiplexing verification, and best practices for
+implementing hardware and firmware arbitration.</p>
+<h3 id="1-understanding-the-electrical-mismatch">1. Understanding the
+Electrical Mismatch</h3>
+<p>SPI and I2C rely on fundamentally different electrical drive
+topologies. Evaluating contention begins with recognizing how these
+topologies interact on shared lines:</p>
+<ul>
+<li><strong>Drive Types:</strong> I2C uses open-drain (or
+open-collector) drivers with passive pull-up resistors, allowing
+multiple devices to pull the line low safely. SPI typically uses active
+push-pull drivers that actively drive lines both high and low.</li>
+<li><strong>Short Circuits:</strong> If an SPI master or peripheral
+actively drives a line high while an I2C device pulls it low, a direct
+path to ground is created. This causes excess current draw, degraded
+logic levels, and potential permanent damage to the SoC or
+peripherals.</li>
+<li><strong>Pull-Up Resistor Impact:</strong> The pull-up resistors
+required for I2C (typically 1kΩ to 10kΩ) can degrade high-speed SPI
+signals by altering line impedance, increasing capacitance, and rounding
+off high-frequency SPI clock edges.</li>
+</ul>
+<h3 id="2-signal-integrity-and-electrical-validation">2. Signal
+Integrity and Electrical Validation</h3>
+<p>Engineers use mixed-signal oscilloscopes (MSOs) to measure physical
+layer behavior during concurrent or alternating operations:</p>
+<ul>
+<li><strong>Voltage Level Verification:</strong> Measure <span
+class="math inline">\(V_{OL}\)</span> (low-level output voltage) and
+<span class="math inline">\(V_{OH}\)</span> (high-level output voltage).
+Contention appears as intermediate voltage levels (e.g., floating
+between 0.8V and 2.0V on a 3.3V bus) instead of clean logic
+transitions.</li>
+<li><strong>Current Measurement:</strong> Place a low-value current
+shunt resistor on the power rails of the bus transceivers or use current
+probes to detect unexpected current spikes during bus transactions.</li>
+<li><strong>Rise and Fall Times:</strong> Verify that bus capacitance
+does not violate the maximum rise time requirements for I2C (typically
+300 ns for Fast Mode) or round the clock edges required for high-speed
+SPI transactions (often exceeding 10 MHz).</li>
+</ul>
+<h3 id="3-logic-and-protocol-collision-analysis">3. Logic and Protocol
+Collision Analysis</h3>
+<p>Digital logic analyzers decode protocol traffic to identify timing
+overlap and software misconfigurations:</p>
+<ul>
+<li><strong>State Tracking:</strong> Monitor the SPI Chip Select (<span
+class="math inline">\(\overline{\text{CS}}\)</span>) line alongside I2C
+Start/Stop conditions to ensure that transactions are strictly mutually
+exclusive when pins are multiplexed.</li>
+<li><strong>NACK and Framing Error Detection:</strong> Contention on an
+I2C line usually manifests as unexpected NACKs (No Acknowledge) or
+missing clock pulses (SCL stretching failures). On SPI lines, contention
+manifests as corrupted MISO/MOSI bits or missing frame bytes.</li>
+<li><strong>Hold and Setup Time Violations:</strong> Confirm that
+switching between protocols provides sufficient guard time for line
+voltages to settle before the next protocol transaction begins.</li>
+</ul>
+<h3 id="4-software-pin-multiplexing-and-driver-arbitration">4. Software
+Pin Multiplexing and Driver Arbitration</h3>
+<p>On modern SBCs running Linux or real-time operating systems (RTOS),
+contention often stems from race conditions in software:</p>
+<ul>
+<li><strong>Kernel Pin Control (pinctrl):</strong> Inspect the SBC’s
+Device Tree and <code>pinctrl</code> subsystem. Ensure pins shared via
+SoC multiplexers dynamically reconfigure their electrical
+characteristics (e.g., switching from open-drain to push-pull) before
+the peripheral driver initiates a transfer.</li>
+<li><strong>Mutexes and Locking:</strong> Evaluate device drivers to
+ensure a shared hardware lock (such as a kernel <code>mutex</code> or
+semaphore) serializes bus access. Neither driver should execute
+transactions until the previous transaction finishes and the pin
+multiplexer updates state.</li>
+<li><strong>Driver Hand-off Delays:</strong> Ensure the driver
+introduces a settling delay after reassigning a pin from SPI to I2C to
+allow the external pull-up resistor to pull the line completely high
+before an I2C Start condition is generated.</li>
+</ul>
+<h3 id="5-architectural-mitigation-strategies">5. Architectural
+Mitigation Strategies</h3>
+<p>If hardware multiplexing or software arbitration fails to resolve
+contention, engineers deploy specific mitigation designs:</p>
+<ul>
+<li><strong>Hardware Bus Switches:</strong> Place a bidirectional analog
+switch (e.g., 74CB3Q series) or digital multiplexer controlled by a
+dedicated GPIO to isolate I2C and SPI signal paths physically.</li>
+<li><strong>I2C-to-SPI / SPI-to-I2C Bridges:</strong> Offload one
+protocol to an external bridge chip connected via a dedicated bus
+interface (e.g., using a dedicated USB-to-I2C bridge or UART
+bridge).</li>
+<li><strong>Software Bit-Banging:</strong> If hardware controller
+sharing is unavoidable and causes bus locks, move the slower I2C bus to
+dedicated spare GPIOs using a software bit-banging implementation,
+leaving the hardware controller exclusively for high-speed SPI.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radiation-Tolerant SBC Design for High Altitude - sbc</title>
+    <meta name="description" content="Designing a Single Board Computer (SBC) for high-altitude environments requires mitigating the effects of ionizing radiation, secondary cosmic rays, and atmospheric neutrons. At altitudes between 10 and 35 kilometers (troposphere to stratosphere), radiat">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/radiation-tolerant-sbc-design-for-high-altitude">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Radiation-Tolerant SBC Design for High Altitude - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/radiation-tolerant-sbc-design-for-high-altitude" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Designing a Single Board Computer (SBC) for high-altitude environments requires mitigating the effects of ionizing radiation, secondary cosmic rays, and atmospheric neutrons. At altitudes between 10 and 35 kilometers (troposphere to stratosphere), radiat" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="radiation-tolerant-sbc-design-for-high-altitude">Radiation-Tolerant
+SBC Design for High Altitude</h1>
+<p>Designing a Single Board Computer (SBC) for high-altitude
+environments requires mitigating the effects of ionizing radiation,
+secondary cosmic rays, and atmospheric neutrons. At altitudes between 10
+and 35 kilometers (troposphere to stratosphere), radiation issues
+primarily manifest as Single Event Effects (SEEs) rather than high Total
+Ionizing Dose (TID) degradation. Converting a standard commercial
+off-the-shelf (COTS) SBC architecture into a radiation-tolerant system
+involves specific modifications in component selection, hardware
+architecture, power distribution, and software-level fault
+tolerance.</p>
+<h3 id="1-component-selection-and-process-technologies">1. Component
+Selection and Process Technologies</h3>
+<ul>
+<li><strong>Silicon-on-Insulator (SOI) and FinFET:</strong> Replace
+standard bulk CMOS integrated circuits with components built on
+Silicon-on-Insulator (SOI) or advanced FinFET nodes. These processes
+feature smaller sensitive volumes, significantly reducing the likelihood
+of charge collection from ionizing particles.</li>
+<li><strong>Radiation-Tolerant Memory:</strong> Avoid standard volatile
+memory. Implement Error-Correcting Code (ECC) DRAM or transition to
+naturally radiation-hardened non-volatile memory alternatives such as
+Magnetoresistive RAM (MRAM) or Ferroelectric RAM (FRAM) for critical
+configuration registers and boot data.</li>
+<li><strong>Automotive/AEC-Q100 and Mil-Spec Grades:</strong> When full
+radiation-hardened components are cost-prohibitive, select components
+rated AEC-Q100 Grade 1 or MIL-STD-883. These parts generally feature
+higher quality silicon with fewer structural lattice defects.</li>
+</ul>
+<h3 id="2-single-event-latchup-sel-protection">2. Single Event Latchup
+(SEL) Protection</h3>
+<p>Single Event Latchups cause high-current states that can permanently
+destroy semiconductors.</p>
+<ul>
+<li><strong>Current-Limiting Switches:</strong> Place fast-acting,
+high-side electronic load switches (e.g., solid-state current limiters)
+on power rails feeding microprocessors, FPGAs, and transceivers.</li>
+<li><strong>Autonomous Power-Cycling Circuits:</strong> Integrate a
+hardware monitor that detects anomalous current spikes exceeding defined
+operational thresholds and instantly cycles power to the affected
+subsystem within microseconds to clear the parasitic thyristor structure
+created during a latchup.</li>
+</ul>
+<h3 id="3-redundancy-and-architectural-hardening">3. Redundancy and
+Architectural Hardening</h3>
+<ul>
+<li><strong>Triple Modular Redundancy (TMR):</strong> In FPGA-based SBC
+designs, implement TMR at the register-transfer level (RTL). TMR
+duplicates logic into three identical paths and uses a majority voting
+circuit to determine the correct output, masking transient bit-flips
+(Single Event Upsets).</li>
+<li><strong>Dual-Core Lockstep (DCLS):</strong> Utilize processors with
+dual cores running the exact same instructions concurrently with a
+cycle-by-cycle comparator. If the outputs differ, the processor triggers
+a non-maskable interrupt (NMI) to re-execute the code or reset to a
+known safe state.</li>
+<li><strong>External Watchdog Timers (WDT):</strong> Do not rely on
+internal microprocessor watchdogs. Employ an external, physically
+isolated, analog or radiation-tolerant watchdog supervisor that requires
+periodic heartbeat pulses from software. If an unhandled Single Event
+Functional Interrupt (SEFI) hangs the CPU, the watchdog forces a full
+system reset.</li>
+</ul>
+<h3 id="4-memory-scrubbing-and-parity">4. Memory Scrubbing and
+Parity</h3>
+<ul>
+<li><strong>Continuous Memory Scrubbing:</strong> Implement hardware- or
+background-firmware memory scrubbers that periodically read through
+ECC-protected system memory, identify single-bit errors, and rewrite
+corrected values to prevent the accumulation of multiple errors that
+could lead to uncorrectable double-bit faults.</li>
+<li><strong>Bus Parity Checks:</strong> Enforce parity or cyclic
+redundancy checks (CRC) across internal communication buses (SPI, I2C,
+PCIe) to catch transmission corruptions caused by transient radiation
+events.</li>
+</ul>
+<h3 id="5-power-tree-and-supply-hardening">5. Power Tree and Supply
+Hardening</h3>
+<ul>
+<li><strong>Over-Engineered Transients Suppression:</strong>
+High-altitude environments feature extreme temperature differentials
+combined with radiation events that stress power circuits. Use transient
+voltage suppressors (TVS) and wide-bandgap semiconductors (such as
+Gallium Nitride or Silicon Carbide) for voltage regulation to tolerate
+power spikes without breakdown.</li>
+<li><strong>Linear Regulators for Sensitive Rails:</strong> Where
+thermal design allows, use Low Dropout Regulators (LDOs) instead of
+complex switching regulators for sensitive analog-to-digital and
+reference voltage rails, as LDOs exhibit lower susceptibility to Single
+Event Burnout (SEB).</li>
+</ul>
+<h3 id="6-pcb-layout-and-physical-protection">6. PCB Layout and Physical
+Protection</h3>
+<ul>
+<li><strong>Localized Spot Shielding:</strong> Add thin layers (1 to 2
+mm) of high-density materials, such as tantalum or copper-tungsten,
+directly over mission-critical ICs. This reduces the energy spectrum of
+incoming heavy ions and secondary particles.</li>
+<li><strong>Conformal Coating:</strong> Apply aerospace-grade conformal
+coating (such as Parylene or silicone) to prevent high-altitude corona
+discharge, arc tracking under low atmospheric pressure, and moisture
+condensation during ascent and descent.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

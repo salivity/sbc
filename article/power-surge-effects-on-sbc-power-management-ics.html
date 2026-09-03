@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Surge Effects on SBC Power Management ICs - sbc</title>
+    <meta name="description" content="An unmanaged power surge poses an immediate and catastrophic risk to the Power Management Integrated Circuit (PMIC) on a Single Board Computer (SBC). Because the PMIC is responsible for stepping down, regulating, and sequencing the various low-voltage ra">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/power-surge-effects-on-sbc-power-management-ics">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Power Surge Effects on SBC Power Management ICs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/power-surge-effects-on-sbc-power-management-ics" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An unmanaged power surge poses an immediate and catastrophic risk to the Power Management Integrated Circuit (PMIC) on a Single Board Computer (SBC). Because the PMIC is responsible for stepping down, regulating, and sequencing the various low-voltage ra" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="power-surge-effects-on-sbc-power-management-ics">Power Surge
+Effects on SBC Power Management ICs</h1>
+<p>An unmanaged power surge poses an immediate and catastrophic risk to
+the Power Management Integrated Circuit (PMIC) on a Single Board
+Computer (SBC). Because the PMIC is responsible for stepping down,
+regulating, and sequencing the various low-voltage rails required by the
+System on Chip (SoC), memory, and peripherals, it serves as the first
+line of electrical defense. When an uncontrolled high-voltage or
+high-current transient strikes the SBC, it quickly exceeds the maximum
+silicon ratings of the PMIC, leading to physical damage, thermal
+runaway, internal electrical shorts, and catastrophic failure of both
+the PMIC and the downstream components it powers.</p>
+<h2 id="the-role-of-the-pmic-in-an-sbc">The Role of the PMIC in an
+SBC</h2>
+<p>Single Board Computers operate on multiple, highly specific voltage
+levels. While the board might accept a 5V, 9V, or 12V input, the core
+processor and system memory often require delicate sub-voltages, such as
+3.3V, 1.8V, 1.1V, or even lower. The PMIC manages these requirements
+using a network of internal switching regulators, linear low-dropout
+regulators (LDOs), and sequencing logic. Because these components are
+densely packed within a single silicon die, they have strict voltage
+tolerance thresholds.</p>
+<h2 id="immediate-failure-modes-caused-by-power-surges">Immediate
+Failure Modes Caused by Power Surges</h2>
+<p>When a power surge occurs without surge protection devices like
+Transient Voltage Suppression (TVS) diodes or metal oxide varistors
+(MOVs), the excessive energy hits the PMIC directly.</p>
+<h3 id="dielectric-breakdown">Dielectric Breakdown</h3>
+<p>Every semiconductor within the PMIC has a rated dielectric breakdown
+voltage. A sudden spike in voltage creates an electric field intense
+enough to puncture the ultra-thin insulating gate oxides inside the
+PMIC's internal MOSFET switches. Once this oxide layer is breached, the
+component loses its ability to block current, creating a permanent short
+circuit.</p>
+<h3 id="latch-up-phenomenon">Latch-Up Phenomenon</h3>
+<p>Surges can inject stray currents into the substrate of the PMIC,
+triggering a parasitic silicon-controlled rectifier (SCR) structure.
+This state, known as "latch-up," creates an abnormal, low-impedance path
+between the power rail and ground. Even after the initial surge
+dissipates, the PMIC continues to draw massive amounts of current from
+the standard power supply until it overheats and burns out.</p>
+<h3 id="thermal-overload-and-package-rupture">Thermal Overload and
+Package Rupture</h3>
+<p>Power surges deliver energy faster than the SBC’s ground plane or
+thermal vias can dissipate heat. This localized energy surge causes
+instantaneous thermal runaway. The heat vaporizes internal bonding wires
+and silicon structures, frequently resulting in visible cracking,
+scorching, or a hole in the PMIC packaging.</p>
+<h2 id="downstream-consequences-for-the-entire-sbc">Downstream
+Consequences for the Entire SBC</h2>
+<p>A damaged PMIC rarely fails cleanly. Depending on how the internal
+switching circuits collapse, the effects typically cascade to the rest
+of the board:</p>
+<ul>
+<li><strong>Short-to-Input Failure:</strong> If the PMIC's high-side
+internal MOSFET fails in a closed (shorted) state, the raw, unregulated
+input voltage (e.g., 5V or 12V) is passed directly to rails meant for
+1.8V or 1.1V logic. This instantly destroys the central SoC, RAM, and
+flash storage.</li>
+<li><strong>Open-Circuit Failure:</strong> If the bonding wires or
+traces vaporize instantly, power delivery stops altogether. While this
+prevents high voltage from reaching downstream chips, the SBC will not
+boot, and the PMIC must be replaced via specialized surface-mount rework
+to restore functionality.</li>
+<li><strong>Degraded Performance and Instability:</strong> In cases of
+minor or repeated low-level surges, the PMIC may sustain partial damage.
+This manifests as erratic system crashes, high ripple noise on sensitive
+voltage rails, excessive heat during standard operation, or failed
+peripheral power negotiation.</li>
+</ul>
+<h2 id="summary-of-mitigation">Summary of Mitigation</h2>
+<p>Preventing PMIC destruction requires implementing external
+overvoltage and surge suppression before power reaches the SBC input
+pins. Utilizing regulated power supplies with fast-clamping TVS diodes,
+dedicated overvoltage protection (OVP) circuits, and resettable fuses
+(PTCs) ensures that voltage transients are safely shunted to ground
+before they can penetrate and destroy the PMIC.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Calibrate I2C Touchscreens on an SBC - sbc</title>
+    <meta name="description" content="Calibrating an I2C-connected touch controller on a Single Board Computer (SBC) involves verifying hardware communication, capturing raw coordinate data, and applying a mathematical transformation to align touch points with the display. This guide covers">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-calibrate-i2c-touchscreens-on-an-sbc">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Calibrate I2C Touchscreens on an SBC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-calibrate-i2c-touchscreens-on-an-sbc" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Calibrating an I2C-connected touch controller on a Single Board Computer (SBC) involves verifying hardware communication, capturing raw coordinate data, and applying a mathematical transformation to align touch points with the display. This guide covers" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-calibrate-i2c-touchscreens-on-an-sbc">How to Calibrate
+I2C Touchscreens on an SBC</h1>
+<p>Calibrating an I2C-connected touch controller on a Single Board
+Computer (SBC) involves verifying hardware communication, capturing raw
+coordinate data, and applying a mathematical transformation to align
+touch points with the display. This guide covers the end-to-end
+technical process developers use to configure, test, and persist
+touchscreen calibration across Linux environments on SBCs such as
+Raspberry Pi, BeagleBone, or custom embedded boards.</p>
+<h3 id="1-verify-i2c-bus-communication-and-driver-binding">1. Verify I2C
+Bus Communication and Driver Binding</h3>
+<p>Before software calibration, ensure the kernel properly detects the
+touch controller (such as Goodix, FocalTech, or Ilitek ICs) over the I2C
+bus.</p>
+<ol type="1">
+<li><strong>Scan the I2C Bus:</strong> Use <code>i2c-tools</code> to
+confirm the device responds at its designated I2C address:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> i2cdetect <span class="at">-y</span> <span class="op">&lt;</span>bus_number<span class="op">&gt;</span></span></code></pre></div>
+A response (or <code>UU</code> indicating an active driver) confirms
+electrical connectivity.</li>
+<li><strong>Verify the Input Device Node:</strong> Ensure the Linux
+input subsystem (<code>evdev</code>) creates an event node:
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /proc/bus/input/devices</span></code></pre></div>
+Look for the touch controller name and its assigned
+<code>/dev/input/eventX</code> path.</li>
+<li><strong>Test Raw Events:</strong> Run <code>evtest</code> to ensure
+hardware interrupts and coordinate events are firing:
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> evtest /dev/input/eventX</span></code></pre></div>
+Touching the screen should stream <code>ABS_MT_POSITION_X</code> and
+<code>ABS_MT_POSITION_Y</code> values.</li>
+</ol>
+<h3 id="2-perform-touch-calibration">2. Perform Touch Calibration</h3>
+<p>The method used to calculate coordinate offsets depends on whether
+the SBC runs an X11 display server, Wayland, or a raw frame-buffer
+environment.</p>
+<h4 id="for-x11-environments">For X11 Environments</h4>
+<ol type="1">
+<li><strong>Run <code>xinput_calibrator</code>:</strong> Install and
+launch the utility:
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install xinput-calibrator</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xinput_calibrator</span></span></code></pre></div></li>
+<li><strong>Collect Data Points:</strong> Tap the four crosshairs
+displayed on the screen. The tool computes the axis inversion, swap
+flags, and coordinate offsets, outputting an <code>xorg.conf</code>
+configuration snippet.</li>
+</ol>
+<h4 id="for-wayland-environments-eg-weston">For Wayland Environments
+(e.g., Weston)</h4>
+<p>Wayland compositors handle input via <code>libinput</code>. Use the
+built-in Weston calibrator:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weston-touch-calibrator</span> /sys/class/input/eventX</span></code></pre></div>
+<h3 id="3-calculate-and-apply-the-coordinate-transformation-matrix">3.
+Calculate and Apply the Coordinate Transformation Matrix</h3>
+<p>Modern Linux touch stacks rely on <code>libinput</code> and a 3x3
+affine transformation matrix (represented as a 9-element array) to
+scale, translate, and rotate touch inputs:</p>
+<p><span class="math display">\[\begin{bmatrix} X_{screen} \\ Y_{screen}
+\\ 1 \end{bmatrix} = \begin{bmatrix} c_0 &amp; c_1 &amp; c_2 \\ c_3
+&amp; c_4 &amp; c_5 \\ 0 &amp; 0 &amp; 1 \end{bmatrix} \begin{bmatrix}
+X_{raw} \\ Y_{raw} \\ 1 \end{bmatrix}\]</span></p>
+<p>Common pre-calculated values for standard screen rotations
+include:</p>
+<ul>
+<li><strong>Default (No Rotation):</strong>
+<code>1 0 0 0 1 0 0 0 1</code></li>
+<li><strong>90° Clockwise:</strong> <code>0 1 0 -1 0 1 0 0 1</code></li>
+<li><strong>180° Inverted:</strong>
+<code>-1 0 1 0 -1 1 0 0 1</code></li>
+<li><strong>270° Clockwise:</strong>
+<code>0 -1 1 1 0 0 0 0 1</code></li>
+</ul>
+<p>To temporarily test a matrix in X11:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xinput</span> set-prop <span class="st">&quot;&lt;Device_Name&gt;&quot;</span> <span class="st">&quot;Coordinate Transformation Matrix&quot;</span> 0 <span class="at">-1</span> 1 1 0 0 0 0 1</span></code></pre></div>
+<h3 id="4-make-calibration-persistent">4. Make Calibration
+Persistent</h3>
+<p>To preserve calibration settings across reboots, apply the
+configuration at the Udev, X11, or Device Tree level.</p>
+<h4 id="method-a-udev-rules-recommended-for-libinput--wayland">Method A:
+Udev Rules (Recommended for <code>libinput</code> &amp; Wayland)</h4>
+<p>Create a custom rule file at
+<code>/etc/udev/rules.d/99-touchscreen.rules</code>:</p>
+<pre class="udev"><code>ENV{ID_INPUT_TOUCHSCREEN}==&quot;1&quot;, ATTRS{name}==&quot;&lt;Controller_Name&gt;&quot;, ENV{LIBINPUT_CALIBRATION_MATRIX}=&quot;1 0 0 0 1 0 0 0 1&quot;</code></pre>
+<p>Reload Udev rules to apply:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> udevadm control <span class="at">--reload-rules</span> <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> udevadm trigger</span></code></pre></div>
+<h4 id="method-b-x11-configuration-files">Method B: X11 Configuration
+Files</h4>
+<p>Save the output from <code>xinput_calibrator</code> to
+<code>/etc/X11/xorg.conf.d/99-calibration.conf</code>:</p>
+<pre class="text"><code>Section &quot;InputClass&quot;
+    Identifier      &quot;calibration&quot;
+    MatchProduct    &quot;&lt;Controller_Name&gt;&quot;
+    Option          &quot;TransformationMatrix&quot; &quot;1 0 0 0 1 0 0 0 1&quot;
+EndSection</code></pre>
+<h4
+id="method-c-device-tree-dts-adjustments-embedded-linux--yocto">Method
+C: Device Tree (DTS) Adjustments (Embedded Linux / Yocto)</h4>
+<p>For headless or embedded configurations using direct framebuffers,
+define calibration properties directly inside the I2C node in your
+device tree:</p>
+<pre class="dts"><code>&amp;i2c1 {
+    touchscreen@5d {
+        compatible = &quot;goodix,gt911&quot;;
+        reg = &lt;0x5d&gt;;
+        touchscreen-size-x = &lt;1024&gt;;
+        touchscreen-size-y = &lt;600&gt;;
+        touchscreen-inverted-x;
+        touchscreen-swapped-x-y;
+    };
+};</code></pre>
+<p>Recompile the device tree blob (DTB) and deploy it to the boot
+partition.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

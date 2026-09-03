@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZRAM Swap Performance on Single Board Computers - sbc</title>
+    <meta name="description" content="Using ZRAM as swap storage significantly enhances the multitasking capabilities and responsiveness of memory-constrained single-board computers (SBCs) like the Raspberry Pi. By creating a compressed block device within the existing physical RAM, ZRAM tra">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/zram-swap-performance-on-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ZRAM Swap Performance on Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/zram-swap-performance-on-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Using ZRAM as swap storage significantly enhances the multitasking capabilities and responsiveness of memory-constrained single-board computers (SBCs) like the Raspberry Pi. By creating a compressed block device within the existing physical RAM, ZRAM tra" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="zram-swap-performance-on-single-board-computers">ZRAM Swap
+Performance on Single Board Computers</h1>
+<p>Using ZRAM as swap storage significantly enhances the multitasking
+capabilities and responsiveness of memory-constrained single-board
+computers (SBCs) like the Raspberry Pi. By creating a compressed block
+device within the existing physical RAM, ZRAM trades a minor amount of
+CPU overhead to virtually expand usable memory, eliminate slow flash
+storage bottlenecks, and prevent system lockups caused by memory
+exhaustion.</p>
+<h3 id="what-zram-does-in-an-sbc">What ZRAM Does in an SBC</h3>
+<p>ZRAM allocates a portion of the system's volatile memory to serve as
+a compressed swap device. When the Linux kernel needs to swap out
+inactive memory pages, it compresses them and stores them in this
+designated RAM space rather than writing uncompressed data to a physical
+drive. Typically, algorithms like LZ4 or ZSTD can compress memory data
+by a factor of 2:1 or 3:1, effectively turning 1 GB of physical RAM into
+roughly 1.5 GB to 2 GB of effective capacity.</p>
+<h3 id="the-cpu-overhead-vs-memory-trade-off">The CPU Overhead vs.
+Memory Trade-Off</h3>
+<p>The primary cost of ZRAM is processor usage. The SBC's CPU must
+compress data when writing to swap and decompress it when reading data
+back.</p>
+<ul>
+<li><strong>CPU Impact:</strong> Modern ARM processors found in SBCs
+handle compression algorithms like LZ4 extremely fast. The CPU
+utilization rarely exceeds a negligible fraction for typical desktop or
+background workloads.</li>
+<li><strong>Throughput Benefit:</strong> RAM-to-RAM data transfers with
+compression are substantially faster than reading and writing
+uncompressed data to external storage. Even with the CPU compression
+overhead, ZRAM operations occur in microseconds, whereas flash I/O can
+take milliseconds.</li>
+</ul>
+<h3 id="elimination-of-flash-storage-bottlenecks">Elimination of Flash
+Storage Bottlenecks</h3>
+<p>Standard SBC storage media, such as MicroSD cards and budget eMMC
+modules, have poor random read and write speeds. Using these media for
+traditional swap causes severe system freezes (thrashing) when memory
+runs low.</p>
+<ul>
+<li><strong>Lower Latency:</strong> ZRAM operates at memory bus speeds,
+avoiding the severe I/O wait times that freeze the user interface.</li>
+<li><strong>Extended Storage Lifespan:</strong> Flash memory degrades
+with repeated writes. Traditional swap files rapidly consume the write
+endurance of MicroSD cards. ZRAM keeps all swap writes in volatile
+memory, preventing flash wear.</li>
+</ul>
+<h3 id="preventing-out-of-memory-oom-crashes">Preventing Out-of-Memory
+(OOM) Crashes</h3>
+<p>On devices with 512 MB to 2 GB of RAM, running a modern web browser
+or compiling software quickly leads to Out-of-Memory (OOM) errors.
+Without swap, the kernel terminates active processes to free memory.
+With standard swap on an SD card, the system often locks up entirely.
+ZRAM provides a stable buffer that allows these memory-heavy tasks to
+complete smoothly without crashing the system.</p>
+<h3 id="compression-algorithm-selection">Compression Algorithm
+Selection</h3>
+<p>The choice of compression algorithm directly impacts the performance
+balance on an SBC:</p>
+<ul>
+<li><strong>LZ4:</strong> The standard and recommended choice for
+low-power SBCs. It features low CPU overhead and high decompression
+speeds, making it ideal for weaker single-core or quad-core
+processors.</li>
+<li><strong>ZSTD:</strong> Offers higher compression ratios (saving more
+memory) at the cost of higher CPU utilization. This is best suited for
+modern quad-core SBCs running memory-intensive workloads where maximum
+RAM expansion is required.</li>
+</ul>
+<h3 id="summary">Summary</h3>
+<p>For low-memory single-board computers, the performance benefits of
+ZRAM far outweigh the CPU compression costs. It prevents system
+thrashing, protects flash storage from write degradation, and allows
+low-RAM hardware to handle heavier workloads smoothly.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Low-Overhead IPC Methods for Multi-Core SBCs - sbc</title>
+    <meta name="description" content="On multi-core embedded single-board computers (SBCs), minimizing Inter-Process Communication (IPC) latency and CPU utilization is vital for real-time responsiveness and high data throughput. Traditional IPC mechanisms like network sockets, standard Unix">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/fast-low-overhead-ipc-methods-for-multi-core-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Fast Low-Overhead IPC Methods for Multi-Core SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/fast-low-overhead-ipc-methods-for-multi-core-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="On multi-core embedded single-board computers (SBCs), minimizing Inter-Process Communication (IPC) latency and CPU utilization is vital for real-time responsiveness and high data throughput. Traditional IPC mechanisms like network sockets, standard Unix" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="fast-low-overhead-ipc-methods-for-multi-core-sbcs">Fast
+Low-Overhead IPC Methods for Multi-Core SBCs</h1>
+<p>On multi-core embedded single-board computers (SBCs), minimizing
+Inter-Process Communication (IPC) latency and CPU utilization is vital
+for real-time responsiveness and high data throughput. Traditional IPC
+mechanisms like network sockets, standard Unix pipes, and heavy message
+brokers introduce kernel transitions, context switching, and data
+copying overhead. This article details the primary low-overhead IPC
+mechanisms suited for multi-core embedded systems, explaining how shared
+memory structures, lockless algorithms, notification primitives, and
+asymmetric core frameworks achieve maximum performance.</p>
+<h3 id="1-posix-shared-memory-shm_open-and-mmap">1. POSIX Shared Memory
+(<code>shm_open</code> and <code>mmap</code>)</h3>
+<p>POSIX shared memory is the fastest standard IPC mechanism on
+Linux-based embedded SBCs. By mapping the same physical RAM pages into
+the virtual address spaces of multiple processes using
+<code>shm_open()</code> and <code>mmap()</code>, processes can exchange
+large datasets with zero memory copies.</p>
+<ul>
+<li><strong>How it reduces overhead:</strong> Data does not pass through
+the kernel buffer. Once the memory region is mapped, reads and writes
+occur directly at hardware memory bus speeds.</li>
+<li><strong>Best use case:</strong> High-bandwidth data pipelines, such
+as raw video frame streaming from a camera capture process to a computer
+vision inference process.</li>
+</ul>
+<h3 id="2-lockless-ring-buffers-queues">2. Lockless Ring Buffers
+(Queues)</h3>
+<p>While shared memory provides zero-copy access, coordinating reads and
+writes without introducing latency requires efficient synchronization.
+Lock-free Single-Producer Single-Consumer (SPSC) or Multiple-Producer
+Multiple-Consumer (MPMC) ring buffers deployed in shared memory
+eliminate the performance penalties of kernel-level mutexes.</p>
+<ul>
+<li><strong>How it reduces overhead:</strong> They rely on atomic
+operations (C11/C++11 atomics) and memory barriers rather than blocking
+system calls like <code>pthread_mutex_lock()</code>. This prevents
+thread preemption, context switching, and priority inversion.</li>
+<li><strong>Best use case:</strong> High-frequency, small-to-medium
+payload streaming (e.g., sensor telemetry, CAN bus message
+processing).</li>
+</ul>
+<h3
+id="3-lightweight-signatures-and-notifications-eventfd-and-futexes">3.
+Lightweight Signatures and Notifications (<code>eventfd</code> and
+Futexes)</h3>
+<p>When a consumer process cannot spin-wait (poll) continuously due to
+power or CPU core constraints, a lightweight signaling mechanism is
+required alongside shared memory.</p>
+<ul>
+<li><strong><code>eventfd</code>:</strong> A lightweight file descriptor
+designed for event notification. It consumes minimal kernel resources
+compared to standard pipes or signals and integrates seamlessly with
+<code>epoll</code> or <code>poll</code> event loops.</li>
+<li><strong>Futexes (Fast Userspace Mutexes):</strong> Futexes handle
+locking entirely in userspace for uncontended cases, entering the kernel
+only when a collision occurs and a process must sleep.</li>
+<li><strong>Best use case:</strong> Low-power event-driven architectures
+where processes sleep until new data is populated in shared memory.</li>
+</ul>
+<h3
+id="4-unix-domain-sockets-af_unix-with-sock_dgram-or-sock_seqpacket">4.
+UNIX Domain Sockets (<code>AF_UNIX</code>) with <code>SOCK_DGRAM</code>
+or <code>SOCK_SEQPACKET</code></h3>
+<p>If strict zero-copy shared memory is too complex to implement safely,
+UNIX domain sockets provide a structured alternative that avoids the
+TCP/IP stack overhead entirely.</p>
+<ul>
+<li><strong>How it reduces overhead:</strong> UNIX domain sockets bypass
+network interface card (NIC) virtualization, packet checksumming, and
+routing logic, executing data transfers purely within kernel memory
+buffers.</li>
+<li><strong>Best use case:</strong> Command-and-control messaging,
+configuration updates, and modular microservice architectures on the
+same board.</li>
+</ul>
+<h3 id="5-openamp-and-rpmsg-for-heterogeneous-cores">5. OpenAMP and
+RPMsg for Heterogeneous Cores</h3>
+<p>Many modern embedded SBCs feature heterogeneous multi-core
+architectures (e.g., ARM Cortex-A application cores combined with ARM
+Cortex-M real-time cores). Standard Linux IPC cannot directly interact
+with bare-metal or RTOS environments on companion cores.</p>
+<ul>
+<li><strong>How it reduces overhead:</strong> The Open Asymmetric
+Multi-Processing (OpenAMP) framework uses Remote Processor Messaging
+(RPMsg) built on top of <code>virtio</code> and Inter-Processor
+Interrupts (IPI). It utilizes dedicated hardware-shared RAM regions and
+hardware mailboxes to signal state changes with sub-microsecond
+latency.</li>
+<li><strong>Best use case:</strong> Offloading real-time control loops,
+motor control, or deterministic I/O tasks to a microcontroller core
+while handling UI or networking on Linux.</li>
+</ul>
+<h3 id="hardware-and-os-optimizations-for-embedded-ipc">Hardware and OS
+Optimizations for Embedded IPC</h3>
+<p>To extract maximum performance from any IPC mechanism on multi-core
+SBCs, combine them with these operating system tunings:</p>
+<ul>
+<li><strong>CPU Affinity (<code>sched_setaffinity</code>):</strong> Pin
+communicating processes to specific CPU cores. If processes share a high
+volume of data, pinning them to cores sharing an L2/L3 cache minimizes
+cache coherency bus traffic.</li>
+<li><strong>Real-Time Scheduling (<code>SCHED_FIFO</code> /
+<code>SCHED_RR</code>):</strong> Assign high-priority real-time
+scheduling classes to prevent IPC processing tasks from being preempted
+by background OS operations.</li>
+<li><strong>Huge Pages (Hugetlbfs):</strong> Use huge pages for shared
+memory segments to reduce Translation Lookaside Buffer (TLB) misses when
+dealing with large buffers.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

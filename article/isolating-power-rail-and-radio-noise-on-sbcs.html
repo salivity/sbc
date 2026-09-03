@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isolating Power Rail and Radio Noise on SBCs - sbc</title>
+    <meta name="description" content="Single board computers (SBCs) integrate high-speed digital processors, switching power supplies, and sensitive radio frequency (RF) transceivers onto a compact printed circuit board. High-frequency switching noise and voltage ripple from power rails can">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/isolating-power-rail-and-radio-noise-on-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Isolating Power Rail and Radio Noise on SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/isolating-power-rail-and-radio-noise-on-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Single board computers (SBCs) integrate high-speed digital processors, switching power supplies, and sensitive radio frequency (RF) transceivers onto a compact printed circuit board. High-frequency switching noise and voltage ripple from power rails can" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="isolating-power-rail-and-radio-noise-on-sbcs">Isolating Power
+Rail and Radio Noise on SBCs</h1>
+<p>Single board computers (SBCs) integrate high-speed digital
+processors, switching power supplies, and sensitive radio frequency (RF)
+transceivers onto a compact printed circuit board. High-frequency
+switching noise and voltage ripple from power rails can easily couple
+into the RF circuitry, causing receiver desensitization, phase noise,
+and transmitter spectral mask violations. Mitigating this electrical
+interference requires a combination of low-noise regulation, passive
+filtering networks, strategic PCB layout, and physical shielding.</p>
+<h3 id="dedicated-low-dropout-regulators-ldos">Dedicated Low-Dropout
+Regulators (LDOs)</h3>
+<p>Directly powering RF modules from switching DC-DC converters
+(buck/boost) introduces substantial switching spikes and ripple. The
+primary method to isolate the radio is placing an ultra-low-noise, high
+Power Supply Rejection Ratio (PSRR) LDO exclusively for the RF
+circuitry. The LDO acts as an active low-pass barrier, suppressing
+high-frequency ripple from the primary power rail before it reaches the
+RF transceiver.</p>
+<h3 id="multi-stage-lc-and-pi-filtering">Multi-Stage LC and Pi
+Filtering</h3>
+<p>Passive filtering placed directly on the power entry pins of the RF
+section attenuates both differential and common-mode conducted
+noise:</p>
+<ul>
+<li><strong>Ferrite Beads:</strong> Inserting high-impedance ferrite
+beads rated for the specific noise frequency band (typically 100 MHz to
+several GHz) effectively blocks high-frequency RF currents from
+traveling along the power line.</li>
+<li><strong>Pi Filters (C-L-C):</strong> Implementing a Pi network using
+a ferrite bead or inductor sandwiched between two parallel ceramic
+capacitors creates steep roll-off characteristics to isolate broadband
+switching harmonics.</li>
+</ul>
+<h3 id="decoupling-capacitor-arrays">Decoupling Capacitor Arrays</h3>
+<p>A single capacitor cannot filter broadband noise due to its
+self-resonant frequency (SRF). Using an array of ceramic decoupling
+capacitors placed in parallel provides low impedance across a wide
+frequency spectrum:</p>
+<ul>
+<li><strong>Bulk Capacitors (10 µF to 47 µF):</strong> Absorb
+low-frequency voltage transients.</li>
+<li><strong>Mid-Range Capacitors (0.1 µF to 1 µF):</strong> Filter
+standard digital switching transients.</li>
+<li><strong>Small RF Capacitors (10 pF to 100 pF):</strong> Provide low
+impedance at the operating frequency of the radio. These capacitors must
+be positioned as close as physically possible to the power pins of the
+RF IC, referencing a solid ground plane with minimal trace
+inductance.</li>
+</ul>
+<h3 id="pcb-layer-stackup-and-ground-plane-partitioning">PCB Layer
+Stackup and Ground Plane Partitioning</h3>
+<p>Improper return paths allow power rail noise to modulate the RF
+ground reference. Effective isolation techniques include:</p>
+<ul>
+<li><strong>Solid Ground Planes:</strong> Providing an uninterrupted
+reference plane beneath both the power distribution and RF sections
+minimizes loop area and ground bounce.</li>
+<li><strong>Moats and Keep-Out Zones:</strong> Creating isolation cuts
+in the power plane ensures noisy digital and switching power
+distribution paths do not cross underneath the RF transceiver or antenna
+feedlines.</li>
+<li><strong>Star Grounding:</strong> Routing separate power and ground
+paths back to a single source point prevents common-impedance coupling
+between digital power stages and the RF chain.</li>
+</ul>
+<h3 id="strategic-physical-separation-and-routing">Strategic Physical
+Separation and Routing</h3>
+<p>Physical placement dictates the amount of capacitive and inductive
+cross-coupling:</p>
+<ul>
+<li><strong>Spatial Distance:</strong> Locating the main DC-DC inductors
+and switching nodes as far as possible from the RF front-end modules and
+antenna.</li>
+<li><strong>Shielded Traces:</strong> Using coplanar waveguides with
+ground vias along the RF paths and placing power traces on internal
+layers between solid ground planes (stripline configuration).</li>
+</ul>
+<h3 id="metallic-shielding-cans-faraday-cages">Metallic Shielding Cans
+(Faraday Cages)</h3>
+<p>Near-field magnetic and electric fields generated by switching power
+inductors can radiate directly into RF components over the air.
+Surface-mount metal shielding cans soldered over the RF module, or over
+the switching power supply itself, block radiated emissions and prevent
+direct electromagnetic coupling between the power converter and the
+radio.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

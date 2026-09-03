@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertical vs Horizontal SBC Mounting Thermal Trade-Offs - sbc</title>
+    <meta name="description" content="Mounting orientation significantly influences the thermal dynamics of a single board computer (SBC). The choice between a vertical and horizontal orientation alters natural convection, heat dissipation efficiency across the printed circuit board (PCB), a">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/vertical-vs-horizontal-sbc-mounting-thermal-trade-offs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Vertical vs Horizontal SBC Mounting Thermal Trade-Offs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/vertical-vs-horizontal-sbc-mounting-thermal-trade-offs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Mounting orientation significantly influences the thermal dynamics of a single board computer (SBC). The choice between a vertical and horizontal orientation alters natural convection, heat dissipation efficiency across the printed circuit board (PCB), a" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="vertical-vs-horizontal-sbc-mounting-thermal-trade-offs">Vertical
+vs Horizontal SBC Mounting Thermal Trade-Offs</h1>
+<p>Mounting orientation significantly influences the thermal dynamics of
+a single board computer (SBC). The choice between a vertical and
+horizontal orientation alters natural convection, heat dissipation
+efficiency across the printed circuit board (PCB), and localized
+component temperatures. Understanding these thermal trade-offs is
+essential for designing compact enclosures, cluster racks, and passively
+cooled embedded systems.</p>
+<h3 id="natural-convection-and-the-chimney-effect">Natural Convection
+and the "Chimney Effect"</h3>
+<p>Passive cooling relies heavily on natural convection, where heated
+air expands, decreases in density, and rises away from hot
+components.</p>
+<ul>
+<li><strong>Vertical Orientation:</strong> When an SBC is mounted
+vertically, air enters from the bottom, warms up as it passes over the
+SoC and surrounding chips, and exits smoothly from the top. This
+vertical flow path creates a chimney effect (buoyancy-driven airflow)
+that continuously draws in cooler air from below, providing superior
+passive cooling.</li>
+<li><strong>Horizontal Orientation:</strong> When mounted flat, rising
+hot air creates a stagnant thermal boundary layer directly above the hot
+components. Without an active fan to push this air laterally, heat tends
+to pool over the SoC and power management ICs (PMICs), reducing the rate
+of heat transfer.</li>
+</ul>
+<h3 id="underside-heat-dissipation-and-pcb-thermal-mass">Underside Heat
+Dissipation and PCB Thermal Mass</h3>
+<p>Modern SBCs transfer a large percentage of component heat directly
+into the internal copper planes of the PCB, which functions as a
+secondary radiator.</p>
+<ul>
+<li><strong>Vertical Trade-Off:</strong> Both the top and bottom
+surfaces of the board are exposed to open vertical airflow. This allows
+the underside of the PCB—where significant heat pools beneath the
+processor—to cool rapidly without trapping heat underneath the
+board.</li>
+<li><strong>Horizontal Trade-Off:</strong> When an SBC sits
+horizontally, especially close to a desk or the bottom of an enclosure,
+the air pocket underneath the PCB becomes trapped. This thermal trap
+leads to elevated baseline temperatures across the entire board.</li>
+</ul>
+<h3 id="vertical-stacking-the-pre-heating-penalty">Vertical Stacking:
+The Pre-Heating Penalty</h3>
+<p>While vertical mounting improves overall convection, it introduces a
+specific trade-off regarding component placement:</p>
+<ul>
+<li><strong>Lower vs. Upper Components:</strong> Components located near
+the bottom of a vertically oriented board receive fresh, ambient air.
+However, components positioned near the top receive air that has already
+absorbed heat from the bottom components. If heat-sensitive components
+(such as memory chips or Wi-Fi modules) are situated directly above a
+hot SoC, they will run hotter than they would on a horizontal
+layout.</li>
+</ul>
+<h3 id="active-vs-passive-cooling-requirements">Active vs. Passive
+Cooling Requirements</h3>
+<p>The necessity of orientation depends heavily on whether active
+cooling is employed:</p>
+<ul>
+<li><strong>Passively Cooled Systems:</strong> Vertical orientation
+yields a measurable temperature drop—often between 3°C and 8°C cooler
+under sustained load compared to horizontal mounting with passive
+heatsinks alone.</li>
+<li><strong>Actively Cooled Systems:</strong> When forced air from a fan
+is introduced, the mechanical airflow overpowers natural convection. In
+actively cooled configurations, the orientation trade-off becomes
+negligible, and horizontal mounting may be preferred for structural
+stability or enclosure form factor.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

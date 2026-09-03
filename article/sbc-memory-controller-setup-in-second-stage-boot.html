@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBC Memory Controller Setup in Second-Stage Boot - sbc</title>
+    <meta name="description" content="During the boot sequence of a Single Board Computer (SBC), the initial Boot ROM lacks the resources to run complex operating systems directly from internal SRAM. The second-stage bootloader (such as U-Boot SPL or ARM Trusted Firmware BL2) is tasked with">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/sbc-memory-controller-setup-in-second-stage-boot">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SBC Memory Controller Setup in Second-Stage Boot - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/sbc-memory-controller-setup-in-second-stage-boot" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="During the boot sequence of a Single Board Computer (SBC), the initial Boot ROM lacks the resources to run complex operating systems directly from internal SRAM. The second-stage bootloader (such as U-Boot SPL or ARM Trusted Firmware BL2) is tasked with" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="sbc-memory-controller-setup-in-second-stage-boot">SBC Memory
+Controller Setup in Second-Stage Boot</h1>
+<p>During the boot sequence of a Single Board Computer (SBC), the
+initial Boot ROM lacks the resources to run complex operating systems
+directly from internal SRAM. The second-stage bootloader (such as U-Boot
+SPL or ARM Trusted Firmware BL2) is tasked with bringing up external
+volatile memory (DRAM). This article details the essential steps
+required to configure power domains, establish clock trees, calibrate
+PHY interfaces, program timing parameters, and verify the memory
+subsystem to ensure stable operation before loading the primary
+operating system.</p>
+<h3 id="1-power-and-clock-initialization">1. Power and Clock
+Initialization</h3>
+<p>Before interacting with the memory controller, stable power and clock
+rails must be established:</p>
+<ul>
+<li><strong>Power Management IC (PMIC) Setup:</strong> Configure the
+PMIC via I2C or SPI to provide the required voltages for the DRAM core
+(VDD/VDDQ), memory controller, and termination circuits (VTT).</li>
+<li><strong>Phase-Locked Loop (PLL) Configuration:</strong> Lock the
+memory PLL to achieve the target operational frequency (e.g., DDR4-2400
+or LPDDR4-3200).</li>
+<li><strong>Clock Routing and De-assertion of Reset:</strong> Enable
+clock gates for the DDR controller (DDRC) and physical layer (DDR PHY),
+then release their respective reset lines.</li>
+</ul>
+<h3 id="2-pin-multiplexing-and-io-configuration">2. Pin Multiplexing and
+I/O Configuration</h3>
+<p>The physical interface between the System-on-Chip (SoC) and the DRAM
+chips must be conditioned for high-speed signal integrity:</p>
+<ul>
+<li><strong>Pad Multiplexing (Pinmux):</strong> Route DDR address,
+command, control, and data (DQ/DQS) lines to the physical I/O pads.</li>
+<li><strong>Electrical Property Tuning:</strong> Configure drive
+strengths, slew rates, and On-Die Termination (ODT) values according to
+PCB impedance profiles.</li>
+</ul>
+<h3 id="3-controller-and-phy-register-configuration">3. Controller and
+PHY Register Configuration</h3>
+<p>The DDR controller and PHY must be loaded with configuration
+parameters matching the specific memory topology:</p>
+<ul>
+<li><strong>Memory Geometry Definition:</strong> Set the number of
+ranks, banks, row/column address widths, and overall bus width (e.g.,
+16-bit, 32-bit).</li>
+<li><strong>JEDEC Timing Parameters:</strong> Program core timing
+constraints into the controller, including CAS Latency (<span
+class="math inline">\(t_{CL}\)</span>), RAS-to-CAS Delay (<span
+class="math inline">\(t_{RCD}\)</span>), Row Precharge Time (<span
+class="math inline">\(t_{RP}\)</span>), and Refresh Cycle Time (<span
+class="math inline">\(t_{RFC}\)</span>).</li>
+<li><strong>Burst and Refresh Settings:</strong> Configure burst length
+(typically BL8 or BL16) and auto-refresh intervals based on the ambient
+temperature and device specifications.</li>
+</ul>
+<h3 id="4-jedec-power-up-and-initialization-sequence">4. JEDEC Power-Up
+and Initialization Sequence</h3>
+<p>The memory controller executes the standardized JEDEC power-up
+protocol to bring the external DRAM chips out of a reset state:</p>
+<ol type="1">
+<li>Maintain CKE (Clock Enable) low while applying power and clock
+signals.</li>
+<li>Assert and hold the DRAM <code>RESET#</code> pin for the duration
+specified by JEDEC standards (typically 200 microseconds).</li>
+<li>Drive CKE high and issue a <code>NOP</code> (No Operation) or
+<code>DESELECT</code> command.</li>
+<li>Execute the ZQ Calibration command to calibrate output drivers.</li>
+<li>Program DRAM Mode Registers (MR0 through MRx) to configure
+read/write latencies, ODT behavior, and low-power modes.</li>
+</ol>
+<h3 id="5-phy-training-and-calibration">5. PHY Training and
+Calibration</h3>
+<p>High-frequency DDR interfaces require active training to compensate
+for board-level propagation delays and skew:</p>
+<ul>
+<li><strong>ZQL Calibration:</strong> Calibrate the PHY's internal
+impedance matching circuits against reference resistors.</li>
+<li><strong>Write Leveling:</strong> Adjust the timing of the write
+clock relative to the DQS strobe to compensate for fly-by routing
+skew.</li>
+<li><strong>Read DQS Gating / Alignment:</strong> Center the read strobe
+(DQS) within the read data (DQ) valid window.</li>
+<li><strong>Read/Write VREF Training:</strong> Sweep voltage reference
+levels to find the optimal eye margin for both reads and writes.</li>
+</ul>
+<h3 id="6-validation-and-memory-mapping">6. Validation and Memory
+Mapping</h3>
+<p>Once training completes successfully, the subsystem is validated
+before execution moves forward:</p>
+<ul>
+<li><strong>Built-In Self-Test (BIST):</strong> Run hardware-based
+pattern generation to verify bus integrity without CPU overhead.</li>
+<li><strong>Software Memory Test:</strong> Perform rapid
+write/read/verify operations on edge addresses (lowest and highest
+bounds) to detect addressing issues or cold solder joints.</li>
+<li><strong>Address Space Handoff:</strong> Enable address translation
+in the system interconnect (e.g., AXI/NoC) to map the DRAM to the global
+system address space, allowing the second-stage bootloader to load the
+next boot image (such as U-Boot proper, UEFI, or the Linux kernel)
+directly into RAM.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

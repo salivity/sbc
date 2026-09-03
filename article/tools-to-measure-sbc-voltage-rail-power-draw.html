@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools to Measure SBC Voltage Rail Power Draw - sbc</title>
+    <meta name="description" content="Measuring real-time power consumption on individual voltage rails of a Single Board Computer (SBC) is essential for power profiling, thermal management, and optimizing energy efficiency. This article details the primary hardware tools, dynamic probes, an">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/tools-to-measure-sbc-voltage-rail-power-draw">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tools to Measure SBC Voltage Rail Power Draw - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/tools-to-measure-sbc-voltage-rail-power-draw" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Measuring real-time power consumption on individual voltage rails of a Single Board Computer (SBC) is essential for power profiling, thermal management, and optimizing energy efficiency. This article details the primary hardware tools, dynamic probes, an" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="tools-to-measure-sbc-voltage-rail-power-draw">Tools to Measure
+SBC Voltage Rail Power Draw</h1>
+<p>Measuring real-time power consumption on individual voltage rails of
+a Single Board Computer (SBC) is essential for power profiling, thermal
+management, and optimizing energy efficiency. This article details the
+primary hardware tools, dynamic probes, and specialized monitoring
+platforms engineers use to tap into isolated rails—such as CPU core,
+GPU, memory, and peripheral lines—and capture high-resolution voltage
+and current data.</p>
+<h3 id="1-dedicated-hardware-power-profilers">1. Dedicated Hardware
+Power Profilers</h3>
+<p>Specialized power measurement instruments provide high dynamic range
+and simultaneous voltage/current tracking without requiring complex
+bench setups.</p>
+<ul>
+<li><strong>Joulescope (e.g., JS110 / JS220):</strong> High-speed
+precision DC energy analyzers capable of switching current ranges
+seamlessly without dropping voltage (burden voltage). They measure down
+to microamps and up to several amps with sample rates up to millions of
+samples per second, making them ideal for capturing fast CPU power state
+transitions on low-voltage rails.</li>
+<li><strong>Nordic Power Profiler Kit II (PPK2):</strong> An accessible
+tool that operates either as a power supply or in ammeter mode to
+measure current draw up to 1 A across target lines with high sampling
+rates.</li>
+<li><strong>Monsoon High Voltage Power Monitor:</strong> Widely used in
+mobile and embedded device testing to supply power and measure
+continuous real-time current, power, and voltage across designated
+system rails.</li>
+</ul>
+<h3 id="2-digital-oscilloscopes-with-active-current-probes">2. Digital
+Oscilloscopes with Active Current Probes</h3>
+<p>When analyzing high-frequency transient spikes, sleep-wake switching,
+or sudden processing bursts on core voltage lines, high-bandwidth
+oscilloscopes are standard.</p>
+<ul>
+<li><strong>Hall-Effect / Fluxgate Current Probes:</strong> Clamps or
+active inline probes (e.g., Keysight, Tektronix) measure magnetic fields
+generated by current flowing through an exposed trace or wire bypass
+without introducing significant resistance.</li>
+<li><strong>High-Bandwidth Differential Voltage Probes:</strong> Placed
+directly across an onboard precision shunt resistor (sensing high-side
+or low-side current) to measure voltage drop (<span
+class="math inline">\(V = I \times R\)</span>), converting it to
+real-time current on the scope screen.</li>
+</ul>
+<h3 id="3-integrated-power-sensing-ics-i2cspi">3. Integrated
+Power-Sensing ICs (I2C/SPI)</h3>
+<p>For multi-rail measurement without bulky external test equipment,
+integrated monitoring ICs can be attached to custom breakout boards or
+wired into the SBC's test points.</p>
+<ul>
+<li><strong>Texas Instruments INA Series (INA219, INA226,
+INA3221):</strong> The INA3221, for example, is a triple-channel current
+and bus voltage monitor. It reads bus voltage and high-side shunt drops
+over <span class="math inline">\(I^2C\)</span>, allowing simultaneous
+telemetry of three independent voltage rails (e.g., 5V system, 3.3V I/O,
+1.8V SoC/RAM) using an external microcontroller or secondary SBC.</li>
+<li><strong>Maxim Integrated / Analog Devices (e.g., MAX34407):</strong>
+A specialized multi-channel power accumulator that monitors multiple
+rails simultaneously and reports current, voltage, and integrated energy
+consumption over an SPI bus.</li>
+</ul>
+<h3 id="4-data-acquisition-systems-daq-with-external-shunt-resistors">4.
+Data Acquisition Systems (DAQ) with External Shunt Resistors</h3>
+<p>For synchronized testing across dozens of voltage domains
+simultaneously:</p>
+<ul>
+<li><strong>Multichannel DAQ Units:</strong> High-density DAQ systems
+(such as National Instruments PXI/cDAQ platforms) log multi-channel
+differential voltages from low-value precision current shunt resistors
+(typically <span class="math inline">\(10\text{ m}\Omega\)</span> to
+<span class="math inline">\(100\text{ m}\Omega\)</span>, 0.1% tolerance)
+inserted in series with each power rail.</li>
+<li><strong>Isolation Amplifiers:</strong> Used in conjunction with DAQs
+when measuring high-side rails to protect inputs and prevent ground
+loops between the SBC and test equipment.</li>
+</ul>
+<h3 id="implementation-methods-for-rail-isolation">Implementation
+Methods for Rail Isolation</h3>
+<p>To apply these measurement tools to an SBC, specific physical access
+methods are used:</p>
+<ul>
+<li><strong>Trace Slicing and Shunt Insertion:</strong> Cutting the PCB
+trace immediately after the Power Management IC (PMIC) or regulator and
+bridging the gap with an inline sense resistor or test leads.</li>
+<li><strong>Inductor Tap / Removal:</strong> Removing the output
+inductor of a buck converter on a specific rail and routing current
+through an external meter or current loop before returning to the
+circuit.</li>
+<li><strong>Interposer Boards:</strong> Custom PCBs inserted between a
+modular System-on-Module (SoM) and carrier board to intercept every pin
+and measure per-rail draw without damaging the SBC.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

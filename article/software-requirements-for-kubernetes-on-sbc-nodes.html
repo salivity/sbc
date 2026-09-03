@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Requirements for Kubernetes on SBC Nodes - sbc</title>
+    <meta name="description" content="Running a Kubernetes cluster across a fleet of Single Board Computers (SBCs)—such as Raspberry Pi, Orange Pi, or Rockchip-based boards—requires a resource-conscious software stack optimized for ARM architectures. Because SBCs typically have limited C">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/software-requirements-for-kubernetes-on-sbc-nodes">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Software Requirements for Kubernetes on SBC Nodes - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/software-requirements-for-kubernetes-on-sbc-nodes" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running a Kubernetes cluster across a fleet of Single Board Computers (SBCs)—such as Raspberry Pi, Orange Pi, or Rockchip-based boards—requires a resource-conscious software stack optimized for ARM architectures. Because SBCs typically have limited C" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="software-requirements-for-kubernetes-on-sbc-nodes">Software
+Requirements for Kubernetes on SBC Nodes</h1>
+<p>Running a Kubernetes cluster across a fleet of Single Board Computers
+(SBCs)—such as Raspberry Pi, Orange Pi, or Rockchip-based
+boards—requires a resource-conscious software stack optimized for ARM
+architectures. Because SBCs typically have limited CPU, memory, and I/O
+throughput compared to traditional enterprise servers, choosing
+lightweight, compatible software components is critical. This guide
+outlines the essential operating systems, container runtimes, Kubernetes
+distributions, networking plugins, and kernel prerequisites necessary to
+deploy and maintain a stable SBC Kubernetes cluster.</p>
+<h2 id="1-64-bit-operating-system-os">1. 64-Bit Operating System
+(OS)</h2>
+<p>A 64-bit Linux distribution (ARM64/aarch64) is strongly recommended
+for running modern Kubernetes clusters, as many container images and
+Kubernetes binaries have deprecated or limited 32-bit (ARMv7/armhf)
+support.</p>
+<ul>
+<li><strong>Ubuntu Server (64-bit):</strong> Widely supported, with
+official builds available for most popular SBCs and extensive
+documentation.</li>
+<li><strong>Debian / Raspberry Pi OS (64-bit Lite):</strong> Minimal
+resource footprint, ideal for low-memory nodes.</li>
+<li><strong>Armbian:</strong> Optimized for diverse, non-Raspberry Pi
+ARM boards (e.g., Allwinner, Rockchip).</li>
+<li><strong>Alpine Linux:</strong> Ultra-lightweight distribution for
+environments where RAM conservation is the top priority.</li>
+</ul>
+<h2 id="2-kernel-and-system-configuration">2. Kernel and System
+Configuration</h2>
+<p>Before installing Kubernetes, the underlying operating system kernel
+requires specific parameters and modules to be enabled:</p>
+<ul>
+<li><strong>Control Groups (cgroups):</strong> Memory and CPU cgroups
+must be enabled to allow Kubernetes to limit and isolate container
+resources. On Debian/Ubuntu systems, this is typically enabled via boot
+flags:
+<pre class="text"><code>cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1</code></pre></li>
+<li><strong>Swap Management:</strong> Memory swap must be disabled
+across all nodes (<code>swapoff -a</code>), as Kubernetes' scheduler
+assumes memory allocation guarantees that swap can disrupt.</li>
+<li><strong>Kernel Modules:</strong> Essential networking modules must
+load on boot, specifically <code>overlay</code> and
+<code>br_netfilter</code>.</li>
+<li><strong>Sysctl Configurations:</strong> Network packet forwarding
+must be explicitly permitted:
+<pre class="text"><code>net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1</code></pre></li>
+</ul>
+<h2 id="3-lightweight-kubernetes-distributions">3. Lightweight
+Kubernetes Distributions</h2>
+<p>Standard Kubernetes (<code>kubeadm</code>) can be heavy on resources,
+often consuming 1 GB to 2 GB of RAM on control plane nodes.
+Purpose-built lightweight distributions are better suited for SBC
+fleets:</p>
+<ul>
+<li><strong>K3s:</strong> A CNCF-certified, highly lightweight
+distribution packaged as a single binary. It reduces memory usage by
+replacing <code>etcd</code> with SQLite (or external DBs) for
+single-node control planes, stripping out legacy cloud providers, and
+bundling required components.</li>
+<li><strong>k0s:</strong> A zero-friction, single-binary Kubernetes
+distribution with minimal system dependencies and flexible control-plane
+separation.</li>
+<li><strong>MicroK8s:</strong> An enterprise-grade, low-overhead
+Kubernetes distribution managed via Snap packages, optimized for edge
+computing and IoT hardware.</li>
+</ul>
+<h2 id="4-container-runtime-interface-cri">4. Container Runtime
+Interface (CRI)</h2>
+<p>Kubernetes requires an Open Container Initiative (OCI)-compliant
+runtime to manage container lifecycles:</p>
+<ul>
+<li><strong>containerd:</strong> The industry-standard CRI, offering
+high performance and low overhead. Often pre-bundled with K3s and
+MicroK8s.</li>
+<li><strong>CRI-O:</strong> A lightweight alternative designed
+exclusively to implement the Kubernetes CRI specification without
+unnecessary tooling.</li>
+</ul>
+<h2 id="5-container-network-interface-cni">5. Container Network
+Interface (CNI)</h2>
+<p>Networking on SBC clusters must balance feature sets with CPU and
+memory consumption:</p>
+<ul>
+<li><strong>Flannel:</strong> The default choice for lightweight setups.
+Uses VXLAN or host-gw backends, consuming minimal CPU cycles.</li>
+<li><strong>Calico:</strong> Provides advanced Network Policy
+enforcement and BGP routing, though it demands slightly more memory per
+node.</li>
+<li><strong>Cilium:</strong> Suitable for higher-end SBCs (e.g., RK3588
+with 8GB+ RAM) that support modern eBPF kernels, providing fast
+datapaths and security monitoring.</li>
+</ul>
+<h2 id="6-lightweight-storage-csi">6. Lightweight Storage (CSI)</h2>
+<p>Because SBCs often rely on SD cards or USB storage, persistent volume
+provisioners must minimize write amplification to prevent media
+degradation:</p>
+<ul>
+<li><strong>Local Path Provisioner:</strong> Utilizes local directories
+on each node for <code>hostPath</code>-backed persistent volumes with
+minimal overhead.</li>
+<li><strong>Longhorn:</strong> Provides distributed block storage,
+though it requires robust network bandwidth (Gigabit Ethernet) and
+adequate RAM across nodes.</li>
+<li><strong>NFS Subdir External Provisioner:</strong> Offloads storage
+I/O from the SBC fleet to a centralized Network-Attached Storage (NAS)
+device.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

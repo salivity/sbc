@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profiling C++ Memory Leaks on ARM SBCs - sbc</title>
+    <meta name="description" content="Memory leaks in C++ applications running on ARM single-board computers (SBCs) can quickly exhaust limited system RAM, leading to performance degradation or system crashes. This guide outlines the end-to-end process of detecting, isolating, and fixing mem">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/profiling-c-memory-leaks-on-arm-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Profiling C++ Memory Leaks on ARM SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/profiling-c-memory-leaks-on-arm-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Memory leaks in C++ applications running on ARM single-board computers (SBCs) can quickly exhaust limited system RAM, leading to performance degradation or system crashes. This guide outlines the end-to-end process of detecting, isolating, and fixing mem" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="profiling-c-memory-leaks-on-arm-sbcs">Profiling C++ Memory Leaks
+on ARM SBCs</h1>
+<p>Memory leaks in C++ applications running on ARM single-board
+computers (SBCs) can quickly exhaust limited system RAM, leading to
+performance degradation or system crashes. This guide outlines the
+end-to-end process of detecting, isolating, and fixing memory leaks on
+resource-constrained ARM devices using industry-standard tools like
+AddressSanitizer (ASan), Valgrind, and Heaptrack.</p>
+<h3 id="step-1-compile-the-application-with-debug-symbols">Step 1:
+Compile the Application with Debug Symbols</h3>
+<p>To trace memory allocations back to specific lines of source code,
+compile your C++ application with debug symbols enabled and omit frame
+pointer optimizations.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">g++</span> <span class="at">-g</span> <span class="at">-O1</span> <span class="at">-fno-omit-frame-pointer</span> main.cpp <span class="at">-o</span> my_arm_app</span></code></pre></div>
+<ul>
+<li><code>-g</code>: Generates debug information (DWARF format).</li>
+<li><code>-fno-omit-frame-pointer</code>: Keeps frame pointers intact
+for accurate stack unwinding on ARM architectures.</li>
+<li><code>-O1</code>: Provides basic optimizations while maintaining
+readable stack traces (avoid <code>-O3</code> during profiling).</li>
+</ul>
+<hr />
+<h3 id="step-2-choose-the-appropriate-profiling-tool">Step 2: Choose the
+Appropriate Profiling Tool</h3>
+<p>ARM SBCs have constrained CPU and memory resources. Selecting the
+right profiling method is essential:</p>
+<ul>
+<li><strong>AddressSanitizer (ASan):</strong> Best for real-time
+profiling on ARM. Low CPU overhead (~2x slowdown) and moderate memory
+usage. Requires recompilation.</li>
+<li><strong>Valgrind (Memcheck):</strong> Best for quick diagnostics
+without recompiling. High CPU overhead (10x–30x slowdown); may run
+slowly on low-power ARM cores.</li>
+<li><strong>Heaptrack:</strong> Best for visualizing allocations over
+time and offloading analysis to a desktop PC.</li>
+</ul>
+<hr />
+<h3
+id="step-3-method-a--profiling-with-addresssanitizer-recommended">Step
+3: Method A – Profiling with AddressSanitizer (Recommended)</h3>
+<p>AddressSanitizer integrates directly into GCC and Clang, making it
+the most efficient choice for ARM platforms.</p>
+<ol type="1">
+<li><p><strong>Recompile with ASan flags:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">g++</span> <span class="at">-g</span> <span class="at">-fsanitize</span><span class="op">=</span>address <span class="at">-fno-omit-frame-pointer</span> main.cpp <span class="at">-o</span> my_arm_app_asan</span></code></pre></div></li>
+<li><p><strong>Configure ASan environment variables:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">ASAN_OPTIONS</span><span class="op">=</span>detect_leaks=1:symbolize=1:abort_on_error=0</span></code></pre></div></li>
+<li><p><strong>Run your application:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./my_arm_app_asan</span></span></code></pre></div></li>
+<li><p><strong>Review the output:</strong> Upon application exit, ASan
+prints detailed stack traces showing the file name and line number where
+leaked memory was allocated.</p></li>
+</ol>
+<hr />
+<h3 id="step-4-method-b--profiling-with-valgrind-memcheck">Step 4:
+Method B – Profiling with Valgrind Memcheck</h3>
+<p>If recompiling the binary is not an option, use Valgrind directly on
+the target device.</p>
+<ol type="1">
+<li><p><strong>Install Valgrind:</strong></p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt-get install <span class="at">-y</span> valgrind</span></code></pre></div></li>
+<li><p><strong>Execute the binary with Memcheck:</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">valgrind</span> <span class="at">--tool</span><span class="op">=</span>memcheck <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">--leak-check</span><span class="op">=</span>full <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">--show-leak-kinds</span><span class="op">=</span>all <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">--track-origins</span><span class="op">=</span>yes <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">--log-file</span><span class="op">=</span>leak_report.txt <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         ./my_arm_app</span></code></pre></div></li>
+<li><p><strong>Inspect the generated log:</strong> Open
+<code>leak_report.txt</code> and search for "definitely lost" or
+"indirectly lost" blocks to pinpoint missing <code>delete</code> or
+<code>free()</code> calls.</p></li>
+</ol>
+<hr />
+<h3 id="step-5-method-c--lightweight-profiling-with-heaptrack">Step 5:
+Method C – Lightweight Profiling with Heaptrack</h3>
+<p>Heaptrack records memory events with minimal overhead, allowing you
+to capture the trace on the ARM board and analyze it visually on a
+workstation.</p>
+<ol type="1">
+<li><p><strong>Install Heaptrack on the ARM board:</strong></p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> heaptrack</span></code></pre></div></li>
+<li><p><strong>Capture the trace:</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">heaptrack</span> ./my_arm_app</span></code></pre></div>
+<p>This generates a <code>.zst</code> log file (e.g.,
+<code>heaptrack.my_arm_app.1234.zst</code>).</p></li>
+<li><p><strong>Analyze the report:</strong> Transfer the file to your
+desktop computer and run <code>heaptrack_gui</code> to view allocation
+graphs, peak memory consumers, and memory leaks.</p></li>
+</ol>
+<hr />
+<h3 id="step-6-interpret-results-and-apply-fixes">Step 6: Interpret
+Results and Apply Fixes</h3>
+<p>Once the profiling tool identifies the offending code paths:</p>
+<ol type="1">
+<li><strong>Locate the allocation point:</strong> Match the reported
+instruction pointer to the file and line number in your source
+tree.</li>
+<li><strong>Implement RAII principles:</strong> Replace manual
+allocations (<code>new</code>/<code>malloc</code>) with smart pointers
+(<code>std::unique_ptr</code> or <code>std::shared_ptr</code>).</li>
+<li><strong>Handle container lifecycles:</strong> Ensure dynamic data
+structures like <code>std::vector</code> or <code>std::map</code> do not
+grow unbounded during long execution cycles.</li>
+<li><strong>Re-profile:</strong> Run the application through the
+profiling tool again to confirm that all leaks have been resolved.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

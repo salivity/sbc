@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEEE 1588 PTP on Industrial Single Board Computers - sbc</title>
+    <meta name="description" content="The IEEE 1588 Precision Time Protocol (PTP) enables industrial single board computers (SBCs) to achieve sub-microsecond clock synchronization over standard Ethernet networks. This article explains the technical operation of IEEE 1588 PTP, detailing how h">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/ieee-1588-ptp-on-industrial-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="IEEE 1588 PTP on Industrial Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/ieee-1588-ptp-on-industrial-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The IEEE 1588 Precision Time Protocol (PTP) enables industrial single board computers (SBCs) to achieve sub-microsecond clock synchronization over standard Ethernet networks. This article explains the technical operation of IEEE 1588 PTP, detailing how h" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="ieee-1588-ptp-on-industrial-single-board-computers">IEEE 1588
+PTP on Industrial Single Board Computers</h1>
+<p>The IEEE 1588 Precision Time Protocol (PTP) enables industrial single
+board computers (SBCs) to achieve sub-microsecond clock synchronization
+over standard Ethernet networks. This article explains the technical
+operation of IEEE 1588 PTP, detailing how hardware timestamping,
+master-slave message exchanges, and network boundary devices work
+together on industrial SBCs to eliminate timing jitter in distributed
+automation and data acquisition systems.</p>
+<h3 id="core-architecture-and-master-slave-hierarchy">Core Architecture
+and Master-Slave Hierarchy</h3>
+<p>IEEE 1588 PTP organizes networked devices into a hierarchical
+master-slave architecture. The network automatically selects the most
+accurate clock source using the Best Master Clock Algorithm (BMCA). The
+device with the highest-quality clock—often synchronized to an external
+GNSS/GPS source—becomes the Grandmaster Clock.</p>
+<p>In an industrial SBC deployment:</p>
+<ul>
+<li><strong>Grandmaster Clock:</strong> Broadcasts precise timing
+references to the network.</li>
+<li><strong>Slave Clocks:</strong> The industrial SBCs adjust their
+internal Real-Time Clocks (RTCs) or hardware counters to match the
+Grandmaster.</li>
+<li><strong>Boundary Clocks and Transparent Clocks:</strong> Network
+switches equipped with PTP support measure and compensate for internal
+packet processing delays (residence time), preventing switch-induced
+jitter.</li>
+</ul>
+<h3 id="the-message-exchange-process">The Message Exchange Process</h3>
+<p>Synchronization occurs through a continuous exchange of event and
+general messages across the Ethernet layer:</p>
+<ol type="1">
+<li><strong>Sync and Follow_Up:</strong> The Master sends a
+<code>Sync</code> message to the Slave and records the exact departure
+time (<span class="math inline">\(t_1\)</span>). If the hardware cannot
+insert <span class="math inline">\(t_1\)</span> directly into the
+<code>Sync</code> packet, it sends a subsequent <code>Follow_Up</code>
+message containing <span class="math inline">\(t_1\)</span>. The Slave
+records the arrival time (<span
+class="math inline">\(t_2\)</span>).</li>
+<li><strong>Delay Request:</strong> The Slave sends a
+<code>Delay_Req</code> message back to the Master and logs its departure
+time (<span class="math inline">\(t_3\)</span>).</li>
+<li><strong>Delay Response:</strong> The Master receives the packet,
+logs the arrival time (<span class="math inline">\(t_4\)</span>), and
+sends a <code>Delay_Resp</code> message containing <span
+class="math inline">\(t_4\)</span> back to the Slave.</li>
+</ol>
+<p>With these four timestamps (<span class="math inline">\(t_1, t_2,
+t_3, t_4\)</span>), the slave SBC calculates two key metrics:</p>
+<ul>
+<li><strong>Mean Path Delay:</strong> <span
+class="math inline">\(\text{Delay} = \frac{(t_4 - t_3) + (t_2 -
+t_1)}{2}\)</span></li>
+<li><strong>Clock Offset:</strong> <span
+class="math inline">\(\text{Offset} = (t_2 - t_1) -
+\text{Delay}\)</span></li>
+</ul>
+<p>The SBC’s operating system adjusts its internal clock frequency and
+phase based on the calculated offset to align with the Grandmaster.</p>
+<h3 id="hardware-timestamping-on-industrial-sbcs">Hardware Timestamping
+on Industrial SBCs</h3>
+<p>Standard software-based time synchronization (such as standard NTP)
+relies on the operating system kernel, which introduces variable latency
+due to interrupt handling, CPU scheduling, and network stack buffering.
+This limits software timestamping accuracy to milliseconds or high
+microseconds.</p>
+<p>Industrial SBCs overcome this through <strong>hardware
+timestamping</strong>:</p>
+<ul>
+<li><strong>Ethernet PHY/MAC Integration:</strong> The network interface
+controller (NIC) or physical transceiver (PHY) captures timestamps at
+the exact moment the start-of-frame delimiter passes the physical
+layer.</li>
+<li><strong>PTP Hardware Clocks (PHC):</strong> Industrial
+system-on-chips (SoCs) include dedicated hardware timers (PHCs) directly
+accessible via Linux interfaces like <code>linuxptp</code>
+(<code>ptp4l</code> and <code>phc2sys</code>).</li>
+<li><strong>Real-Time OS (RTOS) Support:</strong> Industrial SBCs
+running Linux with the PREEMPT_RT patch, VxWorks, or QNX minimize
+internal OS processing overhead, ensuring deterministic handling of
+synchronization events.</li>
+</ul>
+<h3 id="industrial-applications">Industrial Applications</h3>
+<p>By implementing IEEE 1588 PTP, industrial SBCs coordinate
+time-critical actions across distributed systems without dedicated,
+hardwired timing cables. Common deployments include:</p>
+<ul>
+<li><strong>Distributed Motion Control:</strong> Synchronizing
+multi-axis robotics and servo drives across production lines.</li>
+<li><strong>Sensor Fusion:</strong> Aligning high-frequency LiDAR,
+radar, and camera telemetry in autonomous guided vehicles (AGVs).</li>
+<li><strong>Smart Grid Automation:</strong> Timestamps for Phasor
+Measurement Units (PMUs) in power distribution substations.</li>
+<li><strong>Test and Measurement:</strong> Ensuring deterministic event
+logging and fault analysis across distributed DAQ modules.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

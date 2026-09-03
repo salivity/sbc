@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDIO vs USB Wi-Fi Modules for Single Board Computers - sbc</title>
+    <meta name="description" content="When integrating wireless connectivity into a single board computer (SBC), designers primarily choose between SDIO (Secure Digital Input Output) and USB (Universal Serial Bus) interfaces. This article compares the operational differences between SDIO and">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/sdio-vs-usb-wi-fi-modules-for-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SDIO vs USB Wi-Fi Modules for Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/sdio-vs-usb-wi-fi-modules-for-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When integrating wireless connectivity into a single board computer (SBC), designers primarily choose between SDIO (Secure Digital Input Output) and USB (Universal Serial Bus) interfaces. This article compares the operational differences between SDIO and" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="sdio-vs-usb-wi-fi-modules-for-single-board-computers">SDIO vs
+USB Wi-Fi Modules for Single Board Computers</h1>
+<p>When integrating wireless connectivity into a single board computer
+(SBC), designers primarily choose between SDIO (Secure Digital Input
+Output) and USB (Universal Serial Bus) interfaces. This article compares
+the operational differences between SDIO and USB Wi-Fi modules, focusing
+on throughput, latency, CPU utilization, power management, physical
+implementation, and software driver integration to help determine the
+best approach for embedded designs.</p>
+<h3 id="bus-architecture-and-latency">Bus Architecture and Latency</h3>
+<p>SDIO is a native parallel-to-serial bus derived from the SD standard,
+operating directly on the processor’s memory controller. It provides
+deterministic, low-latency communication because data transfers are
+synchronous and host-clocked.</p>
+<p>USB operates as a host-driven, packetized serial bus. Communication
+requires packet framing, endpoint polling, and transaction scheduling.
+This introduces protocol overhead and higher transmission jitter,
+resulting in higher latency compared to SDIO under similar network
+conditions.</p>
+<h3 id="throughput-and-bandwidth">Throughput and Bandwidth</h3>
+<p>USB modules, particularly USB 3.0 and high-speed USB 2.0
+implementations, generally achieve higher maximum raw data throughput.
+They are better suited for high-bandwidth standard protocols such as
+Wi-Fi 5 (802.11ac) and Wi-Fi 6 (802.11ax).</p>
+<p>SDIO interfaces are typically constrained by the bus clock mode
+(e.g., SDIO 3.0 / SDR104 reaches theoretical maximum speeds around 104
+MB/s). While sufficient for Wi-Fi 4 (802.11n) and dual-band Wi-Fi 5
+streams, SDIO can become a throughput bottleneck for multi-gigabit Wi-Fi
+6/6E applications.</p>
+<h3 id="cpu-overhead-and-system-resources">CPU Overhead and System
+Resources</h3>
+<p>SDIO uses dedicated Direct Memory Access (DMA) channels linked
+directly to the processor's peripheral bus. Because data transfers
+bypass standard peripheral serialization stacks, SDIO creates minimal
+interrupt overhead and low CPU load.</p>
+<p>USB requires a full USB host controller stack (EHCI/xHCI). Managing
+USB packet encapsulation, continuous polling, and host transfers
+increases CPU usage and interrupt frequency, which can impact
+performance on resource-constrained single-core or low-power embedded
+processors.</p>
+<h3 id="power-consumption-and-power-management">Power Consumption and
+Power Management</h3>
+<p>SDIO was designed with mobile and embedded low-power systems in mind.
+It supports granular power states and fast wake-up times via dedicated
+out-of-band interrupt pins (such as <code>WL_HOST_WAKE</code>). This
+allows the host processor and Wi-Fi module to sleep independently and
+wake up instantly when network events occur.</p>
+<p>USB Wi-Fi modules consume higher baseline power due to continuous
+physical layer (PHY) activity and active bus state signaling. While USB
+Selective Suspend is supported in software, its entry and exit latencies
+are longer and less power-efficient than native SDIO power controls.</p>
+<h3 id="hardware-integration-and-pcb-layout">Hardware Integration and
+PCB Layout</h3>
+<p>SDIO requires a dedicated set of 4-bit data lines, a clock line, and
+command signals, along with multiple out-of-band GPIO lines for reset
+and wake control. It requires strict length-matching and trace impedance
+control directly on the SBC PCB, making it common in soldered-down
+(chip-on-board) or M.2 implementations.</p>
+<p>USB simplifies hardware layout by requiring only a single
+differential data pair (<span class="math inline">\(D+\)</span> and
+<span class="math inline">\(D-\)</span>) for USB 2.0. It also offers
+modular flexibility, allowing Wi-Fi integration via internal pin
+headers, standard external USB Type-A ports, or modular
+daughtercards.</p>
+<h3 id="driver-and-os-support">Driver and OS Support</h3>
+<p>USB Wi-Fi adapters benefit from widespread plug-and-play support
+across standard Linux kernels. Generic drivers (such as
+<code>ath9k_htc</code>, <code>rtw88</code>, or <code>mt76</code>) can
+automatically detect and configure devices connected to standard USB
+buses.</p>
+<p>SDIO Wi-Fi modules require explicit hardware configuration via the
+operating system's Device Tree (Device Tree Source / DTS in Linux). The
+host must define the specific SDIO slot properties, interrupt lines,
+clock limits, and power-enable GPIOs. While this setup is more rigid, it
+ensures consistent, deterministic hardware binding in commercial
+production environments.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

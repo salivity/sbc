@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Configure Low-Latency Audio on an SBC - sbc</title>
+    <meta name="description" content="Configuring a low-latency audio stack on a multimedia Single Board Computer (SBC) requires optimizing the operating system, tuning the Advanced Linux Sound Architecture (ALSA), and configuring the JACK Audio Connection Kit for real-time processing. This">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-configure-low-latency-audio-on-an-sbc">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Configure Low-Latency Audio on an SBC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-configure-low-latency-audio-on-an-sbc" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring a low-latency audio stack on a multimedia Single Board Computer (SBC) requires optimizing the operating system, tuning the Advanced Linux Sound Architecture (ALSA), and configuring the JACK Audio Connection Kit for real-time processing. This" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-configure-low-latency-audio-on-an-sbc">How to Configure
+Low-Latency Audio on an SBC</h1>
+<p>Configuring a low-latency audio stack on a multimedia Single Board
+Computer (SBC) requires optimizing the operating system, tuning the
+Advanced Linux Sound Architecture (ALSA), and configuring the JACK Audio
+Connection Kit for real-time processing. This guide outlines the
+essential steps to minimize audio buffer sizes, eliminate latency, and
+avoid audio dropouts (xruns) on resource-constrained hardware such as
+Raspberry Pi, BeagleBone, or Odroid boards.</p>
+<h2 id="1-system-and-kernel-optimization">1. System and Kernel
+Optimization</h2>
+<p>Achieving low-latency audio requires a kernel and OS environment
+tuned for real-time responsiveness.</p>
+<ul>
+<li><strong>Enable Real-Time Scheduling:</strong> Grant your audio user
+account real-time scheduling and memory locking privileges. Edit
+<code>/etc/security/limits.d/audio.conf</code> (or create it) and add:
+<pre class="text"><code>@audio - rtprio 95
+@audio - memlock unlimited
+@audio - nice -19</code></pre>
+Ensure your user belongs to the <code>audio</code> group:
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-a</span> <span class="at">-G</span> audio <span class="va">$USER</span></span></code></pre></div></li>
+<li><strong>Set CPU Governor to Performance:</strong> Dynamic CPU
+scaling introduces latency spikes. Force all CPU cores to run at maximum
+clock speed:
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;performance&quot;</span> <span class="kw">|</span> <span class="fu">sudo</span> tee /sys/devices/system/cpu/cpu<span class="pp">*</span>/cpufreq/scaling_governor</span></code></pre></div></li>
+<li><strong>Use a Real-Time (PREEMPT_RT) Kernel (Optional but
+Recommended):</strong> For latencies under 5ms, install a distribution
+kernel built with <code>CONFIG_PREEMPT_RT</code> enabled.</li>
+</ul>
+<h2 id="2-direct-alsa-tuning">2. Direct ALSA Tuning</h2>
+<p>ALSA handles direct communication with your audio hardware. To bypass
+software mixing layers like PulseAudio or PipeWire for dedicated
+low-latency pipelines:</p>
+<ol type="1">
+<li>Identify your hardware card and device numbers:
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aplay</span> <span class="at">-l</span></span></code></pre></div></li>
+<li>Route audio directly through the hardware device identifier (e.g.,
+<code>hw:0,0</code> or <code>hw:AudioDevice</code>) rather than software
+abstractions (<code>default</code> or <code>plug:default</code>). This
+bypasses the ALSA <code>dmix</code> plugin, reducing processing
+overhead.</li>
+</ol>
+<h2 id="3-configuring-the-jack-audio-connection-kit">3. Configuring the
+JACK Audio Connection Kit</h2>
+<p>JACK operates on top of ALSA to provide deterministic real-time audio
+routing between applications.</p>
+<h3 id="installation">Installation</h3>
+<p>Install JACK2 alongside command-line utilities:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install jackd2</span></code></pre></div>
+<p>When prompted during installation, select <strong>Yes</strong> to
+enable real-time priority.</p>
+<h3 id="launching-jack-with-low-latency-parameters">Launching JACK with
+Low-Latency Parameters</h3>
+<p>Run <code>jackd</code> headless or from a system service using the
+following parameters:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jackd</span> <span class="at">-R</span> <span class="at">-P</span> 90 <span class="at">-d</span> alsa <span class="at">-d</span> hw:CARD <span class="at">-r</span> 48000 <span class="at">-p</span> 64 <span class="at">-n</span> 2</span></code></pre></div>
+<h3 id="parameter-breakdown">Parameter Breakdown:</h3>
+<ul>
+<li><code>-R</code>: Enables real-time mode.</li>
+<li><code>-P 90</code>: Sets real-time priority (must match or be lower
+than limits in <code>audio.conf</code>).</li>
+<li><code>-d alsa</code>: Selects the ALSA driver backend.</li>
+<li><code>-d hw:CARD</code>: Points directly to the audio hardware card
+name or index.</li>
+<li><code>-r 48000</code>: Sets the sample rate to 48 kHz (standard for
+low-latency digital audio).</li>
+<li><code>-p 64</code>: Sets the buffer size (frames per period). Lower
+values reduce latency (e.g., 64 frames = ~1.33 ms at 48 kHz).</li>
+<li><code>-n 2</code>: Sets the number of periods in the buffer (2 is
+standard for internal/PCI/I2S devices; 3 is recommended for USB
+interfaces).</li>
+</ul>
+<h2 id="4-monitoring-and-verifying-latency">4. Monitoring and Verifying
+Latency</h2>
+<p>Total round-trip hardware buffer latency (<span
+class="math inline">\(L\)</span>) is calculated as: <span
+class="math display">\[L = \frac{p \times n}{r}\]</span></p>
+<p>For a setup with <span class="math inline">\(p = 64\)</span>, <span
+class="math inline">\(n = 2\)</span>, and <span class="math inline">\(r
+= 48000\)</span>, the algorithmic buffer latency is approximately 2.67
+ms.</p>
+<p>To verify system stability:</p>
+<ul>
+<li>Monitor the terminal output of <code>jackd</code> for
+<code>xrun</code> notices (buffer overruns/underruns).</li>
+<li>If xruns occur, gradually increase the period size
+(<code>-p 128</code> or <code>-p 256</code>) or increase periods to
+<code>-n 3</code> until the stream is stable.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

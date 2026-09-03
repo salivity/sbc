@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuring PDM Microphones on Audio SBCs - sbc</title>
+    <meta name="description" content="Pulse-density modulation (PDM) microphones are widely used in embedded audio projects for their high noise immunity, low cost, and small footprint. Configuring PDM microphones on an audio-focused single-board computer (SBC) requires interfacing the digit">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/configuring-pdm-microphones-on-audio-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configuring PDM Microphones on Audio SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/configuring-pdm-microphones-on-audio-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Pulse-density modulation (PDM) microphones are widely used in embedded audio projects for their high noise immunity, low cost, and small footprint. Configuring PDM microphones on an audio-focused single-board computer (SBC) requires interfacing the digit" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="configuring-pdm-microphones-on-audio-sbcs">Configuring PDM
+Microphones on Audio SBCs</h1>
+<p>Pulse-density modulation (PDM) microphones are widely used in
+embedded audio projects for their high noise immunity, low cost, and
+small footprint. Configuring PDM microphones on an audio-focused
+single-board computer (SBC) requires interfacing the digital microphone
+hardware with the board's digital audio interface, modifying the
+kernel's device tree, configuring decimation filters to convert 1-bit
+PDM streams to multi-bit PCM, and setting up the audio subsystem for
+capture.</p>
+<h3 id="1-hardware-pin-connections">1. Hardware Pin Connections</h3>
+<p>PDM microphones transmit data over a two-wire digital interface: a
+clock line (CLK) driven by the SBC and a data line (DAT) driven by the
+microphone.</p>
+<ul>
+<li><strong>Clock (CLK):</strong> Connect to the SBC's PDM/I2S clock
+output pin.</li>
+<li><strong>Data (DAT):</strong> Connect to the SBC's PDM data input
+pin.</li>
+<li><strong>Channel Select (L/R or SEL):</strong> PDM microphones share
+a single data line for stereo capture. Tie this pin to Ground
+(<code>GND</code>) to transmit on the falling edge (Left channel) or to
+Power (<code>VDD</code>) to transmit on the rising edge (Right
+channel).</li>
+<li><strong>Power (VDD) and Ground (GND):</strong> Provide a stable
+voltage source (typically 1.8V or 3.3V) with decoupling capacitors
+placed close to the microphone.</li>
+</ul>
+<h3 id="2-device-tree-configuration">2. Device Tree Configuration</h3>
+<p>Audio-focused SBCs rely on the Linux Device Tree to map peripherals
+to system drivers. To enable the PDM interface:</p>
+<ol type="1">
+<li><strong>Locate or Create a Device Tree Overlay:</strong> Define the
+pin multiplexing (pinmux) to assign the physical pins to the hardware
+PDM controller or digital microphone codec driver (such as
+<code>dmic-codec</code>).</li>
+<li><strong>Define the Sound Card Node:</strong> Bind the PDM controller
+to the audio platform driver (ALSA System on Chip / ASoC).</li>
+<li><strong>Specify Interface Properties:</strong> Define parameters
+such as supported sample rates, clock frequencies (typically between 1
+MHz and 3.28 MHz), and channel counts.</li>
+</ol>
+<p>A typical overlay snippet defines the generic <code>dmic-codec</code>
+node and links it via a simple-audio-card definition:</p>
+<pre class="dts"><code>dmic_codec: dmic_codec {
+    compatible = &quot;dmic-codec&quot;;
+    #sound-dai-cells = &lt;0&gt;;
+};
+
+sound {
+    compatible = &quot;simple-audio-card&quot;;
+    simple-audio-card,name = &quot;PDM-Mic-Array&quot;;
+    simple-audio-card,dai-link@0 {
+        format = &quot;pdm&quot;;
+        cpu {
+            sound-dai = &lt;&amp;pdm_controller&gt;;
+        };
+        codec {
+            sound-dai = &lt;&amp;dmic_codec&gt;;
+        };
+    };
+};</code></pre>
+<p>Compile and apply the overlay to the board's boot configuration file
+(such as <code>armbianEnv.txt</code> or <code>config.txt</code>,
+depending on the platform).</p>
+<h3 id="3-decimation-and-digital-signal-processing">3. Decimation and
+Digital Signal Processing</h3>
+<p>PDM produces a high-frequency, 1-bit oversampled stream that must be
+downsampled and filtered into standard Pulse-Code Modulation (PCM) audio
+(e.g., 16-bit or 24-bit at 48 kHz).</p>
+<ul>
+<li><strong>Hardware Decimation:</strong> If the SBC contains a
+dedicated PDM hardware module, the internal hardware filter handles
+decimation and filtering automatically with zero CPU overhead.</li>
+<li><strong>Software Decimation:</strong> If reading raw PDM data via a
+generic high-speed SPI or I2S port, developers must run a software
+decimation filter (such as a Cascaded Integrator-Comb / CIC filter) in
+userspace or via an ALSA plugin before processing the audio.</li>
+</ul>
+<h3 id="4-audio-subsystem-configuration-alsa">4. Audio Subsystem
+Configuration (ALSA)</h3>
+<p>Once the driver and device tree are loaded, verify that the Linux
+audio layer detects the hardware:</p>
+<ol type="1">
+<li><strong>List Capture Devices:</strong> Run <code>arecord -l</code>
+to confirm the PDM sound card appears in the list of recording
+devices.</li>
+<li><strong>Set Mixer Controls:</strong> Use <code>alsamixer</code> or
+<code>amixer</code> to unmute the capture channels and set the digital
+capture volume.</li>
+<li><strong>Configure Default Routing:</strong> If using a sound server
+like PipeWire or PulseAudio, set the PDM card as the default capture
+source in the configuration files or via tools like <code>pactl</code>
+or <code>wpctl</code>.</li>
+</ol>
+<h3 id="5-testing-and-validation">5. Testing and Validation</h3>
+<p>Verify proper functionality and signal integrity using ALSA
+utilities:</p>
+<ul>
+<li><strong>Record a Test Sample:</strong>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arecord</span> <span class="at">-D</span> hw:CARD_INDEX,DEV_INDEX <span class="at">-f</span> S16_LE <span class="at">-r</span> 48000 <span class="at">-c</span> 2 <span class="at">-d</span> 5 test.wav</span></code></pre></div></li>
+<li><strong>Inspect Audio Output:</strong> Play back the file using
+<code>aplay</code> or inspect the waveform with an audio analysis tool
+to ensure there is no channel cross-talk, clock jitter noise, or signal
+clipping.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

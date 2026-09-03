@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enable Hardware Video Acceleration on Raspberry Pi - sbc</title>
+    <meta name="description" content="Enabling hardware-accelerated video playback on a Raspberry Pi offloads video decoding from the CPU to the dedicated Graphics Processing Unit (GPU). This process drastically reduces CPU usage, lowers operating temperatures, and prevents stuttering or dro">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/enable-hardware-video-acceleration-on-raspberry-pi">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Enable Hardware Video Acceleration on Raspberry Pi - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/enable-hardware-video-acceleration-on-raspberry-pi" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Enabling hardware-accelerated video playback on a Raspberry Pi offloads video decoding from the CPU to the dedicated Graphics Processing Unit (GPU). This process drastically reduces CPU usage, lowers operating temperatures, and prevents stuttering or dro" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="enable-hardware-video-acceleration-on-raspberry-pi">Enable
+Hardware Video Acceleration on Raspberry Pi</h1>
+<p>Enabling hardware-accelerated video playback on a Raspberry Pi
+offloads video decoding from the CPU to the dedicated Graphics
+Processing Unit (GPU). This process drastically reduces CPU usage,
+lowers operating temperatures, and prevents stuttering or dropped frames
+during high-definition playback. This guide covers how to configure your
+system settings, choose the right media player, and verify that hardware
+acceleration is active on your Raspberry Pi.</p>
+<h2 id="step-1-update-your-system-and-firmware">Step 1: Update Your
+System and Firmware</h2>
+<p>Before configuring hardware acceleration, ensure your operating
+system and GPU firmware are completely up to date. Newer versions of
+Raspberry Pi OS include optimized drivers that improve hardware decoding
+efficiency.</p>
+<p>Open a terminal and run the following commands:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt full-upgrade <span class="at">-y</span></span></code></pre></div>
+<p>Once the update finishes, reboot your Raspberry Pi to apply any
+kernel or firmware changes:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> reboot</span></code></pre></div>
+<h2 id="step-2-configure-gpu-memory-allocation">Step 2: Configure GPU
+Memory Allocation</h2>
+<p>The GPU requires a dedicated amount of system RAM to handle hardware
+video decoding smoothly, especially for 1080p or 4K video.</p>
+<ol type="1">
+<li>Open the Raspberry Pi Configuration tool from the desktop menu, or
+launch the terminal-based configuration tool:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> raspi-config</span></code></pre></div>
+<ol start="2" type="1">
+<li>Navigate to <strong>Performance Options</strong> (or
+<strong>Advanced Options</strong> on older firmware versions).</li>
+<li>Select <strong>GPU Memory</strong>.</li>
+<li>Change the value to at least <strong>128</strong> for 1080p
+playback, or <strong>256</strong> if you are streaming 4K video on a
+Raspberry Pi 4 or 5.</li>
+<li>Save the changes and exit the tool.</li>
+<li>Reboot your device to allocate the memory.</li>
+</ol>
+<h2 id="step-3-choose-and-configure-an-accelerated-media-player">Step 3:
+Choose and Configure an Accelerated Media Player</h2>
+<p>Standard web browsers and default media players often rely on
+software decoding, which lags on low-power ARM processors. For smooth
+playback, you must use software specifically compiled to utilize the
+Pi's hardware video decoder (V4L2 or MMAL).</p>
+<h3 id="vlc-media-player">VLC Media Player</h3>
+<p>VLC comes pre-installed on Raspberry Pi OS and features native
+hardware acceleration hooks.</p>
+<ol type="1">
+<li>Launch VLC Media Player.</li>
+<li>Go to <strong>Tools</strong> &gt; <strong>Preferences</strong> in
+the top menu.</li>
+<li>Click on the <strong>Input / Codecs</strong> tab.</li>
+<li>Locate the <strong>Hardware-accelerated decoding</strong> dropdown
+menu.</li>
+<li>Set this option to <strong>MMAL decode</strong> or <strong>V4L2
+video decoding</strong> depending on your specific Raspberry Pi
+model.</li>
+<li>Click <strong>Save</strong> and restart VLC.</li>
+</ol>
+<h3 id="chromium-web-browser-for-youtube-and-streaming">Chromium Web
+Browser (for YouTube and Streaming)</h3>
+<p>To get smooth playback on web streaming platforms, the Chromium
+browser must be configured to use the hardware GPU pipeline.</p>
+<ol type="1">
+<li>Open Chromium and type <code>chrome://flags</code> into the address
+bar, then press Enter.</li>
+<li>Search for <strong>Hardware-accelerated video decode</strong>.</li>
+<li>Change the dropdown menu next to it from <em>Default</em> to
+<em>Enabled</em>.</li>
+<li>Search for <strong>Override software rendering list</strong> and
+change it to <em>Enabled</em>.</li>
+<li>Click the <strong>Relaunch</strong> button at the bottom right of
+the window to apply the settings.</li>
+</ol>
+<h2 id="step-4-verify-hardware-acceleration-is-working">Step 4: Verify
+Hardware Acceleration is Working</h2>
+<p>To confirm that the video decoding workload has successfully shifted
+to the GPU, you can monitor your CPU utilization during video
+playback.</p>
+<p>Open a terminal window and run the monitoring tool:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">htop</span></span></code></pre></div>
+<p>Play a high-definition video file or stream a 1080p video in your
+browser. If hardware acceleration is working correctly, the total CPU
+utilization across all cores should remain remarkably low (typically
+under 20-30%). If software decoding is still active, your CPU
+utilization will spike close to 100%, and the video will likely
+stutter.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

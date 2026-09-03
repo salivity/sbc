@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Recover a Soft-Bricked SBC with Boot-ROM Tools - sbc</title>
+    <meta name="description" content="A soft-bricked Single Board Computer (SBC) occurs when the system cannot boot due to a corrupted bootloader, misconfigured partition table, or damaged onboard firmware (eMMC/SPI flash), while the underlying hardware remains fully functional. Because prim">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-recover-a-soft-bricked-sbc-with-boot-rom-tools">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Recover a Soft-Bricked SBC with Boot-ROM Tools - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-recover-a-soft-bricked-sbc-with-boot-rom-tools" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A soft-bricked Single Board Computer (SBC) occurs when the system cannot boot due to a corrupted bootloader, misconfigured partition table, or damaged onboard firmware (eMMC/SPI flash), while the underlying hardware remains fully functional. Because prim" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-recover-a-soft-bricked-sbc-with-boot-rom-tools">How to
+Recover a Soft-Bricked SBC with Boot-ROM Tools</h1>
+<p>A soft-bricked Single Board Computer (SBC) occurs when the system
+cannot boot due to a corrupted bootloader, misconfigured partition
+table, or damaged onboard firmware (eMMC/SPI flash), while the
+underlying hardware remains fully functional. Because primary storage
+fails to initialize, recovery relies on the System on Chip’s (SoC)
+hardcoded Mask ROM (Boot-ROM). This article outlines the exact
+mechanisms, hardware triggers, and software utilities used to recover
+soft-bricked SBCs across major SoC vendors including Rockchip,
+Allwinner, Amlogic, NXP, and Broadcom.</p>
+<hr />
+<h3 id="understanding-the-boot-rom-recovery-layer">Understanding the
+Boot-ROM Recovery Layer</h3>
+<p>Every modern SoC contains a hardwired Boot-ROM (Mask ROM) executed by
+the CPU immediately upon power-on. If the Boot-ROM fails to find a valid
+secondary program loader (SPL) or bootloader (such as U-Boot) on the
+configured primary media (SD, eMMC, SPI, or NAND), it falls back to a
+special recovery mode. In this mode, the SoC acts as a USB device,
+allowing a host PC to upload code directly into the SoC's internal
+Static RAM (SRAM) to reflash corrupted non-volatile storage.</p>
+<hr />
+<h3 id="1-rockchip-socs-maskrom-mode">1. Rockchip SoCs (Maskrom
+Mode)</h3>
+<p>Rockchip processors (e.g., RK3399, RK3588, RK3566) feature
+<strong>Maskrom Mode</strong>, which bypasses damaged internal
+flash.</p>
+<ul>
+<li><strong>Hardware Trigger:</strong>
+<ul>
+<li>Press and hold the onboard <code>Recovery</code> or
+<code>Maskrom</code> button while connecting the device to power.</li>
+<li>If no button exists, temporarily short the eMMC clock
+(<code>CLK</code>) or data (<code>D0</code>) test point to ground
+(<code>GND</code>) with tweezers during power-up to simulate empty
+storage.</li>
+</ul></li>
+<li><strong>Host Recovery Tool:</strong> <code>rkdeveloptool</code>
+(Linux/macOS) or <code>RKDevTool</code> / <code>AndroidTool</code>
+(Windows).</li>
+<li><strong>Recovery Procedure:</strong>
+<ol type="1">
+<li>Connect the SBC's USB OTG / Type-C port to the host computer.</li>
+<li>Verify detection:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rkdeveloptool</span> ld</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Output should display: &quot;DevNo=1 Vid=0x2207,Pid=0x350a,LocationID=... Maskrom&quot;</span></span></code></pre></div></li>
+<li>Initialize the DDR controller and load the mini-loader:
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rkdeveloptool</span> db rk3588_spl_loader.bin</span></code></pre></div></li>
+<li>Write the functional U-Boot or full system image directly to onboard
+eMMC:
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rkdeveloptool</span> wl 0x0 system_image.img</span></code></pre></div></li>
+<li>Reboot the board:
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rkdeveloptool</span> rd</span></code></pre></div></li>
+</ol></li>
+</ul>
+<hr />
+<h3 id="2-allwinner-socs-fel-mode">2. Allwinner SoCs (FEL Mode)</h3>
+<p>Allwinner SoCs (e.g., H3, H5, H6, H616, A64) utilize <strong>FEL
+Mode</strong> as their low-level USB recovery mechanism.</p>
+<ul>
+<li><strong>Hardware Trigger:</strong>
+<ul>
+<li>Hold the <code>FEL</code> or <code>U-Boot</code> button while
+powering on.</li>
+<li>Send a break condition over the serial console (UART) if configured
+in custom implementations.</li>
+<li>Ensure no valid bootloader is readable from the SD card or onboard
+SPI/eMMC.</li>
+</ul></li>
+<li><strong>Host Recovery Tool:</strong> <code>sunxi-tools</code>
+(specifically <code>sunxi-fel</code>).</li>
+<li><strong>Recovery Procedure:</strong>
+<ol type="1">
+<li>Connect the board to the host PC via the native USB OTG port.</li>
+<li>Confirm device enumeration:
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sunxi-fel</span> version</span></code></pre></div></li>
+<li>Load and execute the SPL into RAM to initialize external DRAM:
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sunxi-fel</span> spl u-boot-sunxi-with-spl.bin</span></code></pre></div></li>
+<li>Write a raw bootloader or firmware binary to SPI flash or eMMC:
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sunxi-fel</span> spiflash-write 0 u-boot-sunxi-with-spl.bin</span></code></pre></div></li>
+</ol></li>
+</ul>
+<hr />
+<h3 id="3-amlogic-socs-worldcup--usb-burning-mode">3. Amlogic SoCs
+(WorldCup / USB Burning Mode)</h3>
+<p>Amlogic processors (e.g., S905X, S922X, A311D) expose a specialized
+USB gadget mode known as <strong>WorldCup Device</strong> or <strong>USB
+Burning Mode</strong>.</p>
+<ul>
+<li><strong>Hardware Trigger:</strong>
+<ul>
+<li>Depress the reset button (often located inside the AV/audio jack)
+during power-on.</li>
+<li>Short the eMMC <code>CMD</code> or <code>CLK</code> test point to
+ground if the internal bootloader is partially corrupted and fails to
+enter recovery automatically.</li>
+</ul></li>
+<li><strong>Host Recovery Tool:</strong>
+<code>Amlogic USB Burning Tool</code> (Windows) or
+<code>pyamlboot</code> / <code>aml-flash-tool</code> (Linux).</li>
+<li><strong>Recovery Procedure:</strong>
+<ol type="1">
+<li>Connect via the designated USB OTG/Recovery port.</li>
+<li>Verify connection on Linux:
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lsusb</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Should show: ID 1b8e:c003 Amlogic, Inc.</span></span></code></pre></div></li>
+<li>Using <code>pyamlboot</code>, push the vendor bootloader stages
+directly to SRAM:
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">boot-g12.py</span> u-boot.bin</span></code></pre></div></li>
+<li>Alternatively, use the Windows USB Burning Tool with the vendor
+<code>.img</code> package to fully format and rewrite the eMMC
+partitions.</li>
+</ol></li>
+</ul>
+<hr />
+<h3 id="4-nxp-imx-series-serial-downloader-mode">4. NXP i.MX Series
+(Serial Downloader Mode)</h3>
+<p>NXP i.MX SoCs (e.g., i.MX6, i.MX8M) provide a standardized
+<strong>Serial Download Protocol (SDP)</strong> in Boot-ROM.</p>
+<ul>
+<li><strong>Hardware Trigger:</strong>
+<ul>
+<li>Configure the onboard hardware boot DIP switches or jumpers to
+<code>00</code> or the designated <code>Serial Downloader</code>
+configuration.</li>
+</ul></li>
+<li><strong>Host Recovery Tool:</strong> <code>uuu</code> (Universal
+Update Utility) / <code>mfgtools</code>.</li>
+<li><strong>Recovery Procedure:</strong>
+<ol type="1">
+<li>Connect the host PC to the USB OTG port.</li>
+<li>Verify detection using <code>uuu</code>:
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uuu</span> <span class="at">-lsusb</span></span></code></pre></div></li>
+<li>Run an automated UUU script or push the flash loader to RAM:
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uuu</span> <span class="at">-b</span> emmc u-boot-spl.bin u-boot.itb</span></code></pre></div></li>
+<li>Write the bootloader to the eMMC boot partition:
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uuu</span> <span class="at">-b</span> emmc_all imx-boot-tagged.bin rootfs.img</span></code></pre></div></li>
+<li>Reset the boot configuration switches back to internal eMMC/SD boot
+mode.</li>
+</ol></li>
+</ul>
+<hr />
+<h3 id="5-raspberry-pi--broadcom-spi-eeprom--rpiboot">5. Raspberry Pi /
+Broadcom (SPI EEPROM &amp; RPiBoot)</h3>
+<p>Modern Raspberry Pi boards (Pi 4, Pi 5, Compute Module 4/5) utilize a
+dedicated SPI EEPROM rather than relying strictly on SoC boot pins.</p>
+<ul>
+<li><strong>Compute Modules:</strong>
+<ul>
+<li>Fit the <code>nRPIBOOT</code> / <code>DISABLE eMMC BOOT</code>
+jumper to short the pin to ground.</li>
+<li>Run the <code>rpiboot</code> tool on the host to expose the onboard
+eMMC as a standard USB Mass Storage device.</li>
+</ul></li>
+<li><strong>Standard SBCs (Pi 4/Pi 5):</strong>
+<ul>
+<li>If the SPI EEPROM becomes corrupted, the system will blink the green
+ACT LED with a diagnostic failure pattern.</li>
+<li>Recovery involves flashing the official Raspberry Pi EEPROM Recovery
+utility to a blank FAT32 micro-SD card. The hardcoded secondary
+bootloader in the Broadcom SoC reads the micro-SD recovery payload and
+reflashes the onboard SPI EEPROM automatically.</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="standard-troubleshooting-checklist">Standard Troubleshooting
+Checklist</h3>
+<ol type="1">
+<li><strong>Cable Quality and Port Selection:</strong> Always use the
+dedicated OTG/Hardware USB port, not auxiliary standard USB ports. Avoid
+unpowered USB hubs.</li>
+<li><strong>Current Draw:</strong> Do not rely on host USB bus power
+alone for high-performance SoCs (such as the RK3588 or i.MX8M); attach a
+dedicated DC power supply alongside the USB OTG data connection.</li>
+<li><strong>Udev Rules (Linux):</strong> Ensure proper permissions exist
+for non-root flashing by installing the appropriate udev rules for the
+vendor's USB VID/PID.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

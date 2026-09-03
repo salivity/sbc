@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Disk Encryption Performance on Low-Power SBCs - sbc</title>
+    <meta name="description" content="Enabling full disk encryption (FDE) on low-power single board computers (SBCs) provides essential data-at-rest protection, but it introduces noticeable performance trade-offs due to limited hardware resources. This article outlines the primary impacts of">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/full-disk-encryption-performance-on-low-power-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Full Disk Encryption Performance on Low-Power SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/full-disk-encryption-performance-on-low-power-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Enabling full disk encryption (FDE) on low-power single board computers (SBCs) provides essential data-at-rest protection, but it introduces noticeable performance trade-offs due to limited hardware resources. This article outlines the primary impacts of" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="full-disk-encryption-performance-on-low-power-sbcs">Full Disk
+Encryption Performance on Low-Power SBCs</h1>
+<p>Enabling full disk encryption (FDE) on low-power single board
+computers (SBCs) provides essential data-at-rest protection, but it
+introduces noticeable performance trade-offs due to limited hardware
+resources. This article outlines the primary impacts of running FDE on
+resource-constrained devices, detailing how cryptographic operations
+affect CPU utilization, read/write speeds, latency, power draw, and
+thermal stability.</p>
+<h3 id="1-elevated-cpu-utilization">1. Elevated CPU Utilization</h3>
+<p>Low-power SBCs typically rely on energy-efficient ARM or RISC-V
+processors with limited processing power. When FDE is active, every read
+and write operation requires real-time encryption or decryption. On
+boards lacking dedicated cryptographic hardware extensions (such as
+ARMv8 Cryptography Extensions or AES-NI), the CPU must handle these
+algorithms entirely in software. This causes significant CPU spikes
+during routine disk operations, leaving fewer processing cycles
+available for user applications, background services, and system
+tasks.</p>
+<h3 id="2-reduced-storage-read-and-write-throughput">2. Reduced Storage
+Read and Write Throughput</h3>
+<p>The most direct consequence of software-driven encryption is a drop
+in sequential and random I/O throughput. Even when paired with fast
+storage media like high-speed micro-SD cards, eMMC modules, or NVMe SSDs
+via PCIe, the maximum transfer speed becomes bottlenecked by the
+processor's ability to process the cipher blocks. Sequential read and
+write speeds can decrease by 30% to over 70% depending on the specific
+cipher, the storage bus speed, and the processor architecture.</p>
+<h3 id="3-increased-latency-and-longer-boot-times">3. Increased Latency
+and Longer Boot Times</h3>
+<p>Because the system must decrypt the root filesystem on the fly,
+system initialization and application startup times increase. Random I/O
+operations—common in database workloads and operating system
+logging—experience higher latency. This latency can cause noticeable
+sluggishness in responsive operations, such as serving web requests or
+launching heavy software packages.</p>
+<h3 id="4-higher-power-consumption">4. Higher Power Consumption</h3>
+<p>Cryptographic operations force the CPU to run at higher clock
+frequencies for longer durations to process data transfers. This
+sustained processing directly increases the device's electrical power
+consumption. For battery-powered, solar, or remote edge deployments, the
+added power overhead can significantly reduce operational runtime and
+energy efficiency.</p>
+<h3 id="5-thermal-throttling">5. Thermal Throttling</h3>
+<p>Many low-power SBCs rely on passive cooling. The sustained CPU loads
+generated by intensive read/write operations under FDE generate extra
+heat. If the device reaches its thermal ceiling, the processor will
+automatically throttle its clock speed to prevent damage. This thermal
+throttling introduces a compounding performance penalty, drastically
+slowing down both the cryptographic operations and overall system
+performance.</p>
+<h3 id="6-cipher-selection-impact">6. Cipher Selection Impact</h3>
+<p>The severity of these trade-offs largely depends on the chosen
+encryption algorithm. Standard AES-XTS (e.g., AES-256) is highly
+demanding on hardware without native AES instructions. Opting for
+alternative ciphers optimized for software execution—such as Adiantum or
+ChaCha20-Poly1305—can significantly reduce CPU overhead and recover
+throughput on boards lacking hardware acceleration, though some
+performance penalty relative to unencrypted storage will always
+remain.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

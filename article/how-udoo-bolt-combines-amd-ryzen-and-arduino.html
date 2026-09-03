@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How UDOO Bolt Combines AMD Ryzen and Arduino - sbc</title>
+    <meta name="description" content="The UDOO Bolt is a high-performance single-board computer that bridges high-end x86 computing and real-time embedded control on a single PCB. It achieves this by pairing an AMD Ryzen Embedded V1000 processor with an onboard Microchip ATmega32U4 microcont">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-udoo-bolt-combines-amd-ryzen-and-arduino">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How UDOO Bolt Combines AMD Ryzen and Arduino - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-udoo-bolt-combines-amd-ryzen-and-arduino" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The UDOO Bolt is a high-performance single-board computer that bridges high-end x86 computing and real-time embedded control on a single PCB. It achieves this by pairing an AMD Ryzen Embedded V1000 processor with an onboard Microchip ATmega32U4 microcont" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-udoo-bolt-combines-amd-ryzen-and-arduino">How UDOO Bolt
+Combines AMD Ryzen and Arduino</h1>
+<p>The UDOO Bolt is a high-performance single-board computer that
+bridges high-end x86 computing and real-time embedded control on a
+single PCB. It achieves this by pairing an AMD Ryzen Embedded V1000
+processor with an onboard Microchip ATmega32U4 microcontroller. This
+article explains the architectural integration, internal communication
+bus, and pin routing that allow the main processor and the Arduino
+subsystem to function seamlessly together.</p>
+<h3 id="the-dual-core-architecture">The Dual-Core Architecture</h3>
+<p>The UDOO Bolt incorporates two distinct processing units, each
+dedicated to different computing requirements:</p>
+<ul>
+<li><strong>Primary System:</strong> An AMD Ryzen Embedded V1000
+system-on-chip (such as the V1202B or V1605B). This handles standard
+operating systems (Windows, Linux), high-performance compute workloads,
+and 4K graphics processing via integrated AMD Radeon Vega graphics.</li>
+<li><strong>Embedded Coprocessor:</strong> A Microchip ATmega32U4 8-bit
+AVR microcontroller. This is the exact chip used in the Arduino
+Leonardo, providing real-time input/output (I/O) control,
+analog-to-digital conversions, and hardware-level timing tasks.</li>
+</ul>
+<h3 id="internal-communication-and-bridging">Internal Communication and
+Bridging</h3>
+<p>Instead of requiring external cables or USB dongles, the AMD Ryzen
+SoC and the ATmega32U4 communicate directly across internal PCB
+traces:</p>
+<ol type="1">
+<li><strong>Internal USB Connection:</strong> The ATmega32U4 is wired to
+one of the AMD SoC's internal USB 2.0 controllers.</li>
+<li><strong>Virtual Serial Interface:</strong> The main operating system
+running on the Ryzen processor recognizes the ATmega32U4 as a native USB
+Serial (CDC) COM port.</li>
+<li><strong>Bi-Directional Data Transfer:</strong> Applications running
+on Windows or Linux can read sensor data or send actuator commands using
+standard serial read/write protocols (such as standard UART libraries or
+Firmata).</li>
+</ol>
+<h3 id="development-and-programming-workflow">Development and
+Programming Workflow</h3>
+<p>Because of the internal USB bridge, programming the onboard
+microcontroller requires no extra hardware:</p>
+<ul>
+<li>Developers can install the standard Arduino IDE directly within the
+operating system running on the Ryzen processor.</li>
+<li>Sketches are compiled and flashed over the internal virtual COM port
+straight to the ATmega32U4.</li>
+<li>Alternatively, an external computer connected via the board's
+external Micro-USB port can target the microcontroller for
+programming.</li>
+</ul>
+<h3 id="pinout-and-power-integration">Pinout and Power Integration</h3>
+<p>The UDOO Bolt physically isolates the I/O of both chips while sharing
+power management features:</p>
+<ul>
+<li><strong>Arduino-Compatible Headers:</strong> Standard Arduino UNO
+Rev 3 header layouts are mapped directly to the ATmega32U4 GPIO pins,
+supporting standard 5V logic shields, digital I/O, and analog
+inputs.</li>
+<li><strong>Separation from SoC I/O:</strong> The high-speed GPIOs of
+the AMD Ryzen chip remain separate from the 5V Arduino headers to
+prevent electrical damage to the main processor.</li>
+<li><strong>Power State Control:</strong> The ATmega32U4 can remain
+active in ultra-low-power sleep states while the Ryzen SoC is shut down.
+When triggered by a sensor reading or an external event, the
+microcontroller can send a wake signal to boot the primary Ryzen
+processor for resource-intensive workloads.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

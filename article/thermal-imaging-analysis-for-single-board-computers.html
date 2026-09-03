@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermal Imaging Analysis for Single Board Computers - sbc</title>
+    <meta name="description" content="Thermal imaging analysis is a non-invasive diagnostic method used by engineers to detect, visualize, and quantify localized heat concentrations on single board computers (SBCs). By capturing infrared radiation emitted by active components, engineers can">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/thermal-imaging-analysis-for-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Thermal Imaging Analysis for Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/thermal-imaging-analysis-for-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Thermal imaging analysis is a non-invasive diagnostic method used by engineers to detect, visualize, and quantify localized heat concentrations on single board computers (SBCs). By capturing infrared radiation emitted by active components, engineers can" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="thermal-imaging-analysis-for-single-board-computers">Thermal
+Imaging Analysis for Single Board Computers</h1>
+<p>Thermal imaging analysis is a non-invasive diagnostic method used by
+engineers to detect, visualize, and quantify localized heat
+concentrations on single board computers (SBCs). By capturing infrared
+radiation emitted by active components, engineers can evaluate heat
+dissipation under load, identify thermal bottlenecks such as saturated
+voltage regulators or poorly bonded heatsinks, and validate whether the
+board operates within safe manufacturer limits. This process involves
+precise surface preparation, accurate emissivity calibration, dynamic
+workload testing, and radiometric post-processing.</p>
+<h3 id="1-test-setup-and-surface-preparation">1. Test Setup and Surface
+Preparation</h3>
+<p>Accurate thermal imaging begins with preparing the physical
+environment and the SBC's surface. Infrared cameras measure surface
+radiation, which is heavily influenced by a material’s emissivity (<span
+class="math inline">\(\epsilon\)</span>).</p>
+<ul>
+<li><strong>Emissivity Calibration:</strong> Bare silicon, solder
+joints, and shiny metal shields have low emissivity and high
+reflectivity, leading to false low-temperature readings or reflections
+of external heat sources. Engineers apply high-emissivity coatings, such
+as non-conductive matte black paint (<span
+class="math inline">\(\epsilon \approx 0.95\)</span>) or specialized
+thermal tape, to critical areas to standardize readings.</li>
+<li><strong>Environmental Control:</strong> The board is tested in a
+temperature-controlled, draft-free enclosure to prevent convection
+currents from skewing steady-state temperature data.</li>
+<li><strong>Camera Positioning:</strong> The thermal camera is mounted
+perpendicularly on a tripod with a macro lens attached to ensure spatial
+resolution high enough to distinguish individual component pins and
+surface-mount devices (SMDs).</li>
+</ul>
+<h3 id="2-workload-simulation-and-thermal-equilibrium">2. Workload
+Simulation and Thermal Equilibrium</h3>
+<p>To find the worst-case hotspot concentrations, the SBC must be
+stressed under real-world and maximum-load operating conditions.</p>
+<ul>
+<li><strong>Baseline Measurement:</strong> Engineers first capture an
+unpowered baseline image to calibrate against ambient room
+temperature.</li>
+<li><strong>Stress Testing:</strong> Software tools (such as
+<code>stress-ng</code>, <code>cpuburn</code>, or specialized memory and
+GPU stress scripts) are executed to push the System on Chip (SoC), Power
+Management Integrated Circuits (PMICs), RAM, and I/O controllers to 100%
+utilization.</li>
+<li><strong>Reaching Steady State:</strong> The board is run until it
+reaches thermal equilibrium—the point where temperatures stop
+rising—typically taking between 10 to 30 minutes depending on the
+board's thermal mass.</li>
+</ul>
+<h3 id="3-radiometric-capture-and-hotspot-identification">3. Radiometric
+Capture and Hotspot Identification</h3>
+<p>Engineers capture radiometric video or high-resolution still frames,
+which contain absolute temperature metadata for every pixel.</p>
+<ul>
+<li><strong>Component Evaluation:</strong> The analysis focuses on
+high-risk areas:
+<ul>
+<li><strong>SoC / CPU / GPU:</strong> Monitoring junction-to-ambient
+temperature and checking for core hotspots caused by non-uniform silicon
+die heating.</li>
+<li><strong>Power Delivery Networks (PDN):</strong> Identifying hot
+voltage regulator modules (VRMs), buck converters, and inductors that
+generate heat due to high resistance or excessive current draw.</li>
+<li><strong>Traces and Vias:</strong> Detecting high current density
+bottlenecks along narrow PCB power traces.</li>
+</ul></li>
+<li><strong>Gradient Mapping:</strong> Engineers analyze thermal
+gradients (<span class="math inline">\(\Delta T\)</span>) across the
+board. Steep temperature transitions indicate poor lateral heat
+spreading within the PCB's internal copper planes.</li>
+</ul>
+<h3 id="4-thermal-mitigation-and-design-iteration">4. Thermal Mitigation
+and Design Iteration</h3>
+<p>The data gathered from thermal imaging informs both hardware and
+firmware refinements:</p>
+<ul>
+<li><strong>Hardware Adjustments:</strong> Moving thermally sensitive
+components away from hotspots, increasing ground plane copper weight,
+adding thermal vias under hot ICs, or resizing thermal interface
+materials (TIM).</li>
+<li><strong>Cooling Validation:</strong> Testing the efficiency of
+passive heatsinks, heat spreaders, or active cooling fans by measuring
+thermal resistance before and after integration.</li>
+<li><strong>Firmware Tuning:</strong> Adjusting Dynamic Voltage and
+Frequency Scaling (DVFS) trip points to ensure graceful thermal
+throttling before components exceed their maximum junction temperature
+(<span class="math inline">\(T_{j,\text{max}}\)</span>).</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

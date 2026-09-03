@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Interface Delta-Sigma ADCs with SPI SBCs - sbc</title>
+    <meta name="description" content="Interfacing high-precision delta-sigma ($\Delta\Sigma$) analog-to-digital converters (ADCs) with a Serial Peripheral Interface (SPI)-capable single-board computer (SBC) requires a coordinated approach combining hardware wiring, precise bus timing, interr">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-interface-delta-sigma-adcs-with-spi-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Interface Delta-Sigma ADCs with SPI SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-interface-delta-sigma-adcs-with-spi-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interfacing high-precision delta-sigma ($\Delta\Sigma$) analog-to-digital converters (ADCs) with a Serial Peripheral Interface (SPI)-capable single-board computer (SBC) requires a coordinated approach combining hardware wiring, precise bus timing, interr" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-interface-delta-sigma-adcs-with-spi-sbcs">How to
+Interface Delta-Sigma ADCs with SPI SBCs</h1>
+<p>Interfacing high-precision delta-sigma (<span
+class="math inline">\(\Delta\Sigma\)</span>) analog-to-digital
+converters (ADCs) with a Serial Peripheral Interface (SPI)-capable
+single-board computer (SBC) requires a coordinated approach combining
+hardware wiring, precise bus timing, interrupt-driven data retrieval,
+and signal conditioning. This guide outlines the essential steps
+developers take to successfully connect these sensitive converters to
+SBCs (such as a Raspberry Pi, BeagleBone, or Jetson), configure digital
+communication registers, capture high-resolution samples without data
+corruption, and minimize digital switching noise.</p>
+<h3 id="1-hardware-connections-and-pin-configuration">1. Hardware
+Connections and Pin Configuration</h3>
+<p>Connecting a delta-sigma ADC to an SBC requires standard SPI lines
+alongside specialized control pins:</p>
+<ul>
+<li><strong>SCLK (Serial Clock):</strong> Generated by the SBC master to
+clock data in and out.</li>
+<li><strong>MOSI / DIN (Master Out Slave In):</strong> Transmits
+configuration registers, gain settings, and channel multiplexer commands
+from the SBC to the ADC.</li>
+<li><strong>MISO / DOUT (Master In Slave Out):</strong> Carries the
+converted digital sample back to the SBC.</li>
+<li><strong>CS / SS (Chip Select):</strong> Enables the specific ADC on
+the shared SPI bus.</li>
+<li><strong><span class="math inline">\(\overline{\text{DRDY}}\)</span>
+(Data Ready):</strong> A critical dedicated output pin on delta-sigma
+ADCs that asserts low whenever a new conversion is complete. This pin
+must connect to an interrupt-capable GPIO pin on the SBC.</li>
+<li><strong>RESET and PWDN:</strong> Optional GPIO connections to
+hardware-reset or power-down the ADC.</li>
+</ul>
+<h3 id="2-configuring-spi-modes-and-bus-speeds">2. Configuring SPI Modes
+and Bus Speeds</h3>
+<p>Delta-sigma ADCs are sensitive to clock phase and polarity.
+Developers must consult the device datasheet to select the exact SPI
+mode:</p>
+<ul>
+<li><strong>SPI Mode:</strong> Most precision ADCs (such as the ADS1256
+or AD717x families) operate under <strong>SPI Mode 1</strong> (CPOL = 0,
+CPHA = 1) or <strong>SPI Mode 3</strong> (CPOL = 1, CPHA = 1), where
+data is latched on the falling or rising edge depending on the specific
+architecture.</li>
+<li><strong>Clock Frequency:</strong> The maximum SPI clock rate is
+often constrained by internal digital filter conversion periods or
+interface limitations. While an SBC can generate SPI clocks above 20
+MHz, precision ADCs typically require lower frequencies (e.g., 1 MHz to
+8 MHz) to prevent timing violations.</li>
+</ul>
+<h3 id="3-implementing-the-data-ready-interrupt-loop">3. Implementing
+the Data-Ready Interrupt Loop</h3>
+<p>Unlike standard successive-approximation (SAR) ADCs that convert
+on-demand, delta-sigma converters produce samples continuously according
+to their internal modulator and digital decimation filter.</p>
+<ol type="1">
+<li><strong>Avoid Polling:</strong> Continuously polling the SPI bus
+wastes CPU resources and injects high-frequency bus noise into the
+converter during sensitive analog integration cycles.</li>
+<li><strong>Use Hardware Interrupts:</strong> Configure the SBC
+operating system (e.g., Linux GPIO interrupts via <code>libgpiod</code>
+or kernel drivers) to trigger on the falling edge of the <span
+class="math inline">\(\overline{\text{DRDY}}\)</span> line.</li>
+<li><strong>Read Synchronization:</strong> When the interrupt triggers,
+the SBC asserts Chip Select (CS low), sends the "Read Data" command if
+required by the protocol, clocks in the multi-byte sample (typically
+24-bit or 32-bit two's complement integers), and de-asserts CS before
+the next conversion cycle finishes.</li>
+</ol>
+<h3 id="4-software-driver-and-data-conversion">4. Software Driver and
+Data Conversion</h3>
+<p>At the software layer, developers initialize the converter using a
+structured sequence:</p>
+<ol type="1">
+<li><strong>Register Initialization:</strong> Send SPI write commands to
+configure the internal programmable gain amplifier (PGA), input
+multiplexer (single-ended vs. differential), internal reference voltage,
+and output data rate (ODR).</li>
+<li><strong>Offset and Gain Calibration:</strong> Trigger internal or
+system zero-scale and full-scale self-calibration routines through
+control register commands.</li>
+<li><strong>Sample Processing:</strong> Read the incoming 24-bit or
+32-bit raw integer over SPI, sign-extend the value to a standard 32-bit
+or 64-bit integer, and convert it to absolute voltage using the formula:
+<span class="math display">\[\text{Voltage} = \frac{\text{Raw Code}
+\times V_{\text{REF}}}{\text{Gain} \times (2^{N-1} - 1)}\]</span> where
+<span class="math inline">\(N\)</span> represents the ADC resolution in
+bits.</li>
+</ol>
+<h3 id="5-layout-and-noise-mitigation-strategies">5. Layout and Noise
+Mitigation Strategies</h3>
+<p>High-precision delta-sigma ADCs can detect changes down to microvolts
+or nanovolts. To prevent the high-speed SBC digital electronics from
+degrading measurement accuracy:</p>
+<ul>
+<li><strong>Ground Plane Integrity:</strong> Use a solid, low-impedance
+ground plane. Route SPI traces away from sensitive analog input
+signals.</li>
+<li><strong>Series Damping Resistors:</strong> Place 22 <span
+class="math inline">\(\Omega\)</span> to 47 <span
+class="math inline">\(\Omega\)</span> series resistors on SCLK, MOSI,
+and MISO traces near the SBC to slow down digital edge transitions
+(ringing) and reduce radiated EMI.</li>
+<li><strong>Galvanic Isolation:</strong> For maximum precision or
+industrial environments, insert a multi-channel digital isolator (such
+as an ADuM or ISO77xx series IC) between the SBC SPI pins and the ADC to
+completely separate noisy processor grounds from clean analog
+measurement grounds.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

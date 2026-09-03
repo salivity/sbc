@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choosing a Power Adapter for Multi-Drive SBCs - sbc</title>
+    <meta name="description" content="Selecting the correct power adapter for a single board computer (SBC) running multiple drives is essential for maintaining system stability, preventing data corruption, and avoiding hardware damage. Multi-drive SBC setups demand significantly more power">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/choosing-a-power-adapter-for-multi-drive-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Choosing a Power Adapter for Multi-Drive SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/choosing-a-power-adapter-for-multi-drive-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Selecting the correct power adapter for a single board computer (SBC) running multiple drives is essential for maintaining system stability, preventing data corruption, and avoiding hardware damage. Multi-drive SBC setups demand significantly more power" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="choosing-a-power-adapter-for-multi-drive-sbcs">Choosing a Power
+Adapter for Multi-Drive SBCs</h1>
+<p>Selecting the correct power adapter for a single board computer (SBC)
+running multiple drives is essential for maintaining system stability,
+preventing data corruption, and avoiding hardware damage. Multi-drive
+SBC setups demand significantly more power than standalone boards,
+particularly during peak operating conditions like system boots and disk
+spin-ups. This guide details the essential parameters to
+evaluate—ranging from voltage rails and peak amperage to connector
+standards and electrical protections—to ensure your storage setup
+operates reliably.</p>
+<h2 id="1-voltage-specifications-and-rail-compatibility">1. Voltage
+Specifications and Rail Compatibility</h2>
+<p>Single board computers typically operate on 5V, 9V, or 12V DC, while
+storage drives have varied voltage requirements depending on their form
+factor:</p>
+<ul>
+<li><strong>2.5-inch SATA HDDs and SSDs:</strong> Require a stable
+<strong>5V</strong> rail.</li>
+<li><strong>3.5-inch Desktop HDDs:</strong> Require both
+<strong>12V</strong> (for the spindle motor) and <strong>5V</strong>
+(for the logic board).</li>
+<li><strong>M.2 NVMe SSDs:</strong> Typically powered via the SBC’s
+PCIe/M.2 slot using <strong>3.3V</strong>, which is stepped down
+internally from the main input rail.</li>
+</ul>
+<p>Ensure your chosen power adapter matches the input voltage of your
+SBC or drive backplane. If using 3.5-inch drives, select a 12V power
+supply with sufficient step-down regulation for the SBC and 5V lines, or
+use a dedicated dual-voltage power distribution board.</p>
+<h2 id="2-total-wattage-and-inrush-peak-current">2. Total Wattage and
+Inrush (Peak) Current</h2>
+<p>Power requirements must account for both continuous operation and
+instantaneous spin-up demands:</p>
+<ul>
+<li><strong>Continuous Load:</strong> Sum the maximum continuous power
+of the SBC (typically 5W–15W) and all connected drives (approx. 2W–4W
+per SSD, 5W–9W per active 3.5-inch HDD).</li>
+<li><strong>Inrush / Spin-up Current:</strong> Mechanical hard drives
+consume up to 2 to 3 times their rated current for several seconds
+during startup. If the power supply cannot deliver this peak amperage,
+the voltage will drop, causing SBC reboots or drive connection
+drops.</li>
+<li><strong>Headroom:</strong> Add a safety buffer of at least
+<strong>20% to 30%</strong> above your calculated peak wattage to keep
+the adapter operating within its optimal thermal efficiency range.</li>
+</ul>
+<h2 id="3-power-delivery-protocols-and-negotiation">3. Power Delivery
+Protocols and Negotiation</h2>
+<p>Modern SBCs frequently use USB Type-C ports for power input. When
+choosing a USB-C power adapter, verify:</p>
+<ul>
+<li><strong>Protocol Support:</strong> Ensure compatibility with
+standard <strong>USB Power Delivery (USB-PD)</strong> or
+manufacturer-specific profiles.</li>
+<li><strong>Fixed Voltage Profiles:</strong> Check that the adapter
+natively supports the exact voltage profile required by the SBC (e.g.,
+5V/3A, 9V/3A, 12V/3A, or 15V/3A) without requiring proprietary
+handshakes that the SBC cannot perform.</li>
+</ul>
+<h2 id="4-voltage-ripple-and-noise">4. Voltage Ripple and Noise</h2>
+<p>Mechanical drives and flash memory controllers are sensitive to
+electrical noise. Low-quality power adapters often exhibit high voltage
+ripple under heavy loads, which leads to silent data corruption or
+controller resets.</p>
+<ul>
+<li>Look for power adapters with a rated ripple and noise specification
+of <strong>less than 100mV peak-to-peak (p-p)</strong>, ideally under
+50mV p-p on the 5V and 12V rails.</li>
+</ul>
+<h2 id="5-connector-dimensions-and-polarity">5. Connector Dimensions and
+Polarity</h2>
+<p>If using a standard DC barrel jack instead of USB-C:</p>
+<ul>
+<li><strong>Dimensions:</strong> Match outer diameter (OD) and inner pin
+diameter (ID), such as 5.5mm x 2.1mm or 5.5mm x 2.5mm. Mismatched pin
+sizes lead to intermittent contact and localized overheating.</li>
+<li><strong>Polarity:</strong> Verify whether the board requires
+<strong>center-positive</strong> (<span
+class="math inline">\(\text{C}+\)</span>) or
+<strong>center-negative</strong> (<span
+class="math inline">\(\text{C}-\)</span>). The vast majority of SBCs use
+center-positive configurations.</li>
+</ul>
+<h2 id="6-built-in-electrical-protections">6. Built-In Electrical
+Protections</h2>
+<p>To protect drives and data from electrical anomalies, select power
+supplies certified with the following industrial protection
+standards:</p>
+<ul>
+<li><strong>Over-Current Protection (OCP):</strong> Shuts down the
+adapter if current demands exceed safe limits.</li>
+<li><strong>Over-Voltage Protection (OVP):</strong> Prevents voltage
+spikes from reaching sensitive logic boards.</li>
+<li><strong>Short-Circuit Protection (SCP):</strong> Instantly cuts
+power in the event of a wiring short.</li>
+<li><strong>Over-Temperature Protection (OTP):</strong> Prevents thermal
+runaway under continuous 24/7 workloads.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

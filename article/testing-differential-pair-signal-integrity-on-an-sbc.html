@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Differential Pair Signal Integrity on an SBC - sbc</title>
+    <meta name="description" content="Testing signal integrity on high-speed differential pairs of a single board computer (SBC) requires a systematic approach combining high-bandwidth measurement hardware, precise probing techniques, and domain-specific analysis tools. Engineers evaluate pr">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/testing-differential-pair-signal-integrity-on-an-sbc">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Testing Differential Pair Signal Integrity on an SBC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/testing-differential-pair-signal-integrity-on-an-sbc" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Testing signal integrity on high-speed differential pairs of a single board computer (SBC) requires a systematic approach combining high-bandwidth measurement hardware, precise probing techniques, and domain-specific analysis tools. Engineers evaluate pr" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="testing-differential-pair-signal-integrity-on-an-sbc">Testing
+Differential Pair Signal Integrity on an SBC</h1>
+<p>Testing signal integrity on high-speed differential pairs of a single
+board computer (SBC) requires a systematic approach combining
+high-bandwidth measurement hardware, precise probing techniques, and
+domain-specific analysis tools. Engineers evaluate protocols such as
+PCIe, USB 3.0/4.0, Gigabit Ethernet, and MIPI to detect impedance
+discontinuities, jitter, and signal attenuation. This guide breaks down
+the core instruments, methodologies, and metrics engineers use to ensure
+high-speed traces reliably transmit data without bit errors or
+electromagnetic compliance failures.</p>
+<h2 id="1-test-equipment-and-fixturing-setup">1. Test Equipment and
+Fixturing Setup</h2>
+<p>Directly accessing dense SBC layouts requires specialized physical
+interfaces and wide-bandwidth test instruments:</p>
+<ul>
+<li><strong>High-Bandwidth Real-Time Oscilloscopes:</strong> Typically
+rated from 13 GHz to over 30 GHz depending on the protocol's fundamental
+frequency and required harmonic capture (usually up to the 3rd or 5th
+harmonic).</li>
+<li><strong>Differential Probes and Interposers:</strong>
+High-impedance, low-capacitance active differential probes minimize
+circuit loading. In tight form factors, engineers use custom interposers
+placed beneath SoCs or breakout test fixtures soldered directly to test
+points.</li>
+<li><strong>Test Fixtures and SMA Launchers:</strong> For standardized
+interfaces (such as PCIe edge fingers or USB-C receptacles), calibrated
+compliance test fixtures convert PCB traces to high-frequency coaxial
+lines (SMA or SMP).</li>
+</ul>
+<h2 id="2-time-domain-reflectometry-tdr-for-impedance-profile">2.
+Time-Domain Reflectometry (TDR) for Impedance Profile</h2>
+<p>Engineers use TDR modules (often built into high-end scopes or
+dedicated sampling units) to evaluate trace geometry and uniformity:</p>
+<ul>
+<li><strong>Discontinuity Detection:</strong> TDR sends a fast step
+pulse down the differential pair and measures reflected voltage to
+calculate the characteristic differential impedance along the trace
+length.</li>
+<li><strong>Locating Parasitics:</strong> It flags trace neck-downs,
+poorly matched vias, pad capacitance under AC coupling capacitors, and
+connector transitions that cause impedance mismatches away from target
+values (e.g., 90 ohms for USB, 85/100 ohms for PCIe).</li>
+</ul>
+<h2 id="3-eye-diagram-and-mask-testing">3. Eye Diagram and Mask
+Testing</h2>
+<p>Eye diagram analysis overlays thousands of digital transitions
+synchronized to a recovered clock to assess the statistical health of
+the physical layer:</p>
+<ul>
+<li><strong>Eye Height and Width:</strong> Measurements define signal
+amplitude and timing margin. A collapsed eye indicates excessive
+attenuation, noise, or dispersion.</li>
+<li><strong>Compliance Mask Testing:</strong> Industry standards (e.g.,
+PCI-SIG, USB-IF) define geometric "keep-out" masks within the eye. Any
+waveform violation indicates a failed design margin.</li>
+<li><strong>De-embedding:</strong> Engineers mathematically remove the
+fixture, probe, and cable effects using S-parameter files, isolating the
+SBC's true channel behavior.</li>
+</ul>
+<h2 id="4-jitter-decomposition">4. Jitter Decomposition</h2>
+<p>Jitter analysis separates timing variations into root-cause
+components to identify the origin of transmission issues:</p>
+<ul>
+<li><strong>Random Jitter (RJ):</strong> Unbounded noise caused by
+thermal effects and semiconductor physics, modeled as a Gaussian
+distribution.</li>
+<li><strong>Deterministic Jitter (DJ):</strong> Bounded timing
+deviations broken into:
+<ul>
+<li><strong>Data-Dependent Jitter (DDJ) / Inter-Symbol Interference
+(ISI):</strong> Caused by channel loss, skin effect, and dielectric
+dispersion over distance.</li>
+<li><strong>Periodic Jitter (PJ):</strong> Introduced by switching power
+supplies, nearby clock oscillators, or phase-locked loop (PLL)
+instability.</li>
+</ul></li>
+<li><strong>Total Jitter (TJ):</strong> Calculated at a specific Bit
+Error Rate (typically <span class="math inline">\(10^{-12}\)</span>) to
+guarantee long-term link stability.</li>
+</ul>
+<h2 id="5-s-parameter-and-frequency-domain-analysis">5. S-Parameter and
+Frequency-Domain Analysis</h2>
+<p>Using a Vector Network Analyzer (VNA), engineers characterize the
+differential channel as a multi-port network across its operating
+spectrum:</p>
+<ul>
+<li><strong>Differential Insertion Loss (<span
+class="math inline">\(SDD_{21}\)</span>):</strong> Measures signal
+attenuation over frequency to verify that high-frequency components do
+not degrade below receiver sensitivity thresholds.</li>
+<li><strong>Differential Return Loss (<span
+class="math inline">\(SDD_{11}\)</span>):</strong> Quantifies reflected
+energy caused by impedance mismatches.</li>
+<li><strong>Mode Conversion (<span
+class="math inline">\(SCD_{21}\)</span>):</strong> Measures the
+conversion of differential signals to common-mode signals. Elevated
+common-mode energy is a primary cause of radiated electromagnetic
+interference (EMI) and cross-talk.</li>
+</ul>
+<h2 id="6-bit-error-rate-testing-bert-and-receiver-testing">6. Bit Error
+Rate Testing (BERT) and Receiver Testing</h2>
+<p>While oscilloscopes assess transmitter performance, BERT systems
+evaluate the complete link:</p>
+<ul>
+<li><strong>Pattern Generation:</strong> A BERT injects standardized
+Pseudo-Random Binary Sequences (e.g., PRBS7, PRBS31) directly into the
+SBC's receiver pairs.</li>
+<li><strong>Jitter Tolerance Testing:</strong> The tester intentionally
+injects calibrated amounts of jitter, amplitude noise, and sinusoidal
+interference to verify whether the SBC's internal receiver equalizers
+(CTLE, DFE) can successfully reconstruct the data stream at the target
+bit error rate.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

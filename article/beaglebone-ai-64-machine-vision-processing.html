@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeagleBone AI-64 Machine Vision Processing - sbc</title>
+    <meta name="description" content="The BeagleBone AI-64 processes complex machine vision pipelines by leveraging a heterogeneous system-on-chip (SoC) architecture that distributes tasks across specialized processing cores. Powered by the Texas Instruments TDA4VM processor, the board offlo">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/beaglebone-ai-64-machine-vision-processing">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="BeagleBone AI-64 Machine Vision Processing - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/beaglebone-ai-64-machine-vision-processing" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The BeagleBone AI-64 processes complex machine vision pipelines by leveraging a heterogeneous system-on-chip (SoC) architecture that distributes tasks across specialized processing cores. Powered by the Texas Instruments TDA4VM processor, the board offlo" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="beaglebone-ai-64-machine-vision-processing">BeagleBone AI-64
+Machine Vision Processing</h1>
+<p>The BeagleBone AI-64 processes complex machine vision pipelines by
+leveraging a heterogeneous system-on-chip (SoC) architecture that
+distributes tasks across specialized processing cores. Powered by the
+Texas Instruments TDA4VM processor, the board offloads resource-heavy
+workloads—such as high-resolution video capture, image signal
+processing, computer vision algorithms, and deep learning inference—away
+from the main CPU to dedicated hardware accelerators. This architecture
+ensures high-throughput, low-latency processing suitable for real-time
+edge AI applications.</p>
+<h3 id="heterogeneous-processing-architecture">Heterogeneous Processing
+Architecture</h3>
+<p>At the core of the BeagleBone AI-64's capability is the TI TDA4VM
+SoC, which employs a multi-core design tailored for advanced
+driver-assistance systems (ADAS) and autonomous robotics. The system
+separates high-level application control from low-level data
+streaming:</p>
+<ul>
+<li><strong>Dual 64-bit Arm Cortex-A72 cores:</strong> Run the Linux
+operating system, orchestrate the vision pipeline, and handle
+communication protocols.</li>
+<li><strong>C7x Floating-Point DSP with Matrix Multiply Accelerator
+(MMA):</strong> Delivers up to 8 TOPS (Tera Operations Per Second) of
+deep learning compute, executing convolutional neural networks (CNNs)
+for object detection, classification, and segmentation.</li>
+<li><strong>Dual C66x DSPs:</strong> Handle traditional computer vision
+algorithms, image filtering, and mathematical operations.</li>
+<li><strong>Vision Processing Accelerators (VPAC) and Depth/Motion
+Accelerators (DMPAC):</strong> Dedicated hardware blocks for point-cloud
+generation, stereo block matching, and optical flow calculation.</li>
+</ul>
+<h3 id="image-ingestion-and-hardware-isp">Image Ingestion and Hardware
+ISP</h3>
+<p>Machine vision begins with high-bandwidth image capture via the
+board's dual 4-lane MIPI CSI-2 camera interfaces. Raw sensor data is
+routed directly into the integrated Image Signal Processor (ISP) inside
+the VPAC.</p>
+<p>The hardware ISP automatically executes demosaicing, auto white
+balance, auto exposure, dynamic range compression, lens distortion
+correction, and noise reduction in real time. Because the ISP runs in
+fixed-function hardware, it processes multi-megapixel video feeds up to
+4K resolution without consuming CPU cycles or introducing significant
+latency.</p>
+<h3 id="deep-learning-and-tensor-acceleration">Deep Learning and Tensor
+Acceleration</h3>
+<p>Once frames are processed by the ISP, the Vision Preprocessing
+Accelerator scales, crops, and converts the color space (e.g., RGB to
+YUV or planar BGR) to match the input tensor requirements of the neural
+network.</p>
+<p>The prepared tensors are loaded directly into the C7x/MMA core. The
+Matrix Multiply Accelerator computes deep learning layers natively in
+8-bit (INT8) or 16-bit (INT16) precision. Supported frameworks like
+ONNX, TensorFlow Lite, and PyTorch are optimized using TI's Edge AI
+runtime tools (TIDL), allowing pre-trained models such as YOLO,
+MobileNet, and ResNet to execute at high frame rates with minimal power
+draw.</p>
+<h3 id="efficient-data-movement-and-openvx-integration">Efficient Data
+Movement and OpenVX Integration</h3>
+<p>To prevent memory bottlenecks when transferring large frame buffers
+between processing blocks, the BeagleBone AI-64 relies on:</p>
+<ul>
+<li><strong>TI-OpenVX (TIOVX):</strong> A framework that creates
+optimized hardware execution graphs, minimizing buffer copies between
+the CSI receiver, ISP, DSP, and neural network engines.</li>
+<li><strong>DMA Subsystems:</strong> Direct Memory Access controllers
+stream image buffers through the 4GB LPDDR4 memory subsystem via
+shared-memory zero-copy pipelines.</li>
+<li><strong>GStreamer Plugins:</strong> Standard multimedia pipelines
+integrate directly with TI's hardware-accelerated GStreamer plugins,
+enabling seamless decoding, encoding (H.264/H.265), and display output
+through the Mini DisplayPort interface.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

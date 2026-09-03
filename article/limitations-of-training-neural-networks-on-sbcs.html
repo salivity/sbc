@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limitations of Training Neural Networks on SBCs - sbc</title>
+    <meta name="description" content="Training deep neural networks (DNNs) directly on single-board computers (SBCs) presents significant challenges due to fundamental hardware and architectural constraints. While SBCs are highly effective for deploying lightweight models for inference at th">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/limitations-of-training-neural-networks-on-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Limitations of Training Neural Networks on SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/limitations-of-training-neural-networks-on-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Training deep neural networks (DNNs) directly on single-board computers (SBCs) presents significant challenges due to fundamental hardware and architectural constraints. While SBCs are highly effective for deploying lightweight models for inference at th" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="limitations-of-training-neural-networks-on-sbcs">Limitations of
+Training Neural Networks on SBCs</h1>
+<p>Training deep neural networks (DNNs) directly on single-board
+computers (SBCs) presents significant challenges due to fundamental
+hardware and architectural constraints. While SBCs are highly effective
+for deploying lightweight models for inference at the edge, their
+restricted compute capabilities, memory bottlenecks, thermal
+limitations, and slow storage make full-scale model training largely
+impractical for all but the simplest architectures.</p>
+<h3 id="1-inadequate-processing-power">1. Inadequate Processing
+Power</h3>
+<p>Deep learning training relies on billions of floating-point matrix
+multiplications during forward and backward passes. Standard SBCs
+typically feature low-power ARM-based CPUs or entry-level embedded
+GPUs/NPUs. These processors lack the massive parallel computing cores
+and dedicated tensor units available in modern data center GPUs, leading
+to impractically long training times—often taking days or weeks for
+tasks a standard GPU finishes in minutes.</p>
+<h3 id="2-severe-memory-ram-limitations">2. Severe Memory (RAM)
+Limitations</h3>
+<p>Training deep networks requires storing not only model weights, but
+also activation maps, gradients, and optimizer states (such as Adam
+momentum buffers) for every batch. Most SBCs offer between 2 GB and 16
+GB of unified system RAM. Large language models, modern computer vision
+networks, and standard batch sizes easily exceed this capacity,
+resulting in Out-Of-Memory (OOM) crashes unless the model size or batch
+size is reduced to a point that hampers convergence.</p>
+<h3 id="3-limited-memory-bandwidth">3. Limited Memory Bandwidth</h3>
+<p>Memory bandwidth is as critical as memory capacity for deep learning
+workloads. SBCs generally rely on low-power memory (such as LPDDR4 or
+LPDDR5) shared between the CPU and integrated graphics, offering
+bandwidths typically under 50 GB/s. In contrast, modern discrete
+training GPUs utilize high-bandwidth memory (HBM or GDDR6) providing
+bandwidths well exceeding 1,000 GB/s. This difference creates a severe
+data transfer bottleneck during gradient calculation and weight
+updates.</p>
+<h3 id="4-storage-io-and-endurance-bottlenecks">4. Storage I/O and
+Endurance Bottlenecks</h3>
+<p>Training requires continuous, high-throughput reading of training
+datasets and frequent writing of large checkpoint files. Most SBCs rely
+on microSD cards, eMMC modules, or slow USB-attached drives. MicroSD
+cards offer low random read/write speeds, which slows down the data
+loader pipeline and causes GPU/CPU starvation. Additionally, the
+constant write cycles associated with checkpointing can quickly wear out
+flash-based storage media.</p>
+<h3 id="5-thermal-throttling">5. Thermal Throttling</h3>
+<p>Training workloads maintain 100% hardware utilization over extended
+periods. SBCs are designed for compact, low-power environments and
+frequently rely on passive cooling or small heatsinks. Under sustained
+training loads, these boards quickly hit thermal thresholds, forcing the
+system to throttle clock speeds significantly to prevent overheating,
+which further degrades training performance.</p>
+<h3 id="6-power-delivery-constraints">6. Power Delivery Constraints</h3>
+<p>SBCs operate within strict power budgets, commonly between 5W and 25W
+supplied via USB or low-voltage DC inputs. Full-scale deep learning
+training is energy-intensive, with discrete accelerator cards regularly
+drawing 300W to 700W. The low-power envelope of an SBC physically caps
+the maximum continuous compute throughput the board can deliver.</p>
+<h3 id="7-software-and-toolchain-friction">7. Software and Toolchain
+Friction</h3>
+<p>Most deep learning frameworks (such as PyTorch and TensorFlow) and
+optimization libraries (such as CUDA, cuDNN, and FlashAttention) are
+optimized for x86 architectures and discrete GPUs. While ARM-compatible
+builds exist, many hardware acceleration features for training are
+absent or poorly supported on embedded chipsets, where software
+ecosystems are heavily biased toward inference rather than training.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

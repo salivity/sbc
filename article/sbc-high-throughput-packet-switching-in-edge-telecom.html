@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBC High-Throughput Packet Switching in Edge Telecom - sbc</title>
+    <meta name="description" content="Single Board Computers (SBCs) manage high-throughput packet switching in edge telecom applications by combining specialized hardware acceleration, kernel-bypass software frameworks, high-speed input/output (I/O) interfaces, and real-time multiprocessing">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/sbc-high-throughput-packet-switching-in-edge-telecom">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SBC High-Throughput Packet Switching in Edge Telecom - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/sbc-high-throughput-packet-switching-in-edge-telecom" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Single Board Computers (SBCs) manage high-throughput packet switching in edge telecom applications by combining specialized hardware acceleration, kernel-bypass software frameworks, high-speed input/output (I/O) interfaces, and real-time multiprocessing" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="sbc-high-throughput-packet-switching-in-edge-telecom">SBC
+High-Throughput Packet Switching in Edge Telecom</h1>
+<p>Single Board Computers (SBCs) manage high-throughput packet switching
+in edge telecom applications by combining specialized hardware
+acceleration, kernel-bypass software frameworks, high-speed input/output
+(I/O) interfaces, and real-time multiprocessing architectures. As modern
+telecommunication networks shift toward decentralized, low-latency edge
+environments—such as 5G User Plane Functions (UPF) and Open RAN
+deployments—compact SBCs handle massive data streams efficiently by
+bypassing traditional operating system bottlenecks and offloading
+compute-intensive tasks directly to silicon.</p>
+<h3 id="hardware-acceleration-and-offload-engines">Hardware Acceleration
+and Offload Engines</h3>
+<p>Modern edge-grade SBCs utilize System-on-Chips (SoCs) equipped with
+specialized processing units alongside standard CPU cores. These
+include:</p>
+<ul>
+<li><strong>Integrated Network Processing Units (NPUs) and
+FPGAs:</strong> Offload repetitive routing, filtering, and deep packet
+inspection (DPI) tasks from the host CPU.</li>
+<li><strong>Cryptographic and Checksum Engines:</strong> Perform
+wire-speed IPsec encryption, TLS termination, and CRC validation in
+hardware, freeing computational bandwidth.</li>
+<li><strong>Direct Memory Access (DMA):</strong> Enables network
+interfaces to transfer packet payloads directly into system RAM without
+CPU intervention, reducing processing cycles per packet.</li>
+</ul>
+<h3 id="kernel-bypass-software-architectures">Kernel-Bypass Software
+Architectures</h3>
+<p>Standard Linux network stacks introduce latency via frequent context
+switching, interrupts, and memory copying between kernel space and user
+space. To achieve wire-speed throughput, SBCs rely on kernel-bypass
+frameworks:</p>
+<ul>
+<li><strong>Data Plane Development Kit (DPDK):</strong> Replaces
+interrupt-driven packet handling with a Polling Mode Driver (PMD). This
+allows user-space applications direct access to network interface
+queues, drastically reducing latency and packet processing
+overhead.</li>
+<li><strong>Vector Packet Processing (VPP):</strong> Processes packets
+in batches (vectors) rather than one by one, maximizing CPU instruction
+cache hits and processing millions of packets per second (Mpps).</li>
+<li><strong>eXpress Data Path (XDP) and eBPF:</strong> Executes
+in-kernel packet filtering and redirection at the lowest network driver
+layer before memory allocation occurs, minimizing CPU utilization for
+high-speed edge filtering.</li>
+</ul>
+<h3 id="high-speed-io-and-memory-management">High-Speed I/O and Memory
+Management</h3>
+<p>Physical data transport and memory access are optimized to prevent
+edge bottlenecks:</p>
+<ul>
+<li><strong>Multi-Gigabit Interfaces:</strong> Industrial SBCs feature
+10GbE, 25GbE, or SFP+ ports interconnected through high-bandwidth PCIe
+Gen 3/4/5 lanes to support saturated incoming data streams.</li>
+<li><strong>Zero-Copy Memory Access:</strong> Packets are read and
+modified directly within shared memory buffers (such as hugepages) to
+eliminate redundant data duplication.</li>
+<li><strong>High-Bandwidth, Low-Latency RAM:</strong> LPDDR5 or DDR5
+memory subsystems provide the necessary bandwidth to support concurrent
+reads and writes from multiple network streams simultaneously.</li>
+</ul>
+<h3 id="core-pinning-and-real-time-resource-isolation">Core Pinning and
+Real-Time Resource Isolation</h3>
+<p>SBCs in edge telecom applications feature multi-core processors
+configured to separate control-plane and data-plane operations:</p>
+<ul>
+<li><strong>CPU Core Isolation and Pinning:</strong> Specific
+high-performance cores are isolated exclusively for packet forwarding
+loops using DPDK, preventing standard operating system tasks from
+interrupting packet flows.</li>
+<li><strong>Control Plane Separation:</strong> Background tasks,
+telemetry, logging, and routing protocols (e.g., BGP, OSPF) run on
+distinct, lower-priority cores.</li>
+<li><strong>Real-Time Kernels:</strong> PREEMPT_RT-patched Linux
+distributions ensure deterministic latency for time-critical
+telecommunications protocols where jitter must be kept within
+sub-millisecond tolerances.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

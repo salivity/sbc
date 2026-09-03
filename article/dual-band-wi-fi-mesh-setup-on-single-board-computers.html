@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual-Band Wi-Fi Mesh Setup on Single Board Computers - sbc</title>
+    <meta name="description" content="Configuring dual-band Wi-Fi mesh networking on an array of single board computers (SBCs) enables resilient, high-throughput decentralized communication for edge computing, IoT clusters, and field deployments. By utilizing both 2.4 GHz and 5 GHz frequenci">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/dual-band-wi-fi-mesh-setup-on-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dual-Band Wi-Fi Mesh Setup on Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/dual-band-wi-fi-mesh-setup-on-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring dual-band Wi-Fi mesh networking on an array of single board computers (SBCs) enables resilient, high-throughput decentralized communication for edge computing, IoT clusters, and field deployments. By utilizing both 2.4 GHz and 5 GHz frequenci" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="dual-band-wi-fi-mesh-setup-on-single-board-computers">Dual-Band
+Wi-Fi Mesh Setup on Single Board Computers</h1>
+<p>Configuring dual-band Wi-Fi mesh networking on an array of single
+board computers (SBCs) enables resilient, high-throughput decentralized
+communication for edge computing, IoT clusters, and field deployments.
+By utilizing both 2.4 GHz and 5 GHz frequencies simultaneously,
+developers can dedicate high-frequency channels for high-bandwidth
+node-to-node backhaul while retaining the lower frequency for long-range
+connectivity or client access. This guide explains how to establish a
+dual-band mesh architecture using Linux kernel tools, standard IEEE
+802.11s mesh interfaces, and B.A.T.M.A.N. Advanced (Better Approach To
+Mobile Adhoc Networking) routing.</p>
+<h3 id="1-hardware-and-driver-prerequisites">1. Hardware and Driver
+Prerequisites</h3>
+<p>To implement a true dual-band mesh, each SBC must be equipped with
+wireless interfaces capable of simultaneous dual-band operation. This is
+typically achieved using either a dual-band, dual-concurrent (DBDC)
+integrated Wi-Fi module or two separate Wi-Fi adapters (e.g., an onboard
+2.4 GHz radio and a secondary 5 GHz USB dongle).</p>
+<p>Verify that the Wi-Fi drivers support mesh point mode
+(<code>mesh point</code> or <code>802.11s</code>) by inspecting the
+<code>iw</code> capabilities:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">iw</span> list <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;Supported interface modes&quot;</span> <span class="at">-A</span> 8</span></code></pre></div>
+<p>Ensure <code>mesh point</code> is listed under the supported modes
+for both interfaces.</p>
+<h3 id="2-dual-interface-mesh-topology-strategy">2. Dual-Interface Mesh
+Topology Strategy</h3>
+<p>A standard single-band mesh relies on one frequency, creating channel
+contention. A dual-band approach resolves this by establishing two
+distinct Layer 2 mesh domains:</p>
+<ul>
+<li><strong>5 GHz Mesh (<code>mesh5</code>):</strong> Configured on a
+clean, wide channel (e.g., 80 MHz on Channel 36 or 149) for high-speed,
+low-latency inter-node communication.</li>
+<li><strong>2.4 GHz Mesh (<code>mesh24</code>):</strong> Configured on
+standard non-overlapping channels (1, 6, or 11) for maximum range and
+penetration through obstacles.</li>
+</ul>
+<p>Both mesh links are aggregated at Layer 2 using
+<strong>BATMAN-adv</strong>, which continuously assesses link quality
+and dynamically routes packets over the optimal band.</p>
+<h3 id="3-step-by-step-configuration">3. Step-by-Step Configuration</h3>
+<h4 id="step-a-install-required-packages">Step A: Install Required
+Packages</h4>
+<p>Install the wireless configuration tools and routing daemons on each
+SBC:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install iw batctl wireless-tools bridge-utils</span></code></pre></div>
+<p>Load the BATMAN-adv kernel module:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> modprobe batman-adv</span></code></pre></div>
+<h4 id="step-b-initialize-ieee-80211s-mesh-interfaces">Step B:
+Initialize IEEE 802.11s Mesh Interfaces</h4>
+<p>Create dedicated mesh interfaces for both the 2.4 GHz
+(<code>wlan0</code>) and 5 GHz (<code>wlan1</code>) physical radios.
+Replace the Mesh IDs (<code>MeshID_24</code> and <code>MeshID_5</code>)
+and channel frequencies accordingly.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure 2.4 GHz Mesh (Channel 1 -&gt; 2412 MHz)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set wlan0 down</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> iw dev wlan0 interface add mesh24 type mp mesh_id MeshCluster24</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set mesh24 up</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> iw dev mesh24 set channel 1</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Configure 5 GHz Mesh (Channel 36 -&gt; 5180 MHz)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set wlan1 down</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> iw dev wlan1 interface add mesh5 type mp mesh_id MeshCluster5</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set mesh5 up</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> iw dev mesh5 set channel 36</span></code></pre></div>
+<h4 id="step-c-aggregate-interfaces-with-batman-adv">Step C: Aggregate
+Interfaces with BATMAN-adv</h4>
+<p>Attach both mesh interfaces to the BATMAN-adv virtual interface
+(<code>bat0</code>). BATMAN-adv handles routing metrics and dynamically
+selects the best interface for packet transport.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add mesh interfaces to BATMAN-adv</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> batctl if add mesh24</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> batctl if add mesh5</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Bring up the bat0 interface</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set up dev mesh24</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set up dev mesh5</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set up dev bat0</span></code></pre></div>
+<h4 id="step-d-assign-ip-addressing">Step D: Assign IP Addressing</h4>
+<p>Assign a static IP address to the <code>bat0</code> virtual interface
+on each node within the same subnet:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example for Node 1</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip addr add 192.168.199.1/24 dev bat0</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example for Node 2</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip addr add 192.168.199.2/24 dev bat0</span></code></pre></div>
+<h3 id="4-verification-and-routing-diagnostics">4. Verification and
+Routing Diagnostics</h3>
+<p>Verify that the nodes discover each other across both frequency
+bands:</p>
+<ul>
+<li><strong>Check direct 802.11s peers:</strong>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">iw</span> dev mesh24 station dump</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">iw</span> dev mesh5 station dump</span></code></pre></div></li>
+<li><strong>Check BATMAN-adv mesh neighbors and link quality:</strong>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> batctl n</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> batctl o</span></code></pre></div></li>
+</ul>
+<p>The output of <code>batctl o</code> displays the Transmit Quality
+(TQ) metric for each neighbor via both <code>mesh24</code> and
+<code>mesh5</code>, demonstrating automatic traffic steering over the
+highest-performing link.</p>
+<h3 id="5-automating-on-boot">5. Automating on Boot</h3>
+<p>To persist the configuration across reboots, add the initialization
+commands to a systemd service file located at
+<code>/etc/systemd/system/mesh-init.service</code>:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Unit]</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Description</span><span class="ot">=</span><span class="st">Dual-Band Wi-Fi Mesh Service</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="dt">After</span><span class="ot">=</span><span class="st">network.target</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[Service]</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="dt">Type</span><span class="ot">=</span><span class="st">oneshot</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="dt">ExecStart</span><span class="ot">=</span><span class="st">/usr/local/bin/start-mesh.sh</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="dt">RemainAfterExit</span><span class="ot">=</span><span class="kw">yes</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">[Install]</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="dt">WantedBy</span><span class="ot">=</span><span class="st">multi-user.target</span></span></code></pre></div>
+<p>Place the initialization shell script in
+<code>/usr/local/bin/start-mesh.sh</code>, make it executable with
+<code>chmod +x /usr/local/bin/start-mesh.sh</code>, and enable the
+service via <code>sudo systemctl enable mesh-init.service</code>.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

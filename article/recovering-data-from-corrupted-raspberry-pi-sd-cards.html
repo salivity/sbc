@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recovering Data from Corrupted Raspberry Pi SD Cards - sbc</title>
+    <meta name="description" content="If your Raspberry Pi suddenly refuses to boot or throws read-only errors, your SD card may be corrupted. This article provides a quick overview of why this corruption happens and walks you through step-by-step methods to recover your valuable data. We wi">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/recovering-data-from-corrupted-raspberry-pi-sd-cards">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Recovering Data from Corrupted Raspberry Pi SD Cards - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/recovering-data-from-corrupted-raspberry-pi-sd-cards" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="If your Raspberry Pi suddenly refuses to boot or throws read-only errors, your SD card may be corrupted. This article provides a quick overview of why this corruption happens and walks you through step-by-step methods to recover your valuable data. We wi" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="recovering-data-from-corrupted-raspberry-pi-sd-cards">Recovering
+Data from Corrupted Raspberry Pi SD Cards</h1>
+<p>If your Raspberry Pi suddenly refuses to boot or throws read-only
+errors, your SD card may be corrupted. This article provides a quick
+overview of why this corruption happens and walks you through
+step-by-step methods to recover your valuable data. We will cover
+standard filesystem repair tools like <code>fsck</code> for Linux users,
+dedicated data recovery software for Windows and macOS, and best
+practices to prevent future data loss.</p>
+<h3 id="understanding-sd-card-corruption">Understanding SD Card
+Corruption</h3>
+<p>Raspberry Pi SD cards usually corrupt due to sudden power
+interruptions, unsafe shutdowns, or the natural wear and tear of
+continuous read/write cycles. Because the Pi frequently writes log files
+to the disk, cutting the power without a proper shutdown command can
+interrupt a write operation, leaving the filesystem in an inconsistent
+state.</p>
+<h3 id="method-1-using-fsck-linux--macos">Method 1: Using fsck (Linux
+&amp; macOS)</h3>
+<p>If the corruption is minor and related to the filesystem structure
+rather than physical hardware failure, the built-in Linux utility
+<code>fsck</code> (File System Consistency Check) can often repair the
+damage.</p>
+<ul>
+<li>Insert the SD card into a separate Linux computer or a Mac.</li>
+<li>Open the terminal and identify the SD card's identifier using
+<code>lsblk</code> (Linux) or <code>diskutil list</code> (macOS).</li>
+<li>Run the repair command on the ext4 partition (usually the second
+partition, e.g., <code>/dev/sdb2</code>):
+<code>sudo fsck -y /dev/sdb2</code></li>
+<li>The <code>-y</code> flag automatically answers "yes" to all repair
+prompts. Once complete, safely eject the card and test it in your
+Raspberry Pi.</li>
+</ul>
+<h3 id="method-2-image-cloning-and-mounting-windows--linux">Method 2:
+Image Cloning and Mounting (Windows &amp; Linux)</h3>
+<p>When an SD card is failing physically, every read operation could be
+its last. The safest approach is to create a raw image clone of the card
+onto your computer before attempting recovery.</p>
+<ul>
+<li><strong>On Windows:</strong> Use a tool like Win32 Disk Imager or
+BalenaEtcher to read the entire SD card and save it as a
+<code>.img</code> file to your local hard drive.</li>
+<li><strong>On Linux/macOS:</strong> Use the <code>dd</code> command in
+the terminal:
+<code>sudo dd if=/dev/sdb of=~/pi_card_backup.img bs=4M status=progress</code></li>
+<li>Once you have the image file, you can use software like Linux Reader
+by DiskInternals (on Windows) to open the <code>.img</code> file, browse
+the Linux <code>ext4</code> partition, and drag-and-drop your data to
+safety.</li>
+</ul>
+<h3 id="method-3-third-party-data-recovery-software">Method 3:
+Third-Party Data Recovery Software</h3>
+<p>If the partition table itself is destroyed and your computer prompts
+you to "format the disk," do not format it. Instead, use dedicated data
+recovery tools capable of scanning raw disk sectors.</p>
+<ul>
+<li><strong>TestDisk &amp; PhotoRec:</strong> These are powerful, free,
+open-source command-line utilities. TestDisk can rebuild broken
+partition tables, while PhotoRec excels at carving out specific file
+types (like Python scripts, images, and configuration files) from deeply
+corrupted storage.</li>
+<li><strong>Commercial Alternatives:</strong> Software like Recuva
+(Windows) or EaseUS Data Recovery Wizard can also scan raw disks and
+present a user-friendly graphical interface to preview and recover your
+lost files.</li>
+</ul>
+<h3 id="preventing-future-sd-card-corruption">Preventing Future SD Card
+Corruption</h3>
+<p>Once you have retrieved your data, take steps to ensure this issue
+does not happen again. Always shut down your Raspberry Pi using
+<code>sudo shutdown -h now</code> and wait for the green LED to stop
+blinking before unplugging the power source. Additionally, consider
+investing in high-end, "Endurance" rated SD cards, or configure your
+Raspberry Pi to boot from a more reliable USB Solid State Drive
+(SSD).</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

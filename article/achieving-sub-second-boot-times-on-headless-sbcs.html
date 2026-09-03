@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achieving Sub-Second Boot Times on Headless SBCs - sbc</title>
+    <meta name="description" content="Achieving sub-second boot times on a headless single-board computer (SBC) requires a holistic, bottom-up optimization of the entire boot pipeline. This article explores the core engineering practices needed to eliminate latency across every stage of the">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/achieving-sub-second-boot-times-on-headless-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Achieving Sub-Second Boot Times on Headless SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/achieving-sub-second-boot-times-on-headless-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Achieving sub-second boot times on a headless single-board computer (SBC) requires a holistic, bottom-up optimization of the entire boot pipeline. This article explores the core engineering practices needed to eliminate latency across every stage of the" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="achieving-sub-second-boot-times-on-headless-sbcs">Achieving
+Sub-Second Boot Times on Headless SBCs</h1>
+<p>Achieving sub-second boot times on a headless single-board computer
+(SBC) requires a holistic, bottom-up optimization of the entire boot
+pipeline. This article explores the core engineering practices needed to
+eliminate latency across every stage of the boot sequence, including
+bootloader minimization, aggressive Linux kernel trimming, user-space
+streamlining, and storage hardware optimization.</p>
+<h3 id="1-optimize-storage-and-interface-selection">1. Optimize Storage
+and Interface Selection</h3>
+<p>Storage I/O latency is often the primary bottleneck during early
+initialization.</p>
+<ul>
+<li><strong>Use High-Speed NOR Flash or Fast eMMC:</strong> Read-only
+SPI NOR flash or high-performance eMMC (HS200/HS400 mode) dramatically
+outperforms standard microSD cards in random read latency and
+initialization time.</li>
+<li><strong>Execute In Place (XIP):</strong> Where supported by
+architecture and flash memory (e.g., QSPI NOR), XIP allows the CPU to
+execute code directly from flash, completely bypassing the step of
+copying the kernel binary into RAM.</li>
+</ul>
+<h3 id="2-streamline-or-bypass-the-bootloader">2. Streamline or Bypass
+the Bootloader</h3>
+<p>Standard bootloaders like U-Boot introduce several hundred
+milliseconds of delay through hardware discovery, console polling, and
+environment parsing.</p>
+<ul>
+<li><strong>Implement Falcon Mode:</strong> In modern U-Boot
+architectures, "Falcon Mode" allows the secondary program loader (SPL)
+to load and start the Linux kernel directly, entirely skipping the full
+U-Boot stage (U-Boot proper).</li>
+<li><strong>Eliminate Timeouts and Interactive Consoles:</strong> Set
+the boot delay (<code>bootdelay</code>) to zero and disable standard
+boot menu scans over USB, PCIe, and network interfaces.</li>
+<li><strong>Disable Unneeded Driver Support:</strong> Strip the
+bootloader configuration to support only the precise storage device,
+clock tree, and DRAM configuration necessary to load the kernel
+image.</li>
+</ul>
+<h3 id="3-build-a-minimal-monolithic-linux-kernel">3. Build a Minimal,
+Monolithic Linux Kernel</h3>
+<p>A generic Linux distribution kernel includes thousands of drivers and
+checks that are irrelevant for a headless embedded target.</p>
+<ul>
+<li><strong>Compile a Tailored Monolithic Kernel:</strong> Compile all
+required drivers directly into the kernel image (<code>y</code>) rather
+than as modules (<code>m</code>). This removes the overhead of runtime
+module loading and dependency resolution.</li>
+<li><strong>Strip Unused Subsystems:</strong> Disable display stacks
+(DRM/KMS), sound architectures (ALSA), wireless stacks, and unused bus
+protocols (PCIe, USB, CAN) if not required by the headless
+application.</li>
+<li><strong>Quiet the Console:</strong> Standard serial console output
+(<code>printk</code>) is bounded by UART baud rates and significantly
+stalls the boot sequence. Pass <code>quiet</code> and
+<code>loglevel=0</code> in the kernel command line, or disable
+<code>CONFIG_PRINTK</code> in production builds.</li>
+<li><strong>Tune Kernel Compression:</strong> Decompression takes CPU
+cycles. Depending on the CPU speed versus storage read speed, an
+uncompressed kernel (<code>Image</code>) or a fast-decompressing format
+like LZO or LZ4 can boot faster than heavily compressed formats like XZ
+or GZIP.</li>
+</ul>
+<h3 id="4-replace-standard-init-systems-with-a-custom-user-space">4.
+Replace Standard Init Systems with a Custom User-Space</h3>
+<p>Standard user-space initialization systems like <code>systemd</code>
+are too complex for sub-second requirements.</p>
+<ul>
+<li><strong>Use a Dedicated Single-Purpose Init:</strong> Point the
+kernel directly to your target application using the kernel command-line
+argument <code>init=/path/to/app</code>. This avoids the
+process-spawning overhead of typical init systems.</li>
+<li><strong>Avoid Dynamic Device Managers:</strong> Avoid running heavy
+device managers like <code>udev</code>. If specific device nodes are
+required, generate a static <code>/dev</code> directory at build time or
+use a lightweight alternative like <code>mdev</code> (from BusyBox) with
+minimal event rules.</li>
+<li><strong>Static Linking:</strong> Link the core application
+statically or ensure that shared libraries are strictly limited and
+pre-cached, minimizing the dynamic linker’s overhead during application
+startup.</li>
+</ul>
+<h3 id="5-efficient-root-filesystem-architecture">5. Efficient Root
+Filesystem Architecture</h3>
+<p>How the root filesystem is packaged and mounted determines both
+initial read latency and post-boot responsiveness.</p>
+<ul>
+<li><strong>Initramfs Embedded in Kernel:</strong> Embedding a minimal
+<code>cpio</code> root filesystem directly inside the kernel image
+allows the system to start executing user-space instantly after kernel
+memory initialization, without waiting to mount external storage
+blocks.</li>
+<li><strong>Read-Only SquashFS:</strong> If the filesystem must reside
+on block storage, an uncompressed or lightweight compressed read-only
+filesystem reduces filesystem mounting checks and journaling
+overhead.</li>
+</ul>
+<h3 id="6-hardware-level-verification">6. Hardware-Level
+Verification</h3>
+<p>Profiling sub-second boots requires accurate hardware tooling:</p>
+<ul>
+<li><strong>GPIO Toggling:</strong> Instrument key milestones (SPL
+start, kernel entry, application ready) by setting specific GPIO pins
+high and monitoring the transitions using a logic analyzer or
+oscilloscope.</li>
+<li><strong>Kernel Profiling (<code>initcall_debug</code>):</strong>
+Enable <code>initcall_debug</code> and use tools like
+<code>bootgraph.py</code> to identify long-running driver
+initializations inside the kernel, allowing you to defer or remove
+non-critical hardware initialization until after your primary headless
+service is running.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

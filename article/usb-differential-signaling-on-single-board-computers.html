@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USB Differential Signaling on Single Board Computers - sbc</title>
+    <meta name="description" content="This article provides an overview of the electrical characteristics governing differential signaling on the USB lines of single board computers (SBCs). It examines physical layer parameters across various USB standards, detailing differential voltage lev">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/usb-differential-signaling-on-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="USB Differential Signaling on Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/usb-differential-signaling-on-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the electrical characteristics governing differential signaling on the USB lines of single board computers (SBCs). It examines physical layer parameters across various USB standards, detailing differential voltage lev" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="usb-differential-signaling-on-single-board-computers">USB
+Differential Signaling on Single Board Computers</h1>
+<p>This article provides an overview of the electrical characteristics
+governing differential signaling on the USB lines of single board
+computers (SBCs). It examines physical layer parameters across various
+USB standards, detailing differential voltage levels, characteristic
+impedance, signal termination, receiver thresholds, and board-level
+routing requirements critical for robust hardware design.</p>
+<h3 id="differential-voltage-swings-across-usb-modes">Differential
+Voltage Swings Across USB Modes</h3>
+<p>USB communication on single board computers relies on balanced
+differential pairs—designated as <span class="math inline">\(D+\)</span>
+and <span class="math inline">\(D-\)</span> for USB 2.0 and lower, or
+dedicated SuperSpeed differential transmitter/receiver pairs (SSTX/SSRX)
+for USB 3.x. The electrical amplitude varies significantly depending on
+the operating mode:</p>
+<ul>
+<li><strong>Low-Speed (1.5 Mbps) and Full-Speed (12 Mbps):</strong>
+These modes use voltage-mode signaling with nominal 3.3V logic levels. A
+differential '1' occurs when <span class="math inline">\(D+\)</span>
+exceeds 2.8V and <span class="math inline">\(D-\)</span> is below 0.3V.
+A differential '0' occurs when <span class="math inline">\(D-\)</span>
+exceeds 2.8V and <span class="math inline">\(D+\)</span> is below 0.3V.
+The nominal single-ended voltage swing is 0V to 3.3V, resulting in a
+large differential swing of approximately <span
+class="math inline">\(\pm 3.0\text{V}\)</span>.</li>
+<li><strong>High-Speed (480 Mbps):</strong> High-speed USB switches from
+voltage-mode to current-mode signaling to reduce EMI and power
+consumption. The transceiver drives a constant current of <span
+class="math inline">\(17.78\text{ mA}\)</span> into a <span
+class="math inline">\(45\ \Omega\)</span> load, creating a nominal
+differential voltage swing of <span class="math inline">\(\pm 400\text{
+mV}\)</span> (a <span class="math inline">\(800\text{ mV}\)</span>
+peak-to-peak differential amplitude). A logic high corresponds to <span
+class="math inline">\(D+\)</span> at <span
+class="math inline">\(+400\text{ mV}\)</span> relative to <span
+class="math inline">\(D-\)</span>, while a logic low inverts this
+relationship.</li>
+<li><strong>SuperSpeed (5 Gbps and above):</strong> USB 3.x utilizes
+low-voltage differential signaling (LVDS) with AC-coupling capacitors
+(typically <span class="math inline">\(75\text{ nF}\)</span> to <span
+class="math inline">\(200\text{ nF}\)</span>) on the transmit lines. The
+differential peak-to-peak output voltage typically ranges between <span
+class="math inline">\(800\text{ mV}\)</span> and <span
+class="math inline">\(1200\text{ mV}\)</span>, with deemphasis
+techniques applied to compensate for high-frequency channel losses.</li>
+</ul>
+<h3 id="impedance-matching-and-termination">Impedance Matching and
+Termination</h3>
+<p>To avoid signal reflections and ensure maximum power transfer, strict
+impedance controls must be maintained from the SBC system-on-chip (SoC)
+or USB hub controller through the PCB traces to the physical
+connector:</p>
+<ul>
+<li><strong>Differential Impedance (<span
+class="math inline">\(Z_{\text{diff}}\)</span>):</strong> Must be
+precisely controlled to <span class="math inline">\(90\ \Omega \pm
+10\%\)</span>.</li>
+<li><strong>Single-Ended Characteristic Impedance (<span
+class="math inline">\(Z_0\)</span>):</strong> Each line of the
+differential pair must exhibit <span class="math inline">\(45\ \Omega
+\pm 10\%\)</span> relative to the reference ground plane.</li>
+<li><strong>Termination Resistors:</strong> High-speed transceivers
+include internal <span class="math inline">\(45\ \Omega\)</span>
+terminations pulled down to ground on both <span
+class="math inline">\(D+\)</span> and <span
+class="math inline">\(D-\)</span>, providing the required <span
+class="math inline">\(90\ \Omega\)</span> parallel differential
+termination. Low/Full-speed modes utilize pull-up resistors (<span
+class="math inline">\(1.5\ \text{k}\Omega\)</span>) on either <span
+class="math inline">\(D+\)</span> (Full-Speed) or <span
+class="math inline">\(D-\)</span> (Low-Speed) to signal device
+attachment and speed enumeration.</li>
+</ul>
+<h3 id="receiver-sensitivity-and-thresholds">Receiver Sensitivity and
+Thresholds</h3>
+<p>SBC USB physical layer (PHY) receivers must detect signals accurately
+in the presence of noise and attenuation:</p>
+<ul>
+<li><strong>High-Speed Receiver Sensitivity:</strong> The high-speed
+receiver must detect differential signals with an amplitude as low as
+<span class="math inline">\(\pm 100\text{ mV}\)</span>.</li>
+<li><strong>Squelch Threshold:</strong> Signals below <span
+class="math inline">\(\pm 100\text{ mV}\)</span> differential are
+ignored (squelched) to prevent false packet triggers from line noise.
+The squelch detector is disabled once valid data exceeding <span
+class="math inline">\(\pm 150\text{ mV}\)</span> is detected.</li>
+<li><strong>Disconnect Threshold:</strong> A high-speed disconnect state
+is detected when the differential amplitude exceeds approximately <span
+class="math inline">\(525\text{ mV}\)</span> to <span
+class="math inline">\(625\text{ mV}\)</span> due to the doubling of
+impedance when the load is removed.</li>
+</ul>
+<h3 id="pcb-layout-and-parasitic-constraints-on-sbcs">PCB Layout and
+Parasitic Constraints on SBCs</h3>
+<p>Single board computers operate in compact form factors, making
+differential signal integrity highly sensitive to layout design:</p>
+<ul>
+<li><strong>Trace Length Matching (Intra-pair Skew):</strong> The
+physical length difference between <span
+class="math inline">\(D+\)</span> and <span
+class="math inline">\(D-\)</span> (or SSTX+/SSTX-) should be kept under
+<span class="math inline">\(0.15\text{ mm}\)</span> (approx. <span
+class="math inline">\(5\text{ ps}\)</span> delay) to prevent common-mode
+noise conversion and jitter.</li>
+<li><strong>Capacitance Limits:</strong> External components placed on
+the lines, such as electrostatic discharge (ESD) protection diodes, must
+feature ultra-low junction capacitance—typically under <span
+class="math inline">\(0.5\text{ pF}\)</span> for High-Speed and under
+<span class="math inline">\(0.2\text{ pF}\)</span> for SuperSpeed—to
+avoid degrading signal rise/fall times.</li>
+<li><strong>Continuous Reference Plane:</strong> Differential traces
+must be routed over an unbroken ground reference plane without crossing
+plane splits to maintain continuous characteristic impedance.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

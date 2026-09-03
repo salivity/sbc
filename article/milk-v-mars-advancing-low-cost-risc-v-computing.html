@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milk-V Mars: Advancing Low-Cost RISC-V Computing - sbc</title>
+    <meta name="description" content="The Milk-V Mars is a credit-card-sized single-board computer (SBC) that significantly accelerates the adoption of the open-standard RISC-V architecture by offering high-performance features at an entry-level price point. Powered by the StarFive JH7110 qu">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/milk-v-mars-advancing-low-cost-risc-v-computing">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Milk-V Mars: Advancing Low-Cost RISC-V Computing - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/milk-v-mars-advancing-low-cost-risc-v-computing" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Milk-V Mars is a credit-card-sized single-board computer (SBC) that significantly accelerates the adoption of the open-standard RISC-V architecture by offering high-performance features at an entry-level price point. Powered by the StarFive JH7110 qu" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="milk-v-mars-advancing-low-cost-risc-v-computing">Milk-V Mars:
+Advancing Low-Cost RISC-V Computing</h1>
+<p>The Milk-V Mars is a credit-card-sized single-board computer (SBC)
+that significantly accelerates the adoption of the open-standard RISC-V
+architecture by offering high-performance features at an entry-level
+price point. Powered by the StarFive JH7110 quad-core processor, it
+provides developers, hobbyists, and educational institutions with native
+RISC-V hardware capable of running modern Linux distributions. By
+delivering accessible hardware in a familiar form factor, the Milk-V
+Mars bridges the historical gap between expensive development boards and
+affordable experimentation in the RISC-V software ecosystem.</p>
+<h3 id="standardized-form-factor-and-accessibility">Standardized Form
+Factor and Accessibility</h3>
+<p>A primary barrier to new hardware adoption is ecosystem
+compatibility. The Milk-V Mars adopts the standard Raspberry Pi form
+factor, featuring a familiar 40-pin GPIO header, standard port layouts,
+and standard mounting dimensions. This design choice allows developers
+to reuse existing accessories, HATs (Hardware Attached on Top), power
+supplies, and enclosures. By eliminating the need for proprietary
+adapters or custom accessories, the board lowers total deployment costs
+and reduces friction for engineers transitioning from ARM-based
+platforms.</p>
+<h3 id="robust-hardware-at-a-low-price-point">Robust Hardware at a Low
+Price Point</h3>
+<p>Historically, high-performance RISC-V development boards cost
+hundreds of dollars, limiting accessibility for independent developers.
+The Milk-V Mars integrates the StarFive JH7110 SoC (four 64-bit RV64GC
+cores running up to 1.5 GHz) and an Imagination BXE-4-32 GPU, paired
+with up to 8GB of LPDDR4 memory. Despite its low price, it includes
+essential modern interfaces:</p>
+<ul>
+<li><strong>High-Speed Connectivity:</strong> True Gigabit Ethernet with
+optional PoE support, three USB 3.0 ports, and one USB 2.0 port.</li>
+<li><strong>Display and Camera Interfaces:</strong> Standard HDMI 2.0
+output capable of 4K at 30fps, along with MIPI-DSI and MIPI-CSI lanes
+for display and camera integration.</li>
+<li><strong>Storage Options:</strong> An on-board eMMC socket, a
+micro-SD card slot, and an M.2 M-key slot supporting NVMe SSD storage
+via PCIe.</li>
+</ul>
+<p>These hardware capabilities make the board capable of handling
+lightweight desktop computing, edge AI inference, and industrial
+automation tasks, rather than being restricted to low-level
+microcontroller workloads.</p>
+<h3 id="accelerating-native-software-development">Accelerating Native
+Software Development</h3>
+<p>The growth of RISC-V depends heavily on software maturity. Emulation
+via tools like QEMU is useful, but native hardware is essential for
+benchmarking, debugging timing issues, and optimizing drivers. The
+Milk-V Mars supports mainstream Linux environments, including Debian,
+Ubuntu, and Fedora, alongside standard open-source bootloaders like
+OpenSBI and U-Boot. Providing native development boards at low cost
+enables widespread contribution to package maintenance, kernel
+optimization, and application porting across open-source
+communities.</p>
+<h3
+id="democratizing-embedded-education-and-edge-innovation">Democratizing
+Embedded Education and Edge Innovation</h3>
+<p>By offering an entry point accessible to academic budgets, the Milk-V
+Mars serves as an educational tool for teaching computer architecture,
+operating system design, and embedded systems using an open instruction
+set architecture. It removes reliance on proprietary ISAs, enabling a
+new generation of developers to build edge computing, IoT, and embedded
+solutions natively on RISC-V.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

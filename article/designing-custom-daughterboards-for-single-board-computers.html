@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designing Custom Daughterboards for Single Board Computers - sbc</title>
+    <meta name="description" content="Designing custom daughterboards—often called hats, capes, or shields—expands the functionality of a Single Board Computer (SBC) for specialized applications. Successfully integrating a secondary board requires a balanced approach to both physical com">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/designing-custom-daughterboards-for-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Designing Custom Daughterboards for Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/designing-custom-daughterboards-for-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Designing custom daughterboards—often called hats, capes, or shields—expands the functionality of a Single Board Computer (SBC) for specialized applications. Successfully integrating a secondary board requires a balanced approach to both physical com" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="designing-custom-daughterboards-for-single-board-computers">Designing
+Custom Daughterboards for Single Board Computers</h1>
+<p>Designing custom daughterboards—often called hats, capes, or
+shields—expands the functionality of a Single Board Computer (SBC) for
+specialized applications. Successfully integrating a secondary board
+requires a balanced approach to both physical compatibility and circuit
+design. This guide covers the essential mechanical and electrical
+considerations required to design a reliable, high-performance
+daughterboard for any SBC.</p>
+<h2 id="mechanical-considerations">Mechanical Considerations</h2>
+<p>Mechanical design determines whether the daughterboard will
+physically fit, remain securely attached, and operate within the thermal
+boundaries of the host system.</p>
+<h3 id="1-form-factor-and-keepout-zones">1. Form Factor and Keepout
+Zones</h3>
+<ul>
+<li><strong>Board Dimensions and Alignment:</strong> Match the outer
+dimensions, corner radiuses, and mounting hole patterns of the host SBC.
+Standardizing on the host's reference mechanical drawings prevents
+misalignments.</li>
+<li><strong>Component Height Clearances (Z-Height):</strong> SBCs
+feature tall components such as Ethernet jacks, USB ports, SoC
+heatsinks, and electrolytic capacitors. Establish a defined keepout zone
+on the bottom of the daughterboard to prevent components from colliding
+with the SBC's top-side parts.</li>
+<li><strong>Cutouts and Port Access:</strong> Provide cutouts for
+internal connectors (e.g., MIPI-CSI, MIPI-DSI, ribbon cables) or
+antennas located on the host board that need to pass through the
+daughterboard.</li>
+</ul>
+<h3 id="2-header-and-connector-selection">2. Header and Connector
+Selection</h3>
+<ul>
+<li><strong>Pin Pitch and Stacking Height:</strong> Use appropriate
+female or pass-through headers that match the pitch (typically 2.54mm or
+2.0mm) of the SBC's expansion header. Select header pin lengths that
+maintain sufficient clearance between the two PCBs.</li>
+<li><strong>Connector Alignment:</strong> High-pin-count connectors
+require tight manufacturing tolerances. Misaligned pins can cause
+mechanical strain, bent headers, or intermittent contact.</li>
+<li><strong>Keying and Shrouding:</strong> Whenever possible, use keyed
+connectors or asymmetrical pin arrangements to prevent inverted or
+offset mating.</li>
+</ul>
+<h3 id="3-structural-support-and-fasteners">3. Structural Support and
+Fasteners</h3>
+<ul>
+<li><strong>Standoffs:</strong> Relying solely on the expansion header
+for mechanical retention causes trace fatigue and connector damage over
+time. Use threaded standoffs (e.g., M2.5 or M3) at all designated
+mounting points.</li>
+<li><strong>Vibration and Shock Resistance:</strong> In mobile or
+industrial environments, lock washers, thread-locking fluid, or
+friction-fit multi-point connectors prevent the boards from separating
+under mechanical stress.</li>
+</ul>
+<h3 id="4-thermal-management-and-airflow">4. Thermal Management and
+Airflow</h3>
+<ul>
+<li><strong>Heat Dissipation Path:</strong> Avoid placing heat-sensitive
+components directly above the SBC's primary processor or Power
+Management IC (PMIC).</li>
+<li><strong>Airflow Obstruction:</strong> Stacking a daughterboard
+directly over the main processor creates an insulating air pocket.
+Integrate cutouts, ventilation holes, or dedicated thermal vias to allow
+passive convection or clearance for an active cooling fan.</li>
+</ul>
+<hr />
+<h2 id="electrical-considerations">Electrical Considerations</h2>
+<p>Electrical design ensures reliable power delivery, cross-board
+communication, and protection against electrical damage to both the
+daughterboard and the SBC.</p>
+<h3 id="1-power-architecture-and-current-budgets">1. Power Architecture
+and Current Budgets</h3>
+<ul>
+<li><strong>Host Rail Limitations:</strong> SBC power rails (usually 5V
+and 3.3V) have strict current limits. Calculate the total current draw
+of the daughterboard. If the current requirements exceed the SBC’s
+supply capacity, implement a dedicated power input on the
+daughterboard.</li>
+<li><strong>Back-Powering Prevention:</strong> If the daughterboard has
+an independent power supply, ensure it does not inadvertently back-feed
+power into the SBC’s rails via pull-up resistors or I/O pins, which can
+cause erratic boot behavior or hardware damage. Use ideal diodes or
+MOSFET-based power-path management.</li>
+<li><strong>Decoupling and Power Cleanliness:</strong> Place decoupling
+capacitors close to all active ICs. Switching regulators on the
+daughterboard should have careful inductor placement and ground routing
+to prevent noise from coupling into the SBC's power planes.</li>
+</ul>
+<h3 id="2-logic-levels-and-signal-integrity">2. Logic Levels and Signal
+Integrity</h3>
+<ul>
+<li><strong>Voltage Level Matching:</strong> Most modern SBCs operate on
+3.3V or 1.8V logic levels and are generally not 5V-tolerant. Incorporate
+bidirectional logic level shifters if interfacing with legacy 5V
+devices.</li>
+<li><strong>High-Speed Bus Routing:</strong> For high-speed interfaces
+like SPI, USB, PCIe, or SDIO, maintain controlled impedance (e.g.,
+50-ohm single-ended, 90/100-ohm differential), match trace lengths, and
+route over a continuous ground reference plane.</li>
+<li><strong>Ground Returns:</strong> Ensure low-impedance ground returns
+through the header pins. Inadequate grounding between the host and
+daughterboard leads to ground bounce, EMI issues, and communication
+errors.</li>
+</ul>
+<h3 id="3-pin-multiplexing-and-boot-strapping">3. Pin Multiplexing and
+Boot Strapping</h3>
+<ul>
+<li><strong>Multi-Function GPIOs:</strong> Check the SBC documentation
+for pin multiplexing constraints (pinmux). Ensure selected GPIOs do not
+conflict with alternate internal functions needed by the host operating
+system.</li>
+<li><strong>Boot Strapping Pins:</strong> Certain processor pins dictate
+boot modes (e.g., eMMC vs. SD card) when high or low during power-up.
+Avoid using boot configuration pins on the daughterboard unless the
+default pull-up/pull-down states are strictly preserved.</li>
+<li><strong>Default Power-On States:</strong> Determine whether host
+GPIOs float, pull high, or pull low during the bootloader phase to
+prevent accidental activation of actuators, relays, or power
+stages.</li>
+</ul>
+<h3 id="4-protection-and-emc">4. Protection and EMC</h3>
+<ul>
+<li><strong>Electrostatic Discharge (ESD):</strong> Add TVS diodes to
+any external-facing user interfaces (USB, push buttons, terminal blocks,
+sensor lines) to clamp voltage spikes before they propagate to the
+SBC.</li>
+<li><strong>Over-Voltage and Reverse-Polarity Protection:</strong>
+Protect auxiliary power inputs using fuses (PTC or one-time), Zener
+diodes, or reverse-polarity protection circuits.</li>
+<li><strong>Electromagnetic Compatibility (EMC):</strong> Keep
+high-frequency switching loops small, utilize multi-layer boards with
+dedicated ground and power planes, and route sensitive analog signals
+far from high-speed digital buses.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

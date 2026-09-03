@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Compile PREEMPT_RT Kernel for ARM SBC - sbc</title>
+    <meta name="description" content="This guide outlines the complete process of cross-compiling a real-time Linux kernel using the PREEMPTRT patch for a custom ARM-based single board computer (SBC). Achieving deterministic, low-latency performance on embedded ARM hardware requires obtainin">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-compile-preempt-rt-kernel-for-arm-sbc">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Compile PREEMPT_RT Kernel for ARM SBC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-compile-preempt-rt-kernel-for-arm-sbc" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide outlines the complete process of cross-compiling a real-time Linux kernel using the PREEMPTRT patch for a custom ARM-based single board computer (SBC). Achieving deterministic, low-latency performance on embedded ARM hardware requires obtainin" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-compile-preempt_rt-kernel-for-arm-sbc">How to Compile
+PREEMPT_RT Kernel for ARM SBC</h1>
+<p>This guide outlines the complete process of cross-compiling a
+real-time Linux kernel using the PREEMPT_RT patch for a custom ARM-based
+single board computer (SBC). Achieving deterministic, low-latency
+performance on embedded ARM hardware requires obtaining the matching
+kernel and patch sources, setting up an appropriate cross-compilation
+toolchain, configuring the preemption model, building the kernel
+binaries and Device Tree Blobs (DTBs), and deploying the resulting
+artifacts to the target board.</p>
+<hr />
+<h3 id="step-1-prepare-the-host-build-environment">Step 1: Prepare the
+Host Build Environment</h3>
+<p>Compiling directly on an embedded ARM board is often slow due to
+limited CPU and RAM resources. It is best practice to cross-compile on a
+high-performance x86_64 host running Linux.</p>
+<p>Install the necessary build dependencies and the ARM
+cross-compiler:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> build-essential libncurses-dev bison flex libssl-dev <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    libelf-dev bc git wget u-boot-tools</span></code></pre></div>
+<p>Install the appropriate toolchain for your target architecture:</p>
+<ul>
+<li><strong>For 64-bit ARM (ARMv8 / AArch64):</strong>
+<code>sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu</code></li>
+<li><strong>For 32-bit ARM (ARMv7 / armhf):</strong>
+<code>sudo apt install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf</code></li>
+</ul>
+<p>Export environment variables for your build session (example shown
+for 64-bit ARM):</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">ARCH</span><span class="op">=</span>arm64</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">CROSS_COMPILE</span><span class="op">=</span>aarch64-linux-gnu-</span></code></pre></div>
+<hr />
+<h3 id="step-2-download-the-kernel-source-and-matching-rt-patch">Step 2:
+Download the Kernel Source and Matching RT Patch</h3>
+<p>The PREEMPT_RT patch must match the exact minor version of the Linux
+kernel source.</p>
+<ol type="1">
+<li><p>Create a working directory:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/rt-kernel-build <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/rt-kernel-build</span></code></pre></div></li>
+<li><p>Download your base kernel (either the mainline Linux kernel from
+kernel.org or your SBC vendor's kernel fork) and the corresponding
+PREEMPT_RT patch:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Linux 6.1.70</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.70.tar.xz</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.1/patch-6.1.70-rt21.patch.xz</span></code></pre></div></li>
+<li><p>Extract the files:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xf</span> linux-6.1.70.tar.xz</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unxz</span> patch-6.1.70-rt21.patch.xz</span></code></pre></div></li>
+</ol>
+<hr />
+<h3 id="step-3-apply-the-preempt_rt-patch">Step 3: Apply the PREEMPT_RT
+Patch</h3>
+<p>Navigate to the extracted kernel directory and apply the real-time
+patch:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> linux-6.1.70</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">patch</span> <span class="at">-p1</span> <span class="op">&lt;</span> ../patch-6.1.70-rt21.patch</span></code></pre></div>
+<p>Ensure no patch conflicts or failures (<code>.rej</code> files) are
+reported before proceeding.</p>
+<hr />
+<h3 id="step-4-configure-the-real-time-kernel">Step 4: Configure the
+Real-Time Kernel</h3>
+<p>Start with your board vendor's default configuration (defconfig) or a
+baseline generic config, then modify it for real-time operation.</p>
+<ol type="1">
+<li><p>Load the baseline configuration:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> defconfig</span></code></pre></div>
+<p><em>(Replace <code>defconfig</code> with your board-specific config
+file if provided by the vendor, e.g.,
+<code>make custom_sbc_defconfig</code>)</em>.</p></li>
+<li><p>Open the kernel configuration menu:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> menuconfig</span></code></pre></div></li>
+<li><p>Modify the following settings for real-time behavior:</p>
+<ul>
+<li><strong>Enable Full Preemption:</strong>
+<ul>
+<li>Navigate to: <code>General setup</code> -&gt;
+<code>Preemption Model</code></li>
+<li>Select: <code>Fully Preemptible Kernel (Real-Time)</code>
+(<code>CONFIG_PREEMPT_RT=y</code>)</li>
+</ul></li>
+<li><strong>Enable High-Resolution Timers:</strong>
+<ul>
+<li>Navigate to: <code>General setup</code> -&gt;
+<code>Timers subsystem</code></li>
+<li>Ensure <code>High Resolution Timer Support</code>
+(<code>CONFIG_HIGH_RES_TIMERS=y</code>) is checked.</li>
+</ul></li>
+<li><strong>Optimize CPU Frequency Scaling:</strong>
+<ul>
+<li>Navigate to: <code>Power management and ACPI options</code> -&gt;
+<code>CPU Frequency scaling</code></li>
+<li>Set <code>Default CPUFreq governor</code> to
+<code>performance</code> to eliminate latency spikes caused by CPU
+frequency changes.</li>
+</ul></li>
+<li><strong>Disable Conflicting Debugging and Power Features:</strong>
+<ul>
+<li>Disable <code>CONFIG_SUSPEND</code> and
+<code>CONFIG_HIBERNATION</code> if not needed.</li>
+<li>Disable kernel debug options like <code>CONFIG_PROVE_LOCKING</code>
+or <code>CONFIG_DEBUG_INFO</code> to minimize overhead in
+production.</li>
+</ul></li>
+</ul></li>
+<li><p>Save the configuration and exit <code>menuconfig</code>.</p></li>
+</ol>
+<hr />
+<h3 id="step-5-compile-kernel-modules-and-device-trees">Step 5: Compile
+Kernel, Modules, and Device Trees</h3>
+<p>Run the compilation using all available host CPU cores:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For 64-bit ARM (arm64):</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> <span class="at">-j</span><span class="va">$(</span><span class="fu">nproc</span><span class="va">)</span> Image modules dtbs</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For 32-bit ARM (arm):</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># make -j$(nproc) zImage modules dtbs</span></span></code></pre></div>
+<p>After the build completes, the output files will be located in:</p>
+<ul>
+<li>Kernel binary: <code>arch/arm64/boot/Image</code> (or
+<code>arch/arm/boot/zImage</code>)</li>
+<li>Device Tree:
+<code>arch/arm64/boot/dts/&lt;vendor&gt;/&lt;board-name&gt;.dtb</code></li>
+</ul>
+<hr />
+<h3 id="step-6-package-and-deploy-to-the-target-sbc">Step 6: Package and
+Deploy to the Target SBC</h3>
+<ol type="1">
+<li><p><strong>Install Modules to a Staging Directory:</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/rt-kernel-build/modules_out</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> modules_install INSTALL_MOD_PATH=~/rt-kernel-build/modules_out</span></code></pre></div></li>
+<li><p><strong>Transfer Files to the SBC:</strong> Transfer the compiled
+binaries, modules, and device tree blob to your target board via SSH/SCP
+or by mounting the SBC’s SD card/eMMC partitions:</p>
+<ul>
+<li>Copy <code>arch/arm64/boot/Image</code> to the target board's
+<code>/boot/</code> directory.</li>
+<li>Copy
+<code>arch/arm64/boot/dts/&lt;vendor&gt;/&lt;board-name&gt;.dtb</code>
+to <code>/boot/</code> or the designated bootloader partition.</li>
+<li>Copy the contents of
+<code>~/rt-kernel-build/modules_out/lib/modules/&lt;kernel-version&gt;-rt/</code>
+to the target's <code>/lib/modules/</code> directory.</li>
+</ul></li>
+<li><p><strong>Update Bootloader Configuration:</strong> Ensure U-Boot
+or your SBC's boot configuration (such as <code>extlinux.conf</code>,
+<code>boot.scr</code>, or <code>uEnv.txt</code>) points to the new
+kernel image and device tree file.</p></li>
+</ol>
+<hr />
+<h3 id="step-7-verify-real-time-functionality">Step 7: Verify Real-Time
+Functionality</h3>
+<p>Reboot the custom ARM board into the new kernel and verify that the
+PREEMPT_RT patch is active:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">uname</span> <span class="at">-a</span></span></code></pre></div>
+<p>The output should display <code>PREEMPT_RT</code> in the kernel
+description string, confirming that the real-time kernel is active:</p>
+<pre><code>Linux custom-arm-sbc 6.1.70-rt21 #1 SMP PREEMPT_RT ... aarch64 GNU/Linux</code></pre>
+<p>To evaluate real-time latency performance on the device, run
+<code>cyclictest</code> from the <code>rt-tests</code> suite under
+simulated load:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> rt-tests</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cyclictest <span class="at">-m</span> <span class="at">-p</span> 99 <span class="at">-n</span> <span class="at">-a</span> <span class="at">-t</span> <span class="at">-l</span> 100000</span></code></pre></div></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

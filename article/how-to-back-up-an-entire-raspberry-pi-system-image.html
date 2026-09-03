@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Back Up an Entire Raspberry Pi System Image - sbc</title>
+    <meta name="description" content="This article provides a comprehensive guide on the recommended methods for backing up an entire Raspberry Pi system image. You will learn how to create a complete, cloneable backup of your microSD card using native tools and reliable third-party software">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-back-up-an-entire-raspberry-pi-system-image">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Back Up an Entire Raspberry Pi System Image - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-back-up-an-entire-raspberry-pi-system-image" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a comprehensive guide on the recommended methods for backing up an entire Raspberry Pi system image. You will learn how to create a complete, cloneable backup of your microSD card using native tools and reliable third-party software" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-back-up-an-entire-raspberry-pi-system-image">How to Back
+Up an Entire Raspberry Pi System Image</h1>
+<p>This article provides a comprehensive guide on the recommended
+methods for backing up an entire Raspberry Pi system image. You will
+learn how to create a complete, cloneable backup of your microSD card
+using native tools and reliable third-party software across Windows,
+macOS, and Linux. By following these steps, you can safeguard your
+projects, configurations, and data against SD card corruption or
+hardware failure.</p>
+<h3 id="the-standard-approach-direct-card-imaging">The Standard
+Approach: Direct Card Imaging</h3>
+<p>The most reliable way to back up an entire Raspberry Pi system is to
+create a byte-for-byte image (<span
+class="math inline">\(*.img\)</span>) of the microSD card. This captures
+the operating system, partitions, configurations, and local files
+simultaneously, allowing for a seamless restore if your card fails.
+Because the process reads the entire card, you must shut down your
+Raspberry Pi, remove the microSD card, and insert it into a separate
+computer to perform the backup.</p>
+<h3 id="creating-a-backup-on-windows">Creating a Backup on Windows</h3>
+<p>Windows users can easily create full disk images using free,
+lightweight utility software. The two most common tools are
+<strong>Win32 Disk Imager</strong> and <strong>Rufus</strong>.</p>
+<ul>
+<li><strong>Win32 Disk Imager:</strong> 1. Insert your microSD card into
+your PC.</li>
+</ul>
+<ol start="2" type="1">
+<li>Open Win32 Disk Imager.</li>
+<li>Click the folder icon under "Image File" to select a destination
+directory and type a name for your backup (e.g.,
+<code>pi_backup.img</code>).</li>
+<li>Select your microSD card's drive letter under "Device".</li>
+<li>Click the <strong>Read</strong> button to copy the data from the
+card to your computer.</li>
+</ol>
+<ul>
+<li><strong>Rufus:</strong></li>
+</ul>
+<ol type="1">
+<li>Insert your microSD card.</li>
+<li>Open Rufus and select your SD card under "Device".</li>
+<li>Click the Save icon next to the "Boot selection" dropdown to save
+the entire drive as a compressed VHD or raw image file.</li>
+</ol>
+<h3 id="creating-a-backup-on-macos">Creating a Backup on macOS</h3>
+<p>macOS users can utilize the built-in Command Line interface via
+Terminal. This method uses the <code>dd</code> utility, which clones the
+drive sector by sector.</p>
+<ol type="1">
+<li>Open Terminal and run <code>diskutil list</code> to identify your
+microSD card identifier (e.g., <code>/dev/disk4</code>).</li>
+<li>Unmount the disk so it can be copied safely by running:
+<code>diskutil unmountDisk /dev/disk4</code> (replace <code>disk4</code>
+with your actual disk number).</li>
+<li>Execute the backup command using a raw disk interface
+(<code>rdisk</code>) for significantly faster transfer speeds:
+<code>sudo dd if=/dev/rdisk4 of=~/Desktop/pi_backup.img bs=1m</code></li>
+<li>Enter your system password. The terminal will remain quiet until the
+image creation is finished.</li>
+</ol>
+<h3 id="creating-a-backup-on-linux">Creating a Backup on Linux</h3>
+<p>Similar to macOS, Linux systems natively support the <code>dd</code>
+command to generate precise system images.</p>
+<ol type="1">
+<li>Open a terminal window and run <code>lsblk</code> or
+<code>sudo fdisk -l</code> to find the device name of your SD card
+(e.g., <code>/dev/sdb</code> or <code>/dev/mmcblk0</code>).</li>
+<li>Run the following command to generate the backup file:
+<code>sudo dd if=/dev/sdb of=~/pi_backup.img bs=4M status=progress</code></li>
+<li>The <code>status=progress</code> flag will give you live updates on
+the data transfer speed and remaining time.</li>
+</ol>
+<h3 id="restoring-your-system-image">Restoring Your System Image</h3>
+<p>If your original microSD card becomes corrupted, restoring your
+system to a new card is simple. You can use <strong>Raspberry Pi
+Imager</strong> or <strong>BalenaEtcher</strong> across any operating
+system.</p>
+<ul>
+<li>Launch the imaging software.</li>
+<li>Choose the "Custom .img" option and select your saved
+<code>pi_backup.img</code> file.</li>
+<li>Select your target microSD card.</li>
+<li>Click <strong>Write</strong> to flash the backup image back onto the
+card, returning your Raspberry Pi exactly to the state it was in when
+the backup was made.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

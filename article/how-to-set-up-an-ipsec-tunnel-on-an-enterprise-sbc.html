@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Set Up an IPSec Tunnel on an Enterprise SBC - sbc</title>
+    <meta name="description" content="Establishing an encrypted IPSec tunnel on an enterprise-grade Single Board Computer (SBC) enables secure, high-integrity communication for edge computing, remote IoT deployments, and branch networks. This guide walks through the end-to-end technical proc">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-set-up-an-ipsec-tunnel-on-an-enterprise-sbc">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Set Up an IPSec Tunnel on an Enterprise SBC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-set-up-an-ipsec-tunnel-on-an-enterprise-sbc" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Establishing an encrypted IPSec tunnel on an enterprise-grade Single Board Computer (SBC) enables secure, high-integrity communication for edge computing, remote IoT deployments, and branch networks. This guide walks through the end-to-end technical proc" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-set-up-an-ipsec-tunnel-on-an-enterprise-sbc">How to Set
+Up an IPSec Tunnel on an Enterprise SBC</h1>
+<p>Establishing an encrypted IPSec tunnel on an enterprise-grade Single
+Board Computer (SBC) enables secure, high-integrity communication for
+edge computing, remote IoT deployments, and branch networks. This guide
+walks through the end-to-end technical process of configuring an
+enterprise-grade SBC running Linux to establish an IKEv2 IPSec VPN
+tunnel, covering hardware preparation, crypto configuration, firewall
+adjustments, and tunnel verification.</p>
+<h3 id="1-prepare-the-enterprise-sbc-environment">1. Prepare the
+Enterprise SBC Environment</h3>
+<ul>
+<li><strong>Verify Cryptographic Hardware Acceleration:</strong> Ensure
+the SBC’s SoC supports hardware-assisted cryptography (such as ARMv8
+Cryptography Extensions or Intel AES-NI) to offload encryption and
+maintain high network throughput.</li>
+<li><strong>Assign Static Network Configuration:</strong> Assign a
+static IP address to the SBC's WAN and LAN interfaces to prevent routing
+disruptions caused by DHCP lease renewals.</li>
+<li><strong>Enable IP Forwarding:</strong> Enable kernel-level packet
+forwarding by updating <code>/etc/sysctl.conf</code>:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">net.ipv4.ip_forward</span> = 1</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">net.ipv4.conf.all.accept_redirects</span> = 0</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">net.ipv4.conf.all.send_redirects</span> = 0</span></code></pre></div>
+Apply the changes using <code>sysctl -p</code>.</li>
+</ul>
+<h3 id="2-install-ipsec-management-software">2. Install IPSec Management
+Software</h3>
+<p>Install an enterprise-grade IKE/IPSec daemon. On Debian/Ubuntu-based
+enterprise SBC distributions, install strongSwan:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install strongswan strongswan-pki libcharon-extra-plugins libstrongswan-extra-plugins</span></code></pre></div>
+<h3 id="3-generate-cryptographic-credentials">3. Generate Cryptographic
+Credentials</h3>
+<p>Secure authentication requires either Pre-Shared Keys (PSK) or public
+key infrastructure (PKI) certificates. For enterprise security, X.509
+digital certificates are recommended.</p>
+<ul>
+<li><strong>Generate Private Key &amp; CA:</strong>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ipsec</span> pki <span class="at">--gen</span> <span class="at">--type</span> rsa <span class="at">--size</span> 4096 <span class="at">--outform</span> pem <span class="op">&gt;</span> caKey.pem</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ipsec</span> pki <span class="at">--self</span> <span class="at">--ca</span> <span class="at">--lifetime</span> 3650 <span class="at">--in</span> caKey.pem <span class="at">--type</span> rsa <span class="at">--dn</span> <span class="st">&quot;CN=Enterprise CA&quot;</span> <span class="at">--outform</span> pem <span class="op">&gt;</span> caCert.pem</span></code></pre></div></li>
+<li><strong>Generate SBC Host Certificate:</strong>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ipsec</span> pki <span class="at">--gen</span> <span class="at">--type</span> rsa <span class="at">--size</span> 2048 <span class="at">--outform</span> pem <span class="op">&gt;</span> sbcKey.pem</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ipsec</span> pki <span class="at">--issue</span> <span class="at">--lifetime</span> 730 <span class="at">--cacert</span> caCert.pem <span class="at">--cakey</span> caKey.pem <span class="at">--in</span> sbcKey.pem <span class="at">--type</span> rsa <span class="at">--dn</span> <span class="st">&quot;CN=sbc.enterprise.local&quot;</span> <span class="at">--san</span> sbc.enterprise.local <span class="at">--outform</span> pem <span class="op">&gt;</span> sbcCert.pem</span></code></pre></div></li>
+<li><strong>Store Credentials:</strong> Move private keys to
+<code>/etc/ipsec.d/private/</code> and certificates to
+<code>/etc/ipsec.d/certs/</code> and
+<code>/etc/ipsec.d/cacerts/</code>.</li>
+</ul>
+<h3 id="4-configure-ipsec-tunnel-parameters">4. Configure IPSec Tunnel
+Parameters</h3>
+<p>Define the IKEv2 proposal and tunnel endpoints in
+<code>/etc/ipsec.conf</code>:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">config setup</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">    charondebug</span><span class="ot">=</span><span class="st">&quot;ike 2, knl 2, cfg 2&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">    uniqueids</span><span class="ot">=</span><span class="kw">yes</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="dt">conn Enterprise-Tunnel</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="dt">    keyexchange</span><span class="ot">=</span><span class="st">ikev2</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="dt">    ike</span><span class="ot">=</span><span class="st">aes256gcm16-sha384-modp3072!</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="dt">    esp</span><span class="ot">=</span><span class="st">aes256gcm16-sha384!</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="dt">    dpdaction</span><span class="ot">=</span><span class="st">restart</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="dt">    dpddelay</span><span class="ot">=</span><span class="st">30s</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="dt">    dpdtimeout</span><span class="ot">=</span><span class="st">120s</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="dt">    auto</span><span class="ot">=</span><span class="st">start</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="dt">    </span><span class="co"># Local SBC Parameters</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="dt">    left</span><span class="ot">=</span><span class="st">%defaultroute</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="dt">    leftid</span><span class="ot">=</span><span class="st">@sbc.enterprise.local</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="dt">    leftcert</span><span class="ot">=</span><span class="st">sbcCert.pem</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="dt">    leftsubnet</span><span class="ot">=</span><span class="st">192.168.10.0/24</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="dt">    </span><span class="co"># Remote Gateway Parameters</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="dt">    right</span><span class="ot">=</span><span class="st">203.0.113.1</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="dt">    rightid</span><span class="ot">=</span><span class="st">@gateway.enterprise.local</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="dt">    rightsubnet</span><span class="ot">=</span><span class="st">10.0.0.0/16</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="dt">    type</span><span class="ot">=</span><span class="st">tunnel</span></span></code></pre></div>
+<h3 id="5-adjust-firewall-and-routing-rules">5. Adjust Firewall and
+Routing Rules</h3>
+<p>Open the required network ports and configure network address
+translation (NAT) traversal:</p>
+<ul>
+<li><strong>Allow UDP Ports:</strong> Permit UDP 500 (IKE) and UDP 4500
+(NAT-T) through the firewall.</li>
+<li><strong>Allow ESP Protocol:</strong> Permit IP protocol 50
+(ESP).</li>
+<li><strong>Bypass NAT for Encrypted Subnets:</strong> Add rules to the
+firewall to ensure traffic between local and remote subnets bypasses
+standard masquerading:
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">iptables</span> <span class="at">-t</span> nat <span class="at">-A</span> POSTROUTING <span class="at">-s</span> 192.168.10.0/24 <span class="at">-d</span> 10.0.0.0/16 <span class="at">-j</span> ACCEPT</span></code></pre></div></li>
+</ul>
+<h3 id="6-initiate-and-verify-the-ipsec-tunnel">6. Initiate and Verify
+the IPSec Tunnel</h3>
+<ul>
+<li><strong>Start the Service:</strong>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart strongswan-starter</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ipsec up Enterprise-Tunnel</span></code></pre></div></li>
+<li><strong>Verify Tunnel State:</strong>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ipsec statusall</span></code></pre></div>
+Look for the <code>ESTABLISHED</code> state along with active
+<code>Security Associations (SAs)</code>.</li>
+<li><strong>Validate Data Flow:</strong> Ping an IP address on the
+remote subnet (<code>10.0.0.0/16</code>) and monitor ESP packet counters
+using <code>ip -s xfrm state</code> to confirm that traffic is
+successfully encrypted and decrypted.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

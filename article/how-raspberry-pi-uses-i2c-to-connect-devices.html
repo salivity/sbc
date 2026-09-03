@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Raspberry Pi Uses I2C to Connect Devices - sbc</title>
+    <meta name="description" content="The Raspberry Pi utilizes the Inter-Integrated Circuit (I2C) protocol to communicate with multiple peripheral devices using only two wires: a serial data line (SDA) and a serial clock line (SCL). This master-slave architecture allows the Raspberry Pi to">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-raspberry-pi-uses-i2c-to-connect-devices">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Raspberry Pi Uses I2C to Connect Devices - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-raspberry-pi-uses-i2c-to-connect-devices" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Raspberry Pi utilizes the Inter-Integrated Circuit (I2C) protocol to communicate with multiple peripheral devices using only two wires: a serial data line (SDA) and a serial clock line (SCL). This master-slave architecture allows the Raspberry Pi to" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-raspberry-pi-uses-i2c-to-connect-devices">How Raspberry Pi
+Uses I2C to Connect Devices</h1>
+<p>The Raspberry Pi utilizes the Inter-Integrated Circuit (I2C) protocol
+to communicate with multiple peripheral devices using only two wires: a
+serial data line (SDA) and a serial clock line (SCL). This master-slave
+architecture allows the Raspberry Pi to act as the central controller,
+orchestrating data transfers with sensors, displays, and RTC modules by
+assigning each peripheral a unique hex address. This article explores
+how the Raspberry Pi's hardware, operating system, and software
+libraries work together to enable efficient, multi-device I2C
+communication.</p>
+<h3 id="the-hardware-foundations-sda-and-scl">The Hardware Foundations:
+SDA and SCL</h3>
+<p>At the physical layer, the Raspberry Pi relies on two specific GPIO
+pins to facilitate I2C communication. GPIO 2 acts as the Data line
+(SDA), while GPIO 3 serves as the Clock line (SCL).</p>
+<ul>
+<li><strong>The Clock Line (SCL):</strong> Generated entirely by the
+Raspberry Pi, this synchronous clock signal regulates the timing of data
+transmission, ensuring both the Pi and the peripherals pulse at the
+exact same frequency.</li>
+<li><strong>The Data Line (SDA):</strong> This bidirectional line
+carries the actual data frames back and forth between the Raspberry Pi
+and the connected peripherals.</li>
+</ul>
+<p>Because the I2C bus uses an open-drain configuration, the Raspberry
+Pi includes internal pull-up resistors (typically 1.8k ohms) on these
+specific pins to pull the lines up to a 3.3V logic high state when the
+bus is idle.</p>
+<h3 id="addressing-and-the-master-slave-dynamics">Addressing and the
+Master-Slave Dynamics</h3>
+<p>The Raspberry Pi operates as the <strong>Master</strong> on the bus,
+meaning it initiates all communication, generates the clock signal, and
+terminates transfers. The connected peripherals act as
+<strong>Slaves</strong>.</p>
+<p>To communicate with multiple devices on the same two wires without
+data collisions, the Raspberry Pi utilizes a 7-bit addressing system.
+When the Pi wants to talk to a specific sensor, it broadcasts a start
+condition followed by the unique hexadecimal address of that device
+(e.g., <code>0x68</code> for an MPU6050 accelerometer). Every device on
+the bus listens, but only the device with the matching address responds
+by pulling the SDA line low to acknowledge (ACK) the signal.</p>
+<h3 id="enabling-the-i2c-interface-in-raspberry-pi-os">Enabling the I2C
+Interface in Raspberry Pi OS</h3>
+<p>By default, the Raspberry Pi disables the I2C interface to free up
+the GPIO pins for general use. To utilize the protocol, users must
+enable it through the Linux operating system kernel. This can be done
+via the graphical <code>Raspberry Pi Configuration</code> tool or the
+terminal interface using <code>sudo raspi-config</code>.</p>
+<p>Enabling I2C instructs the kernel to load the necessary device
+drivers (<code>i2c-dev</code>). Once enabled, the OS exposes the I2C bus
+as a system device file, typically located at
+<code>/dev/i2c-1</code>.</p>
+<h3 id="software-tools-and-code-implementation">Software Tools and Code
+Implementation</h3>
+<p>Once the hardware is wired and the OS interface is active, developers
+interact with the I2C bus using command-line utilities and programming
+languages like Python.</p>
+<h4 id="command-line-diagnostics">Command-Line Diagnostics</h4>
+<p>The <code>i2c-tools</code> package is widely used to verify that the
+Raspberry Pi recognizes connected peripherals. Running the command
+<code>sudo i2cdetect -y 1</code> outputs a grid representing all
+possible 7-bit addresses. If a peripheral is correctly wired and
+powered, its hex address will appear in the grid, confirming the Pi can
+communicate with it.</p>
+<h4 id="python-programming-with-smbus">Python Programming with
+SMBus</h4>
+<p>In software, the Raspberry Pi frequently utilizes the
+<strong>SMBus</strong> (System Management Bus) protocol, which is a
+subset of the I2C protocol. In Python, the <code>smbus2</code> or
+<code>Adafruit CircuitPython</code> libraries provide clean abstractions
+for reading and writing data.</p>
+<p>To read data from a specific register of a peripheral, the Python
+script sends the peripheral's address, specifies the internal register
+holding the desired data, and shifts the SDA line to read mode. The
+peripheral then streams the requested bytes back to the Raspberry Pi,
+allowing the Pi to process sensor metrics, update displays, or log
+timestamps in real time.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

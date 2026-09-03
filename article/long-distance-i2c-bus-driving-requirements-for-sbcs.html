@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Long-Distance I2C Bus Driving Requirements for SBCs - sbc</title>
+    <meta name="description" content="Driving an I2C bus over extended distances using a single board computer (SBC) requires specific electrical adjustments to overcome the standard protocol's physical layer limitations. Because standard I2C is designed for short, on-board traces with a max">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/long-distance-i2c-bus-driving-requirements-for-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Long-Distance I2C Bus Driving Requirements for SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/long-distance-i2c-bus-driving-requirements-for-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Driving an I2C bus over extended distances using a single board computer (SBC) requires specific electrical adjustments to overcome the standard protocol's physical layer limitations. Because standard I2C is designed for short, on-board traces with a max" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="long-distance-i2c-bus-driving-requirements-for-sbcs">Long-Distance
+I2C Bus Driving Requirements for SBCs</h1>
+<p>Driving an I2C bus over extended distances using a single board
+computer (SBC) requires specific electrical adjustments to overcome the
+standard protocol's physical layer limitations. Because standard I2C is
+designed for short, on-board traces with a maximum capacitance of 400
+pF, extending the bus over cables requires carefully managing total bus
+capacitance, pull-up resistor sizing, current sinking capability,
+voltage threshold margins, and clock frequencies to maintain signal
+integrity and prevent communication failures.</p>
+<h2 id="total-bus-capacitance-management">Total Bus Capacitance
+Management</h2>
+<p>The primary constraint in long-distance I2C is parasitic capacitance
+(<span class="math inline">\(C_b\)</span>). Standard twisted-pair or
+shielded cables typically introduce 30 to 100 pF of capacitance per
+meter, rapidly exceeding the standard 400 pF limit (or 550 pF in
+Fast-mode Plus).</p>
+<ul>
+<li><strong>Capacitance Limit:</strong> Maintain total bus capacitance
+below the specification limit for the chosen mode, or decouple the
+capacitive load using dedicated I2C bus buffers or accelerators (such as
+the PCA9600 or P82B96).</li>
+<li><strong>Differential Conversion:</strong> For runs exceeding a few
+meters, converting single-ended I2C signals (SDA/SCL) into differential
+signals (using transceivers like the PCA9615) eliminates common-mode
+capacitance constraints and extends ranges up to several hundred
+meters.</li>
+</ul>
+<h2 id="pull-up-resistor-calculation-and-slew-rates">Pull-Up Resistor
+Calculation and Slew Rates</h2>
+<p>I2C uses open-drain/open-collector outputs that rely on pull-up
+resistors (<span class="math inline">\(R_p\)</span>) to transition
+signals from logic LOW to logic HIGH. Long cables increase the RC time
+constant (<span class="math inline">\(\tau = R_p \times C_b\)</span>),
+resulting in slow signal rise times (<span
+class="math inline">\(t_r\)</span>).</p>
+<ul>
+<li><strong>Maximum Pull-Up Resistance (<span
+class="math inline">\(R_{p(max)}\)</span>):</strong> Calculated using
+the formula <span class="math inline">\(R_{p(max)} = \frac{t_r}{0.8473
+\times C_b}\)</span>. Rise times must not exceed 1000 ns (Standard-mode)
+or 300 ns (Fast-mode).</li>
+<li><strong>Minimum Pull-Up Resistance (<span
+class="math inline">\(R_{p(min)}\)</span>):</strong> Determined by the
+supply voltage (<span class="math inline">\(V_{DD}\)</span>) and the
+maximum output low sink current (<span
+class="math inline">\(I_{OL}\)</span>): <span
+class="math inline">\(R_{p(min)} = \frac{V_{DD} -
+V_{OL(max)}}{I_{OL}}\)</span>.</li>
+<li><strong>Active Pull-Ups:</strong> In place of purely passive
+resistors, active pull-up circuits (switched current sources) can
+quickly charge line capacitance without excessively loading the bus
+during the LOW state.</li>
+</ul>
+<h2 id="current-sink-capability-i_ol">Current Sink Capability (<span
+class="math inline">\(I_{OL}\)</span>)</h2>
+<p>Typical SBC GPIO pins can only safely sink between 2 mA and 4 mA of
+current while maintaining a valid low-level output voltage (<span
+class="math inline">\(V_{OL}\)</span>).</p>
+<ul>
+<li><strong>Drive Strength:</strong> When driving long cables with small
+pull-up resistors to achieve acceptable rise times, the required sink
+current often exceeds native SBC GPIO limits.</li>
+<li><strong>External Driver Stages:</strong> Integrating an external
+open-drain buffer or an active bus driver capable of sinking 15 mA to 30
+mA prevents logic level degradation and protects the SBC's internal
+output stages.</li>
+</ul>
+<h2 id="logic-voltage-thresholds-and-dc-noise-margins">Logic Voltage
+Thresholds and DC Noise Margins</h2>
+<p>DC resistance over long wire runs causes ground offsets and voltage
+drops (<span class="math inline">\(I \times R\)</span> drop), narrowing
+noise margins.</p>
+<ul>
+<li><strong><span class="math inline">\(V_{OL}\)</span> and <span
+class="math inline">\(V_{IL}\)</span> Margins:</strong> The driver must
+pull the line below the receiver’s maximum input low threshold (<span
+class="math inline">\(V_{IL(max)}\)</span>, typically <span
+class="math inline">\(0.3 \times V_{DD}\)</span>). High pull-up currents
+across long cable resistance can elevate the measured <span
+class="math inline">\(V_{OL}\)</span> above <span
+class="math inline">\(V_{IL(max)}\)</span>.</li>
+<li><strong>Noise Margin (<span
+class="math inline">\(V_{nL}\)</span>):</strong> Keep low-level noise
+margins above <span class="math inline">\(0.1 \times V_{DD}\)</span> to
+prevent false transitions caused by external electromagnetic
+interference (EMI).</li>
+</ul>
+<h2 id="bus-speed-and-clock-synchronization">Bus Speed and Clock
+Synchronization</h2>
+<p>Reducing the clock frequency (<span
+class="math inline">\(f_{SCL}\)</span>) directly relaxes the required
+rise time constraint, making higher capacitance tolerable without
+requiring dangerously low pull-up resistance.</p>
+<ul>
+<li><strong>Frequency Scaling:</strong> Operating the SBC I2C bus at
+lower speeds (e.g., 10 kHz to 50 kHz instead of standard 100 kHz or 400
+kHz) allows longer RC charge times while still maintaining stable clock
+and data setup/hold parameters.</li>
+<li><strong>Clock Stretching:</strong> Ensure the SBC hardware and
+driver properly support clock stretching if slave devices or line
+buffers require additional time to settle valid logic states.</li>
+</ul>
+<h2 id="cable-impedance-and-wire-topology">Cable Impedance and Wire
+Topology</h2>
+<ul>
+<li><strong>Crosstalk Mitigation:</strong> Avoid placing SDA and SCL in
+the same twisted pair. Instead, pair SDA with Ground and SCL with <span
+class="math inline">\(V_{DD}\)</span> (or Ground) to shield the signals
+from mutual capacitive and inductive coupling.</li>
+<li><strong>Bus Topology:</strong> Maintain a single, continuous trunk
+line topology with short stubs (&lt; 10 cm). Star or branched
+configurations create impedance mismatches and reflections that distort
+the edges of the open-drain waveform.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

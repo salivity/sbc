@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Abstraction Layers for Single Board Computers - sbc</title>
+    <meta name="description" content="Developing embedded applications across diverse single board computer (SBC) models often presents integration bottlenecks due to differing pinouts, system-on-chip (SoC) architectures, and bus interfaces. This article explores the primary software archite">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/sensor-abstraction-layers-for-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sensor Abstraction Layers for Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/sensor-abstraction-layers-for-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Developing embedded applications across diverse single board computer (SBC) models often presents integration bottlenecks due to differing pinouts, system-on-chip (SoC) architectures, and bus interfaces. This article explores the primary software archite" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="sensor-abstraction-layers-for-single-board-computers">Sensor
+Abstraction Layers for Single Board Computers</h1>
+<p>Developing embedded applications across diverse single board computer
+(SBC) models often presents integration bottlenecks due to differing
+pinouts, system-on-chip (SoC) architectures, and bus interfaces. This
+article explores the primary software architectures—including Hardware
+Abstraction Layers (HALs), kernel-level subsystems, containerized driver
+frameworks, and robotics middleware—that decouple high-level application
+logic from low-level hardware dependencies to ensure cross-platform
+sensor portability.</p>
+<h2 id="the-challenge-of-multi-sbc-sensor-integration">The Challenge of
+Multi-SBC Sensor Integration</h2>
+<p>Single board computers like Raspberry Pi, BeagleBone, NVIDIA Jetson,
+and Orange Pi utilize different SoCs, register maps, and Linux
+distributions. Directly binding application code to specific pin
+mappings or proprietary peripheral libraries creates tight coupling,
+forcing complete code rewrites whenever the host hardware changes. A
+standardized sensor abstraction layer solves this by establishing a
+uniform programming interface regardless of the physical bus (I2C, SPI,
+UART, or GPIO) or board layout.</p>
+<h2 id="layered-hardware-abstraction-layer-hal-architecture">Layered
+Hardware Abstraction Layer (HAL) Architecture</h2>
+<p>The classic HAL architecture separates software into distinct
+horizontal tiers:</p>
+<ol type="1">
+<li><strong>Application Layer:</strong> Handles domain-specific business
+logic, data processing, and telemetry without knowledge of underlying
+pin layouts.</li>
+<li><strong>Abstract Sensor API:</strong> Exposes unified sensor
+interfaces (e.g., <code>read_temperature()</code>,
+<code>get_acceleration()</code>) using standardized data types.</li>
+<li><strong>Platform Bus Driver Layer:</strong> Translates abstract bus
+commands into platform-specific implementations (e.g., standard Linux
+<code>/dev/i2c-*</code> calls or SoC-specific memory-mapped
+registers).</li>
+<li><strong>Hardware Layer:</strong> The physical sensor and SBC
+hardware.</li>
+</ol>
+<p>By isolating bus implementations behind polymorphic interfaces or
+abstract base classes, adding support for a new SBC requires only
+implementing the low-level bus wrapper rather than refactoring sensor
+drivers.</p>
+<h2 id="linux-industrial-io-iio-subsystem">Linux Industrial I/O (IIO)
+Subsystem</h2>
+<p>For Linux-based SBCs, the kernel-level Industrial I/O (IIO) subsystem
+serves as a native, hardware-agnostic architecture for sensors such as
+ADCs, DACs, gyroscopes, accelerometers, and environmental sensors.</p>
+<ul>
+<li><strong>Unified Sysfs Interface:</strong> Exposes sensor data
+through standardized filesystem nodes under
+<code>/sys/bus/iio/devices/</code>.</li>
+<li><strong>Standardized Units:</strong> Automatically scales raw
+hardware outputs to SI units (e.g., millivolts, meters per second
+squared, pascals).</li>
+<li><strong>Device Tree Integration:</strong> Utilizes Device Tree
+Overlays (DTOs) to map sensors to specific I2C or SPI buses at boot
+time, removing the need for user-space board detection logic.</li>
+</ul>
+<p>Applications read data via <code>libiio</code> or direct file
+operations, ensuring the user-space code remains completely identical
+across different SBC hardware platforms.</p>
+<h2 id="modern-user-space-driver-frameworks">Modern User-Space Driver
+Frameworks</h2>
+<p>When kernel-level driver development is impractical, standardized
+user-space libraries decouple applications from specific hardware:</p>
+<ul>
+<li><strong>libgpiod:</strong> The standard Linux character device
+interface for GPIO access, replacing obsolete <code>sysfs</code>
+interactions and proprietary SBC GPIO libraries.</li>
+<li><strong>Unified Hardware Access Libraries:</strong> Frameworks like
+Adafruit CircuitPython/Blinka, MRAA, or Embedded HALs (in Rust) create
+an abstraction shim. They map vendor-specific pin definitions
+dynamically using runtime environment detection.</li>
+</ul>
+<h2 id="middleware-and-message-driven-architectures">Middleware and
+Message-Driven Architectures</h2>
+<p>Complex systems deploy publish-subscribe middleware to completely
+isolate sensor drivers from data consumers:</p>
+<ul>
+<li><strong>Robot Operating System (ROS 2):</strong> Sensor drivers
+execute as independent nodes that read hardware and publish standardized
+messages (such as <code>sensor_msgs/Imu</code> or
+<code>sensor_msgs/Temperature</code>) over a DDS network. The processing
+software subscribes to the message topic without any reference to the
+SBC hosting the sensor.</li>
+<li><strong>Microservices and Containerized Drivers:</strong> Packaging
+hardware drivers into individual Docker or OCI containers that read from
+mapped device nodes (like <code>/dev/i2c-1</code>) and stream data via
+gRPC, REST, or MQTT. This isolates platform dependencies, simplifies
+dependency management, and exposes a uniform networking API across SBC
+fleets.</li>
+</ul>
+<h2 id="dynamic-configuration-and-runtime-pin-mapping">Dynamic
+Configuration and Runtime Pin-Mapping</h2>
+<p>To maximize portability, modern architectures implement declarative
+configuration models:</p>
+<ul>
+<li><strong>JSON/YAML Pin Mapping Schemes:</strong> Sensor pin numbers
+and bus addresses are stored in external configuration files, loaded
+dynamically at runtime based on the detected SBC model.</li>
+<li><strong>Factory Pattern Implementation:</strong> A centralized
+sensor factory reads the configuration, identifies the underlying board
+platform via <code>/proc/cpuinfo</code> or Device Tree models,
+instantiates the corresponding bus driver, and returns a generic sensor
+handle to the application.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecting Decoupling Capacitors for High-Frequency SBCs - sbc</title>
+    <meta name="description" content="Selecting the correct decoupling capacitors is essential for maintaining power distribution network (PDN) stability and signal integrity on high-frequency single board computers (SBCs). This article covers the step-by-step engineering process required to">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/selecting-decoupling-capacitors-for-high-frequency-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Selecting Decoupling Capacitors for High-Frequency SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/selecting-decoupling-capacitors-for-high-frequency-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Selecting the correct decoupling capacitors is essential for maintaining power distribution network (PDN) stability and signal integrity on high-frequency single board computers (SBCs). This article covers the step-by-step engineering process required to" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="selecting-decoupling-capacitors-for-high-frequency-sbcs">Selecting
+Decoupling Capacitors for High-Frequency SBCs</h1>
+<p>Selecting the correct decoupling capacitors is essential for
+maintaining power distribution network (PDN) stability and signal
+integrity on high-frequency single board computers (SBCs). This article
+covers the step-by-step engineering process required to calculate target
+impedance, select appropriate capacitor technologies across the
+operational frequency spectrum, account for component parasitics and DC
+bias effects, and optimize physical layout for minimal parasitic loop
+inductance.</p>
+<h3 id="1-calculate-target-impedance">1. Calculate Target Impedance</h3>
+<p>The foundation of PDN design is determining the target impedance
+(<span class="math inline">\(Z_{target}\)</span>) across the operating
+bandwidth of the processor and high-speed peripherals. The power rail
+must maintain this impedance to prevent voltage fluctuations during
+sudden current load steps.</p>
+<p><span class="math display">\[Z_{target} = \frac{\Delta V}{\Delta
+I}\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(\Delta V\)</span> is the maximum
+allowable voltage ripple (typically 2% to 5% of the nominal supply
+voltage).</li>
+<li><span class="math inline">\(\Delta I\)</span> is the maximum dynamic
+transient current switching step.</li>
+</ul>
+<p>The capacitor network must provide an impedance equal to or lower
+than <span class="math inline">\(Z_{target}\)</span> from DC up to the
+maximum switching frequency harmonics.</p>
+<h3 id="2-implement-multi-tier-broadband-decoupling">2. Implement
+Multi-Tier Broadband Decoupling</h3>
+<p>No single capacitor can provide low impedance across the entire
+frequency range required by modern gigahertz-class processors. Engineers
+deploy a tiered hierarchy to cover specific frequency bands:</p>
+<ul>
+<li><strong>Bulk Capacitors (10 µF to 470 µF):</strong> Positioned near
+power entry points or voltage regulators. Tantalum polymer or large
+aluminum electrolytic capacitors supply bulk charge during low-frequency
+(kHz to low-MHz) transient load changes.</li>
+<li><strong>Mid-Range MLCCs (0.1 µF to 4.7 µF):</strong> Placed adjacent
+to power domains to bypass mid-frequency noise (1 MHz to 100 MHz).</li>
+<li><strong>High-Frequency MLCCs (100 pF to 10 nF):</strong> Placed as
+close as physically possible to the IC power pins or BGA balls to
+suppress high-frequency switching noise (100 MHz to 1 GHz+).</li>
+<li><strong>Package/On-Die Capacitance:</strong> Handles sub-nanosecond
+transient demands beyond 1 GHz where PCB trace inductance renders
+discrete components ineffective.</li>
+</ul>
+<h3 id="3-account-for-parasitic-esl-and-esr">3. Account for Parasitic
+ESL and ESR</h3>
+<p>Real-world capacitors exhibit Equivalent Series Resistance (ESR) and
+Equivalent Series Inductance (ESL).</p>
+<ul>
+<li><strong>Self-Resonant Frequency (SRF):</strong> Above the SRF, a
+capacitor behaves as an inductor, losing its decoupling effectiveness.
+Minimizing ESL shifts the SRF higher.</li>
+<li><strong>Package Geometry:</strong> Smaller package footprints (such
+as 0201 or 0402) have significantly lower parasitic inductance than
+larger packages (0805 or 1206). Reverse-geometry packages (e.g., 0306
+instead of 0603) place terminations on the long sides to reduce current
+loop length and ESL by up to 60%.</li>
+<li><strong>Anti-Resonance Mitigation:</strong> Placing different value
+capacitors in parallel creates parallel anti-resonance peaks where
+impedance spikes. Engineers must select values whose ESR provides enough
+damping to suppress anti-resonance without compromising filtering
+performance.</li>
+</ul>
+<h3 id="4-select-proper-dielectrics-and-apply-dc-bias-derating">4.
+Select Proper Dielectrics and Apply DC Bias Derating</h3>
+<p>Class 2 ceramic capacitors (X5R, X7R, X8R) offer high volumetric
+efficiency, making them standard for SBCs. However, their effective
+capacitance drops substantially under DC operating voltages due to the
+DC bias effect.</p>
+<ul>
+<li><strong>DC Bias Derating:</strong> A 0.1 µF, 6.3V rated X7R
+capacitor operating at 3.3V can lose 30% to 70% of its nominal
+capacitance. Engineers must review the manufacturer's DC bias curves and
+select higher voltage-rated components (e.g., 10V or 16V ratings for a
+3.3V rail) or increase nominal capacitance values to compensate.</li>
+<li><strong>Temperature Stability:</strong> Ensure the dielectric
+retains sufficient capacitance over the SBC’s operational temperature
+range. X7R (<span class="math inline">\(-55^\circ\text{C}\)</span> to
+<span class="math inline">\(+125^\circ\text{C}\)</span>, <span
+class="math inline">\(\pm15\%\)</span> drift) is generally preferred
+over X5R for industrial-grade SBC designs.</li>
+</ul>
+<h3 id="5-optimize-pcb-routing-and-via-placement">5. Optimize PCB
+Routing and Via Placement</h3>
+<p>The electrical performance of high-frequency decoupling capacitors
+depends heavily on PCB layout. Parasitic loop inductance introduced by
+traces and vias can negate the benefits of low-ESL capacitors.</p>
+<ul>
+<li><strong>Minimize Trace Length:</strong> Place decoupling capacitors
+on the layer directly opposite the BGA pads or adjacent to the power
+pins to keep trace lengths near zero.</li>
+<li><strong>Via Configuration:</strong> Use wide, short traces to
+connect capacitor pads to vias. Place power and ground vias close to
+each other to maximize mutual inductive cancellation.</li>
+<li><strong>Plane Proximity:</strong> Keep power and ground reference
+planes separated by thin dielectric layers (typically 2 to 4 mils).
+Close plane spacing provides distributed inter-plane capacitance that
+enhances decoupling performance above 500 MHz.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

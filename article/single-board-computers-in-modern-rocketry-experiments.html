@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Board Computers in Modern Rocketry Experiments - sbc</title>
+    <meta name="description" content="Single board computers (SBCs) have revolutionized modern rocketry by serving as compact, powerful, and cost-effective flight computers for amateur, collegiate, and commercial aerospace projects. This article explores how SBCs manage complex in-flight tas">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/single-board-computers-in-modern-rocketry-experiments">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Single Board Computers in Modern Rocketry Experiments - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/single-board-computers-in-modern-rocketry-experiments" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Single board computers (SBCs) have revolutionized modern rocketry by serving as compact, powerful, and cost-effective flight computers for amateur, collegiate, and commercial aerospace projects. This article explores how SBCs manage complex in-flight tas" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="single-board-computers-in-modern-rocketry-experiments">Single
+Board Computers in Modern Rocketry Experiments</h1>
+<p>Single board computers (SBCs) have revolutionized modern rocketry by
+serving as compact, powerful, and cost-effective flight computers for
+amateur, collegiate, and commercial aerospace projects. This article
+explores how SBCs manage complex in-flight tasks, from real-time data
+acquisition and autonomous flight control to high-frequency telemetry
+logging and live ground station communication, enabling more
+sophisticated and reliable high-power rocket missions.</p>
+<h3 id="multi-sensor-data-acquisition">Multi-Sensor Data
+Acquisition</h3>
+<p>Modern rocketry experiments require rapid, synchronized sampling from
+diverse sensor suites. SBCs utilize high-speed communication
+buses—including SPI, I2C, and UART—to interface simultaneously with:</p>
+<ul>
+<li><strong>Inertial Measurement Units (IMUs):</strong> Measuring 6-axis
+or 9-axis acceleration, angular velocity, and magnetic fields.</li>
+<li><strong>Barometric Pressure Sensors:</strong> Providing
+high-precision altitude and vertical velocity calculations.</li>
+<li><strong>GPS Modules:</strong> Supplying absolute coordinates,
+velocity vectors, and time synchronization.</li>
+<li><strong>Strain Gauges and Thermocouples:</strong> Monitoring
+structural integrity and motor thermal profiles.</li>
+</ul>
+<p>Unlike basic microcontrollers, an SBC features high clock speeds and
+multi-core processors capable of running concurrent threads. This allows
+one core to dedicatedly sample sensors at kilohertz frequencies without
+dropping packets while other cores execute control algorithms.</p>
+<h3 id="autonomous-flight-logic-and-event-triggering">Autonomous Flight
+Logic and Event Triggering</h3>
+<p>SBCs run real-time operating systems (RTOS) or real-time-patched
+Linux kernels (such as PREEMPT_RT) to execute deterministic flight
+control algorithms. Key autonomous flight operations include:</p>
+<ul>
+<li><strong>State Estimation and Kalman Filtering:</strong> Fusing noisy
+sensor data into a continuous, accurate state vector (position,
+velocity, orientation).</li>
+<li><strong>Apogee Detection:</strong> Accurately identifying the
+highest point of trajectory using rate-of-climb indicators and Kalman
+predictions to prevent premature deployment under high dynamic
+pressure.</li>
+<li><strong>Recovery Deployment:</strong> Outputting GPIO signals to
+electronic switches, triggering pyrotechnic charges or CO2 systems for
+dual-deployment parachutes.</li>
+<li><strong>Active Control Surfaces:</strong> Calculating
+proportional-integral-derivative (PID) adjustments for grid fins,
+cold-gas thrusters, or thrust-vectoring gimbals to stabilize or guide
+the vehicle.</li>
+</ul>
+<h3 id="high-speed-telemetry-logging">High-Speed Telemetry Logging</h3>
+<p>Black-box data logging is essential for post-flight analysis, anomaly
+investigations, and validating aerodynamic models. SBCs facilitate
+robust telemetry logging by:</p>
+<ul>
+<li><strong>High-Bandwidth Storage:</strong> Utilizing onboard eMMC
+storage or high-end NVMe/microSD interfaces capable of sustained write
+speeds that prevent data bottlenecks during intense burn phases.</li>
+<li><strong>Memory Buffering:</strong> Leveraging ample RAM to buffer
+high-rate sensor streams before writing to non-volatile storage,
+protecting data integrity against sudden mechanical shocks or high-G
+environments.</li>
+<li><strong>Structured Formats:</strong> Logging data directly into
+structured binary formats or lightweight databases (e.g., SQLite, CSV,
+or custom telemetry frames) with microsecond-level timestamps.</li>
+</ul>
+<h3 id="downlink-communication-and-ground-control">Downlink
+Communication and Ground Control</h3>
+<p>During flight, transmitting vital parameters back to the ground
+control station enables real-time monitoring and safety oversight. SBCs
+manage this interface through integrated or peripheral radio frequency
+(RF) hardware:</p>
+<ul>
+<li><strong>Packet Compression and Serialization:</strong> Packing
+critical state metrics into minimal payload sizes (using protocols like
+Protocol Buffers or MAVLink) to maximize transmission efficiency.</li>
+<li><strong>Radio Transceiver Management:</strong> Interfacing with
+long-range modules (such as LoRa, 900 MHz, or 2.4 GHz transceivers) via
+UART or SPI.</li>
+<li><strong>Ground Commands:</strong> Processing remote arming, abort,
+or diagnostic commands sent from the launch pad prior to ignition.</li>
+</ul>
+<h3 id="reliability-and-fault-management">Reliability and Fault
+Management</h3>
+<p>High-vibration, high-G, and temperature-variable environments pose
+significant risks to electronic payloads. When deployed in rockets, SBCs
+rely on software and hardware safeguards:</p>
+<ul>
+<li><strong>Hardware Watchdog Timers:</strong> Automatically resetting
+the system or switching to a safe state if the main flight loop
+hangs.</li>
+<li><strong>Read-Only File Systems:</strong> Configuring root partitions
+to run in memory or read-only mode, eliminating the risk of operating
+system corruption during sudden power loss or hard landings.</li>
+<li><strong>Secondary Microcontroller Redundancy:</strong> Teaming the
+SBC with low-level microcontrollers that act as dedicated backup
+triggers for recovery events, ensuring mission success even in the event
+of SBC software anomalies.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

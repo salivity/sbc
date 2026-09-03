@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimizing SBC Cooling Fan Curve Parameters - sbc</title>
+    <meta name="description" content="Configuring an effective hardware cooling fan curve on a temperature-sensitive single-board computer (SBC) requires balancing thermal dissipation, acoustic comfort, power consumption, and hardware longevity. Because SBCs often integrate the CPU, GPU, mem">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/optimizing-sbc-cooling-fan-curve-parameters">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Optimizing SBC Cooling Fan Curve Parameters - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/optimizing-sbc-cooling-fan-curve-parameters" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring an effective hardware cooling fan curve on a temperature-sensitive single-board computer (SBC) requires balancing thermal dissipation, acoustic comfort, power consumption, and hardware longevity. Because SBCs often integrate the CPU, GPU, mem" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="optimizing-sbc-cooling-fan-curve-parameters">Optimizing SBC
+Cooling Fan Curve Parameters</h1>
+<p>Configuring an effective hardware cooling fan curve on a
+temperature-sensitive single-board computer (SBC) requires balancing
+thermal dissipation, acoustic comfort, power consumption, and hardware
+longevity. Because SBCs often integrate the CPU, GPU, memory, and power
+management onto a compact, densely populated board, failing to manage
+thermals can trigger performance-degrading throttling or premature
+hardware failure. Selecting the ideal curve relies on a clear
+understanding of specific thermal, mechanical, and workload
+parameters.</p>
+<h3 id="1-soc-thermal-limits-and-throttling-thresholds">1. SoC Thermal
+Limits and Throttling Thresholds</h3>
+<p>The primary parameter governing any fan curve is the maximum junction
+temperature (<span class="math inline">\(T_j\text{ max}\)</span>) of the
+System on Chip (SoC), along with the temperature at which the firmware
+begins thermal throttling (<span
+class="math inline">\(T_{\text{throttle}}\)</span>).</p>
+<ul>
+<li><strong>Target Idle Range:</strong> Usually 35°C to 50°C.</li>
+<li><strong>Target Load Range:</strong> Kept at least 10°C to 15°C below
+the hardware throttling point.</li>
+<li><strong>Critical Cutoff:</strong> The maximum curve point (100% duty
+cycle) should trigger before the SoC hits severe thermal throttling to
+prevent frame drops or system instability.</li>
+</ul>
+<h3 id="2-thermal-mass-and-heatsink-efficiency">2. Thermal Mass and
+Heatsink Efficiency</h3>
+<p>The thermal mass and design of the attached heatsink dictate how
+rapidly temperatures fluctuate:</p>
+<ul>
+<li><strong>Passive vs. Active Capacity:</strong> A large aluminum or
+copper heatsink absorbs brief thermal spikes, allowing the fan to stay
+at lower RPMs during short compute bursts.</li>
+<li><strong>Minimalist Thermal Solutions:</strong> Small or low-profile
+heatsinks have low thermal inertia, requiring a steeper curve with
+earlier fan engagement to counteract rapid heat buildup.</li>
+</ul>
+<h3 id="3-fan-hysteresis-and-stepping-delay">3. Fan Hysteresis and
+Stepping Delay</h3>
+<p>Hysteresis introduces a delay or temperature difference between
+ramp-up and ramp-down thresholds (e.g., spin up at 60°C, spin down only
+when falling below 55°C).</p>
+<ul>
+<li><strong>Preventing Oscillation:</strong> Without proper hysteresis,
+temperatures hovering around a threshold cause the fan to constantly
+fluctuate in speed, creating annoying acoustic whine and accelerating
+mechanical bearing wear.</li>
+<li><strong>Step Smoothing:</strong> Implementing a small time-delay
+filter (moving average) prevents momentary load spikes from instantly
+revving the fan.</li>
+</ul>
+<h3 id="4-acoustic-constraints-and-ambient-noise">4. Acoustic
+Constraints and Ambient Noise</h3>
+<p>The operating environment defines the acceptable noise floor:</p>
+<ul>
+<li><strong>Desktop or Media Center (HTPC):</strong> Demands a silent or
+near-silent profile. Fan activation is delayed until higher temperatures
+(e.g., 55°C–60°C), with RPM kept below 40–50% until absolutely
+necessary.</li>
+<li><strong>Headless Servers or Enclosures:</strong> Prioritize thermal
+margins over noise, enabling a more aggressive linear curve.</li>
+</ul>
+<h3 id="5-ambient-temperature-and-enclosure-airflow">5. Ambient
+Temperature and Enclosure Airflow</h3>
+<p>Ambient operating temperature directly affects cooling
+efficiency:</p>
+<ul>
+<li><strong>Enclosed Chassis:</strong> SBCs inside unventilated or
+compact cases suffer from heat soaking, requiring higher baseline fan
+speeds to maintain positive airflow.</li>
+<li><strong>Ambient Variations:</strong> Systems operating in
+non-climate-controlled environments need conservative, steep curves to
+handle high summer ambient baselines.</li>
+</ul>
+<h3 id="6-power-budget-and-pwm-control-limits">6. Power Budget and PWM
+Control Limits</h3>
+<p>Single-board computers often run on tight power budgets (e.g., USB
+power supplies or Power over Ethernet):</p>
+<ul>
+<li><strong>Fan Stall Speed:</strong> Pulse-Width Modulation (PWM) fans
+have a minimum duty cycle (often 20% to 30%) below which they cannot
+reliably spin.</li>
+<li><strong>Power Draw:</strong> At 100% duty cycle, high-RPM 5V/12V
+fans can consume significant power, which must be accounted for to
+prevent brownouts under peak compute loads.</li>
+</ul>
+<h3 id="7-workload-profile">7. Workload Profile</h3>
+<ul>
+<li><strong>Bursty Loads (Web browsing, light scripting):</strong>
+Benefit from higher activation thresholds to avoid unnecessary fan
+cycling.</li>
+<li><strong>Sustained Compute (Compilation, machine learning inference,
+continuous video decoding):</strong> Require early, proactive ramp-ups
+to saturate the heatsink's dissipation rate before temperatures reach
+throttling zones.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single vs Dual Channel RAM on Single Board Computers - sbc</title>
+    <meta name="description" content="This article explores the technical distinctions between single-channel and dual-channel memory configurations on single board computers (SBCs). It covers the underlying architectural differences, including data bus width, theoretical throughput, system-">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/single-vs-dual-channel-ram-on-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Single vs Dual Channel RAM on Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/single-vs-dual-channel-ram-on-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores the technical distinctions between single-channel and dual-channel memory configurations on single board computers (SBCs). It covers the underlying architectural differences, including data bus width, theoretical throughput, system-" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="single-vs-dual-channel-ram-on-single-board-computers">Single vs
+Dual Channel RAM on Single Board Computers</h1>
+<p>This article explores the technical distinctions between
+single-channel and dual-channel memory configurations on single board
+computers (SBCs). It covers the underlying architectural differences,
+including data bus width, theoretical throughput, system-on-chip (SoC)
+controller design, PCB trace layout constraints, and the resulting
+performance impacts on unified memory workloads such as integrated
+graphics and edge AI tasks.</p>
+<h3 id="bus-width-and-peak-bandwidth">Bus Width and Peak Bandwidth</h3>
+<p>The primary technical difference lies in the total width of the data
+bus communicating between the memory controller and the dynamic
+random-access memory (DRAM). In a single-channel configuration, the
+memory controller accesses RAM through a single bus—typically 32 bits
+wide on embedded architectures or 64 bits wide on standard x86 and
+high-end ARM platforms.</p>
+<p>A dual-channel configuration doubles the number of data lines by
+utilizing two independent channels (e.g., two 32-bit channels or two
+64-bit channels). While operating at the same clock frequency, a
+dual-channel layout doubles the theoretical peak memory bandwidth
+because the SoC can read or write across both channels concurrently.</p>
+<h3 id="memory-controller-and-soc-architecture">Memory Controller and
+SoC Architecture</h3>
+<p>To support dual-channel memory, the SBC's SoC must physically include
+multiple memory controllers or a controller capable of split-channel
+addressing.</p>
+<ul>
+<li><strong>Single-Channel:</strong> Memory requests are queued
+sequentially. Simultaneous read/write requests from different cores or
+coprocessors must wait for bus availability.</li>
+<li><strong>Dual-Channel:</strong> The SoC can interleave memory
+addresses across both channels. This allows the memory controller to
+execute two distinct memory operations in parallel, reducing wait states
+during high-concurrency workloads.</li>
+</ul>
+<h3 id="pcb-layout-and-trace-routing-complexity">PCB Layout and Trace
+Routing Complexity</h3>
+<p>SBCs operate under strict size constraints, often using compact form
+factors like the Raspberry Pi footprint or standard Pico-ITX
+dimensions.</p>
+<p>Implementing a dual-channel memory configuration requires:</p>
+<ul>
+<li><strong>Higher Layer Count:</strong> Routing twice as many
+high-speed data, address, and control lines requires 6-layer, 8-layer,
+or higher-density PCBs to maintain signal integrity.</li>
+<li><strong>Length Matching and Impedance Control:</strong> Every
+channel requires precise trace length matching and differential pair
+routing to prevent cross-talk, skew, and electromagnetic interference
+(EMI).</li>
+<li><strong>Package Integration:</strong> Single-channel designs often
+utilize a single Package-on-Package (PoP) or a single discrete DRAM
+chip, whereas dual-channel configurations typically require multiple
+discrete LPDDR/DDR chips placed strategically around the SoC.</li>
+</ul>
+<h3 id="unified-memory-architecture-uma-impact">Unified Memory
+Architecture (UMA) Impact</h3>
+<p>Most SBCs rely on a Unified Memory Architecture where the CPU,
+integrated Graphics Processing Unit (iGPU), Neural Processing Unit
+(NPU), and Video Processing Unit (VPU) share the same physical RAM.</p>
+<ul>
+<li><strong>Single-Channel Limitations:</strong> When the CPU and iGPU
+compete for the single data bus, memory starvation can occur.
+High-resolution displays (4K/60Hz), intensive 3D rendering, or
+high-bandwidth camera ingestion (via CSI interfaces) quickly saturate
+the bus, leading to frame drops and general CPU throttling.</li>
+<li><strong>Dual-Channel Advantages:</strong> The doubled bandwidth
+provides sufficient headroom for high-bandwidth peripherals and compute
+units to operate simultaneously without causing significant memory
+access bottlenecks.</li>
+</ul>
+<h3 id="latency-vs-throughput">Latency vs. Throughput</h3>
+<p>Dual-channel configurations do not reduce the native latency of the
+memory modules; CAS latency and access cycle times remain identical to
+single-channel modules running at the same frequency. However,
+dual-channel memory lowers <em>effective</em> latency under heavy system
+loads by reducing bus contention and queue depth at the memory
+controller.</p>
+<h3 id="power-consumption-and-thermal-management">Power Consumption and
+Thermal Management</h3>
+<p>Dual-channel layouts generally draw more power than single-channel
+configurations due to the operation of additional signal traces, dual
+controllers, and multiple memory dies. On battery-powered or passively
+cooled SBCs, this results in slightly higher idle and active power
+consumption, alongside increased localized heat dissipation near the RAM
+modules and SoC.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

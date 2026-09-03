@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Radxa Zero Achieves High Computing Density - sbc</title>
+    <meta name="description" content="The Radxa Zero packs desktop-class processing power and versatile connectivity into a footprint roughly the size of a USB flash drive. By leveraging an efficient 12nm quad-core system-on-chip (SoC), high-speed LPDDR4 memory, onboard eMMC storage, and an">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-radxa-zero-achieves-high-computing-density">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Radxa Zero Achieves High Computing Density - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-radxa-zero-achieves-high-computing-density" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Radxa Zero packs desktop-class processing power and versatile connectivity into a footprint roughly the size of a USB flash drive. By leveraging an efficient 12nm quad-core system-on-chip (SoC), high-speed LPDDR4 memory, onboard eMMC storage, and an" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-radxa-zero-achieves-high-computing-density">How Radxa Zero
+Achieves High Computing Density</h1>
+<p>The Radxa Zero packs desktop-class processing power and versatile
+connectivity into a footprint roughly the size of a USB flash drive. By
+leveraging an efficient 12nm quad-core system-on-chip (SoC), high-speed
+LPDDR4 memory, onboard eMMC storage, and an optimized multi-layer
+printed circuit board (PCB) layout, the device delivers high computing
+density without exceeding the standard 65mm x 30mm form factor.</p>
+<h3 id="advanced-12nm-soc-architecture">Advanced 12nm SoC
+Architecture</h3>
+<p>At the core of the Radxa Zero is the Amlogic S905Y2 processor,
+featuring four 64-bit ARM Cortex-A53 cores running at up to 1.8 GHz,
+paired with an ARM Mali-G31 MP2 GPU. Unlike older single-board computers
+in this size category that rely on larger, less power-efficient
+fabrication nodes (such as 28nm or 40nm), the S905Y2 utilizes a 12nm
+process. This smaller transistor gate size significantly reduces power
+consumption and heat dissipation per clock cycle, enabling higher clock
+speeds and multi-threaded performance in an ultra-compact package.</p>
+<h3 id="dense-memory-and-storage-integration">Dense Memory and Storage
+Integration</h3>
+<p>To avoid performance bottlenecks, the Radxa Zero integrates modern
+memory and storage standards directly onto the board:</p>
+<ul>
+<li><strong>LPDDR4 RAM:</strong> Configurable up to 4GB, LPDDR4 provides
+high memory bandwidth and lower operating voltage compared to older
+DDR3/DDR2 designs used on traditional mini-SBCs.</li>
+<li><strong>Onboard eMMC 5.1 Storage:</strong> Select configurations
+include up to 128GB of high-speed eMMC flash storage directly soldered
+to the PCB. This yields significantly faster read/write speeds than
+standard microSD cards while saving physical space.</li>
+<li><strong>MicroSD Expansion:</strong> A slot remains available on the
+reverse side for auxiliary storage, maintaining flexibility without
+increasing surface area.</li>
+</ul>
+<h3
+id="high-density-pcb-design-and-space-saving-interfaces">High-Density
+PCB Design and Space-Saving Interfaces</h3>
+<p>Fitting modern computing hardware into a 65mm x 30mm board requires a
+dense, multi-layer PCB layout that routes signals efficiently while
+minimizing electromagnetic interference (EMI).</p>
+<p>Radxa achieved this by replacing bulky legacy ports with compact
+alternatives:</p>
+<ul>
+<li><strong>Dual USB Type-C Ports:</strong> One port serves as a
+dedicated USB 2.0 OTG/power input, while the second functions as a
+high-speed USB 3.0 Host interface.</li>
+<li><strong>Micro HDMI:</strong> Delivers 4K video output at 60Hz using
+a fraction of the board area required by a full-sized HDMI
+connector.</li>
+<li><strong>Integrated Wireless:</strong> An onboard module provides
+dual-band 2.4 GHz/5 GHz Wi-Fi 5 (802.11ac) and Bluetooth 5.0 with an
+integrated antenna, eliminating the need for external wireless
+adapters.</li>
+</ul>
+<h3 id="thermal-efficiency-and-power-management">Thermal Efficiency and
+Power Management</h3>
+<p>High computing density requires careful thermal and power
+distribution. The low-leakage 12nm design of the S905Y2 enables the
+processor to handle sustained moderate workloads passively. For
+sustained peak loads, the compact layout exposes the SoC on the top
+layer, allowing direct attachment of miniature passive heatsinks or
+integration into aluminum cases that double as heat spreaders. This
+ensures maximum performance retention without demanding complex cooling
+solutions.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

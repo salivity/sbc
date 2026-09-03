@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Speed SBC EMC Certification Factors - sbc</title>
+    <meta name="description" content="Achieving Electromagnetic Compatibility (EMC) certification for a high-speed Single Board Computer (SBC) requires passing rigorous regulatory tests for both radiated and conducted electromagnetic interference (EMI) as well as electromagnetic susceptibili">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/high-speed-sbc-emc-certification-factors">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="High-Speed SBC EMC Certification Factors - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/high-speed-sbc-emc-certification-factors" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Achieving Electromagnetic Compatibility (EMC) certification for a high-speed Single Board Computer (SBC) requires passing rigorous regulatory tests for both radiated and conducted electromagnetic interference (EMI) as well as electromagnetic susceptibili" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="high-speed-sbc-emc-certification-factors">High-Speed SBC EMC
+Certification Factors</h1>
+<p>Achieving Electromagnetic Compatibility (EMC) certification for a
+high-speed Single Board Computer (SBC) requires passing rigorous
+regulatory tests for both radiated and conducted electromagnetic
+interference (EMI) as well as electromagnetic susceptibility (EMS).
+Because modern SBCs feature multi-gigahertz processors, high-speed
+memory interfaces, and dense I/O layouts, controlling high-frequency
+noise is critical to meeting international standards like FCC, CE, and
+CISPR. The primary factors influencing EMC compliance include PCB
+stackup design, signal integrity and routing, clock management, power
+distribution network (PDN) performance, I/O filtering, and physical
+shielding.</p>
+<h3 id="pcb-layer-stackup-and-grounding-strategy">PCB Layer Stackup and
+Grounding Strategy</h3>
+<p>A well-structured printed circuit board (PCB) stackup is the
+foundation of EMC compliance. High-speed SBCs typically require a
+multi-layer board (often 6 to 12+ layers) with dedicated, continuous
+ground and power reference planes.</p>
+<ul>
+<li><strong>Return Path Integrity:</strong> High-frequency currents
+follow the path of least inductance, directly beneath the signal trace
+on an adjacent reference plane. Any interruption in this reference
+plane—such as crossing split planes or slots—forces the return current
+into a wider loop, transforming the trace into an efficient loop antenna
+that emits radiation.</li>
+<li><strong>Plane Placement:</strong> Placing ground planes directly
+adjacent to high-speed signal layers provides immediate shielding and
+tight electromagnetic coupling.</li>
+</ul>
+<h3 id="high-speed-signal-routing-and-impedance-control">High-Speed
+Signal Routing and Impedance Control</h3>
+<p>Impedance mismatches create signal reflections and ringing, which
+introduce harmonic noise that elevates emission levels.</p>
+<ul>
+<li><strong>Controlled Impedance:</strong> Traces for high-speed
+protocols (such as PCIe, USB 3.x, DDR memory, and Ethernet) must be
+routed with precise characteristic impedance (e.g., 50Ω single-ended,
+90Ω/100Ω differential).</li>
+<li><strong>Differential Signaling:</strong> Differential pairs must
+maintain tight length and phase matching to ensure high Common Mode
+Rejection Ratio (CMRR). Mismatches convert differential-mode signals
+into common-mode noise, which is a leading contributor to radiated
+emissions.</li>
+<li><strong>Via Management:</strong> Minimizing layer transitions and
+using ground stitching vias alongside signal vias ensures continuous
+return paths for vertical transitions.</li>
+</ul>
+<h3 id="clock-generation-distribution-and-harmonics">Clock Generation,
+Distribution, and Harmonics</h3>
+<p>Clocks and periodic oscillators are dominant sources of narrowband
+radiated EMI due to their sharp edge rates (fast rise/fall times)
+containing high-frequency harmonics.</p>
+<ul>
+<li><strong>Spread Spectrum Clocking (SSC):</strong> Modulating the
+clock frequency over a narrow band flattens spectral peaks, distributing
+the radiated energy over a wider frequency band to lower peak emissions
+below regulatory thresholds.</li>
+<li><strong>Edge Rate Control and Termination:</strong> Using series
+damping resistors or software-programmable drive strength on clock
+outputs reduces excessively sharp edge rates without violating timing
+budgets.</li>
+</ul>
+<h3 id="power-distribution-network-pdn-and-decoupling">Power
+Distribution Network (PDN) and Decoupling</h3>
+<p>Transient switching currents from microprocessors, GPUs, and
+high-speed logic generate dynamic voltage drops (<span
+class="math inline">\(L \cdot di/dt\)</span>), injecting high-frequency
+noise into the power planes.</p>
+<ul>
+<li><strong>Decoupling Capacitance:</strong> A combination of decoupling
+capacitors with staggered resonant frequencies must be placed directly
+at the power pins of high-speed ICs with minimal trace inductance.</li>
+<li><strong>Low Impedance:</strong> Maintaining a low PDN impedance
+across a wide frequency range prevents voltage ripple from propagating
+across the board and radiating as common-mode noise.</li>
+</ul>
+<h3 id="io-filtering-transient-protection-and-connectors">I/O Filtering,
+Transient Protection, and Connectors</h3>
+<p>External cables attached to an SBC act as efficient whip antennas,
+radiating internal high-frequency noise into the environment or picking
+up external electrostatic discharges (ESD) and RF fields.</p>
+<ul>
+<li><strong>Common-Mode Chokes (CMCs):</strong> Installing CMCs on
+differential data lines (such as USB and Ethernet) suppresses
+common-mode noise while allowing differential signals to pass
+unhindered.</li>
+<li><strong>Filtering at the Board Edge:</strong> Passive LC or RC
+low-pass filters placed immediately adjacent to I/O connectors prevent
+internal PCB noise from escaping onto attached cables.</li>
+<li><strong>ESD and Surge Protection:</strong> Transient Voltage
+Suppressors (TVS diodes) clamped close to the connector pins protect the
+SBC against ESD and electrical fast transients (EFT) to meet EMS
+immunity standards.</li>
+</ul>
+<h3 id="mechanical-enclosure-and-shielding">Mechanical Enclosure and
+Shielding</h3>
+<p>When board-level techniques are insufficient to meet regulatory
+limits, the mechanical enclosure provides a crucial final layer of
+defense.</p>
+<ul>
+<li><strong>Faraday Cage Design:</strong> Metallic or conductive-coated
+plastic enclosures attenuate radiated emissions.</li>
+<li><strong>Aperture Control:</strong> Openings for ventilation, display
+ports, and LEDs must be kept significantly smaller than the wavelength
+of the highest harmonic frequencies generated by the SBC to prevent RF
+leakage.</li>
+<li><strong>Gasketing and Grounding:</strong> Conductive gaskets and
+proper chassis grounding ensure continuous electrical contact along
+enclosure seams and interface panels.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

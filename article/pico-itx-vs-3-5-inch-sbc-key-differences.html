@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pico-ITX vs 3.5-Inch SBC: Key Differences - sbc</title>
+    <meta name="description" content="When designing embedded systems, selecting the correct form factor is critical to balancing physical constraints with processing capabilities. Both Pico-ITX and 3.5-inch single board computers (SBCs) are widely used industrial computing standards, yet th">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/pico-itx-vs-3-5-inch-sbc-key-differences">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pico-ITX vs 3.5-Inch SBC: Key Differences - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/pico-itx-vs-3-5-inch-sbc-key-differences" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When designing embedded systems, selecting the correct form factor is critical to balancing physical constraints with processing capabilities. Both Pico-ITX and 3.5-inch single board computers (SBCs) are widely used industrial computing standards, yet th" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="pico-itx-vs-35-inch-sbc-key-differences">Pico-ITX vs 3.5-Inch
+SBC: Key Differences</h1>
+<p>When designing embedded systems, selecting the correct form factor is
+critical to balancing physical constraints with processing capabilities.
+Both Pico-ITX and 3.5-inch single board computers (SBCs) are widely used
+industrial computing standards, yet they serve distinct operational
+needs. The primary differences between them lie in their physical
+footprint, thermal performance, processor scalability, I/O connectivity,
+and power design. While Pico-ITX focuses on ultra-compact efficiency for
+extreme space limitations, the 3.5-inch standard provides a balanced
+blend of high compute performance, rich native connectivity, and
+flexible expansion.</p>
+<h3 id="dimensions-and-footprint">Dimensions and Footprint</h3>
+<p>The most immediate distinction is size:</p>
+<ul>
+<li><strong>Pico-ITX:</strong> Measures <strong>100 mm × 72 mm</strong>
+(3.9 in × 2.8 in). Originally defined by VIA Technologies, it is roughly
+half the size of a Nano-ITX board and represents one of the smallest
+standard x86 and ARM SBC formats available.</li>
+<li><strong>3.5-inch SBC:</strong> Measures <strong>146 mm × 102
+mm</strong> (5.75 in × 4.0 in). Despite its name, the dimensions are
+derived from the footprint of a standard 3.5-inch magnetic disk drive
+rather than the board's diagonal length.</li>
+</ul>
+<p>The smaller footprint of Pico-ITX allows it to fit into extremely
+tight enclosures, handheld devices, and compact drones. In contrast, the
+3.5-inch board requires more physical volume but offers significantly
+more surface area for integrated components.</p>
+<h3 id="processing-power-and-thermal-management">Processing Power and
+Thermal Management</h3>
+<p>The physical area of the board directly dictates the thermal design
+power (TDP) it can dissipate and, consequently, the class of processors
+it can host.</p>
+<ul>
+<li><strong>Pico-ITX:</strong> Generally equipped with ultra-low-power
+system-on-chips (SoCs), such as Intel Atom, Celeron, or low-power ARM
+architectures, typically operating within a <strong>5W to 15W
+TDP</strong> range. Because surface area for heatsinks is limited, these
+boards are built for low-heat, fanless operation where basic compute
+efficiency is prioritized over raw performance.</li>
+<li><strong>3.5-inch SBC:</strong> Capable of housing high-performance
+industrial processors, including Intel Core i3/i5/i7/i9, Intel Xeon, and
+AMD Ryzen Embedded processors, often handling <strong>15W to 45W+
+TDP</strong>. The larger surface area accommodates substantial
+heatsinks, heat spreaders, or active cooling fans, making it capable of
+running heavy workloads such as real-time edge AI inference and
+multi-stream video processing.</li>
+</ul>
+<h3 id="io-connectivity-and-expansion">I/O Connectivity and
+Expansion</h3>
+<p>PCB real estate determines how many physical connectors can fit
+directly onto the board edges versus requiring ribbon cables or external
+daughterboards.</p>
+<ul>
+<li><strong>Pico-ITX:</strong> Due to edge-space constraints, Pico-ITX
+boards typically provide only essential external connectors (e.g., one
+RJ45 Ethernet port, one or two USB ports, and a single HDMI/Micro-HDMI
+output). Additional interfaces such as COM ports, audio, and GPIOs are
+routed through internal pin headers. Expansion is limited, often
+offering only a single M.2 slot (such as M.2 Key-E for Wi-Fi) or
+proprietary mezzanine expansion boards.</li>
+<li><strong>3.5-inch SBC:</strong> Offers extensive native I/O directly
+on the rear I/O panel, commonly featuring dual or quad Gigabit/2.5GbE
+Ethernet ports, multiple USB 3.2 ports, multiple display outputs
+(DisplayPort, HDMI, LVDS/eDP), and dedicated RS-232/422/485 serial
+ports. Expansion is robust, frequently including multiple standard M.2
+slots (Key-M for NVMe storage, Key-B for 4G/5G, Key-E for wireless),
+full-size Mini PCIe slots, and SIM card sockets.</li>
+</ul>
+<h3 id="power-input-and-industrial-ruggedization">Power Input and
+Industrial Ruggedization</h3>
+<ul>
+<li><strong>Pico-ITX:</strong> Frequently designed to operate on a fixed
+single-voltage direct current (DC) input, typically <strong>+12V
+DC</strong> or <strong>+5V DC</strong>. While industrial-grade versions
+exist with wide-temperature support, the compact component layout leaves
+limited room for extensive power protection circuitry.</li>
+<li><strong>3.5-inch SBC:</strong> Purpose-built for rugged industrial
+environments, these boards regularly feature <strong>wide-range DC power
+inputs</strong> (such as 9V to 36V DC) alongside integrated
+over-voltage, over-current, and reverse-polarity protection to handle
+unstable power sources in factory and automotive settings.</li>
+</ul>
+<h3 id="summary-of-best-fit-applications">Summary of Best-Fit
+Applications</h3>
+<ul>
+<li><strong>Choose Pico-ITX when:</strong> Space is the primary design
+constraint, power consumption must be minimized, and compute
+requirements are focused on lightweight tasks like smart sensors, basic
+IoT gateways, portable medical instruments, and compact robotics.</li>
+<li><strong>Choose 3.5-inch SBC when:</strong> The application demands
+desktop-class computing performance, multiple high-speed camera or
+network inputs, multi-display support, wide-temperature industrial
+reliability, and diverse expansion options for machine vision,
+industrial automation, edge AI, and digital signage.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Configure DMA Channels on Modern SBCs - sbc</title>
+    <meta name="description" content="Direct Memory Access (DMA) allows hardware peripherals to transfer data directly to and from system memory without continuous CPU intervention, drastically reducing processor overhead in embedded systems. On modern Single Board Computers (SBCs) running e">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-configure-dma-channels-on-modern-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Configure DMA Channels on Modern SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-configure-dma-channels-on-modern-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Direct Memory Access (DMA) allows hardware peripherals to transfer data directly to and from system memory without continuous CPU intervention, drastically reducing processor overhead in embedded systems. On modern Single Board Computers (SBCs) running e" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-configure-dma-channels-on-modern-sbcs">How to Configure
+DMA Channels on Modern SBCs</h1>
+<p>Direct Memory Access (DMA) allows hardware peripherals to transfer
+data directly to and from system memory without continuous CPU
+intervention, drastically reducing processor overhead in embedded
+systems. On modern Single Board Computers (SBCs) running embedded Linux,
+configuring DMA channels involves declaring hardware routing in the
+Device Tree, allocating cache-coherent memory buffers, configuring
+channel parameters via the Linux DMAEngine subsystem, and handling
+asynchronous transfer callbacks.</p>
+<h3 id="1-declare-dma-resources-in-the-device-tree">1. Declare DMA
+Resources in the Device Tree</h3>
+<p>Modern SBCs use Device Tree Source (<code>.dts</code>) files to
+describe hardware topology. To link a peripheral (such as an SPI, UART,
+or I2S controller) to a DMA controller, the peripheral node must specify
+its DMA channels and request lines.</p>
+<ul>
+<li><strong>Locate the DMA Controller:</strong> Ensure the DMA
+controller node is enabled and provides a <code>#dma-cells</code>
+property (defining the number of arguments required to specify a channel
+or request line).</li>
+<li><strong>Reference DMA in the Peripheral Node:</strong> Use the
+<code>dmas</code> and <code>dma-names</code> properties to map the
+transmit (TX) and receive (RX) channels.</li>
+</ul>
+<pre class="dts"><code>&amp;spi1 {
+    dmas = &lt;&amp;dma0 14&gt;, &lt;&amp;dma0 15&gt;;
+    dma-names = &quot;tx&quot;, &quot;rx&quot;;
+    status = &quot;okay&quot;;
+};</code></pre>
+<h3 id="2-allocate-dma-safe-memory-buffers">2. Allocate DMA-Safe Memory
+Buffers</h3>
+<p>Standard dynamically allocated memory (via <code>kmalloc</code> or
+user space) can be swapped, fragmented, and cached, which leads to
+memory corruption during DMA transfers. Embedded drivers must allocate
+physically contiguous, DMA-accessible buffers.</p>
+<ul>
+<li><strong>Coherent Mappings (Consistent DMA):</strong> Used for
+non-time-critical buffers that are shared continuously between the
+device and CPU.
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dma_addr_t dma_handle<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>cpu_addr <span class="op">=</span> dma_alloc_coherent<span class="op">(</span>dev<span class="op">,</span> size<span class="op">,</span> <span class="op">&amp;</span>dma_handle<span class="op">,</span> GFP_KERNEL<span class="op">);</span></span></code></pre></div></li>
+<li><strong>Streaming Mappings:</strong> Used for one-off transfers
+(like network packets) where memory is mapped immediately before the
+transfer and unmapped after, ensuring CPU caches are properly flushed or
+invalidated.
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dma_addr_t dma_handle <span class="op">=</span> dma_map_single<span class="op">(</span>dev<span class="op">,</span> buffer<span class="op">,</span> size<span class="op">,</span> DMA_TO_DEVICE<span class="op">);</span></span></code></pre></div></li>
+</ul>
+<h3 id="3-request-and-configure-the-channel-via-dmaengine">3. Request
+and Configure the Channel via DMAEngine</h3>
+<p>Kernel drivers interact with DMA controllers using the Linux
+DMAEngine API (<code>linux/dmaengine.h</code>).</p>
+<ol type="1">
+<li><strong>Request the Channel:</strong> Obtain the channel configured
+in the Device Tree using <code>dma_request_chan()</code>:
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> dma_chan <span class="op">*</span>tx_chan <span class="op">=</span> dma_request_chan<span class="op">(</span>dev<span class="op">,</span> <span class="st">&quot;tx&quot;</span><span class="op">);</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>IS_ERR<span class="op">(</span>tx_chan<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* Handle channel allocation failure */</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li><strong>Set Slave Configuration:</strong> Configure data widths,
+burst sizes, and peripheral register addresses using
+<code>struct dma_slave_config</code>:
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> dma_slave_config config <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>direction <span class="op">=</span> DMA_MEM_TO_DEV<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>dst_addr <span class="op">=</span> peripheral_phys_base_addr<span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>dst_addr_width <span class="op">=</span> DMA_SLAVE_BUSWIDTH_2_BYTES<span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>dst_maxburst <span class="op">=</span> <span class="dv">4</span><span class="op">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>dmaengine_slave_config<span class="op">(</span>tx_chan<span class="op">,</span> <span class="op">&amp;</span>config<span class="op">);</span></span></code></pre></div></li>
+</ol>
+<h3 id="4-prepare-submit-and-trigger-the-transfer">4. Prepare, Submit,
+and Trigger the Transfer</h3>
+<p>Once the channel is configured, create a DMA descriptor representing
+the transfer.</p>
+<ol type="1">
+<li><strong>Prepare Descriptor:</strong> Generate a descriptor matching
+your transfer type (single buffer, scatter-gather, or cyclic for audio
+streaming):
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> dma_async_tx_descriptor <span class="op">*</span>desc <span class="op">=</span> dmaengine_prep_slave_single<span class="op">(</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    tx_chan<span class="op">,</span> dma_handle<span class="op">,</span> size<span class="op">,</span> DMA_MEM_TO_DEV<span class="op">,</span> DMA_PREP_INTERRUPT <span class="op">|</span> DMA_CTRL_ACK<span class="op">);</span></span></code></pre></div></li>
+<li><strong>Assign Callback:</strong> Set a completion callback function
+and custom context data:
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>desc<span class="op">-&gt;</span>callback <span class="op">=</span> dma_transfer_complete_callback<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>desc<span class="op">-&gt;</span>callback_param <span class="op">=</span> custom_data_ptr<span class="op">;</span></span></code></pre></div></li>
+<li><strong>Submit and Fire:</strong> Enqueue the descriptor and trigger
+the DMA engine hardware:
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dma_cookie_t cookie <span class="op">=</span> dmaengine_submit<span class="op">(</span>desc<span class="op">);</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dma_async_issue_pending<span class="op">(</span>tx_chan<span class="op">);</span></span></code></pre></div></li>
+</ol>
+<h3 id="5-handle-teardown-and-cleanup">5. Handle Teardown and
+Cleanup</h3>
+<p>When transfers complete or the driver module unloads, clean up
+allocated resources to prevent memory leaks and hardware locks:</p>
+<ul>
+<li>In the completion callback or error routines, unmap streaming memory
+using <code>dma_unmap_single()</code>.</li>
+<li>Stop any ongoing transfers using
+<code>dmaengine_terminate_sync(tx_chan)</code>.</li>
+<li>Free the DMA channel using
+<code>dma_release_channel(tx_chan)</code>.</li>
+<li>Free coherent buffers using
+<code>dma_free_coherent(dev, size, cpu_addr, dma_handle)</code>.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

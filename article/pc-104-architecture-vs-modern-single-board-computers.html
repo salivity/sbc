@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC/104 Architecture vs Modern Single Board Computers - sbc</title>
+    <meta name="description" content="This article explores the fundamental design differences between legacy, stackable PC/104 architectures and modern single board computers (SBCs). While both solutions cater to embedded systems, industrial computing, and rugged environments, they diverge">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/pc-104-architecture-vs-modern-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PC/104 Architecture vs Modern Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/pc-104-architecture-vs-modern-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores the fundamental design differences between legacy, stackable PC/104 architectures and modern single board computers (SBCs). While both solutions cater to embedded systems, industrial computing, and rugged environments, they diverge" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="pc104-architecture-vs-modern-single-board-computers">PC/104
+Architecture vs Modern Single Board Computers</h1>
+<p>This article explores the fundamental design differences between
+legacy, stackable PC/104 architectures and modern single board computers
+(SBCs). While both solutions cater to embedded systems, industrial
+computing, and rugged environments, they diverge significantly in their
+mechanical layouts, interconnect topologies, modularity, and overall
+approach to Size, Weight, Power, and Cost (SWaP-C).</p>
+<h3 id="mechanical-form-factor-and-stacking-architecture">Mechanical
+Form Factor and Stacking Architecture</h3>
+<p>The defining characteristic of PC/104 is its stackable, modular
+architecture. Measuring roughly 3.6 by 3.8 inches (90 x 96 mm), PC/104
+modules feature four-corner mounting holes and self-stacking
+pin-and-socket bus connectors. This design eliminates the need for a
+backplane or card cage; peripheral modules (such as I/O cards, power
+supplies, and communication controllers) stack directly on top of or
+below the central processor board.</p>
+<p>In contrast, modern SBCs typically adopt a monolithic, single-PCB
+design (such as Pico-ITX, 3.5-inch boards, or proprietary form factors)
+or rely on a Computer-on-Module (COM/SOM) plus carrier board approach.
+Rather than stacking multiple independent boards vertically, modern SBC
+designs integrate the CPU, memory, power regulation, and standard I/O
+directly onto a single plane, expanding horizontally or via compact
+mezzanine standards like M.2.</p>
+<h3 id="bus-interfaces-and-interconnects">Bus Interfaces and
+Interconnects</h3>
+<p>Interconnect technology represents a major evolutionary gap between
+the two approaches:</p>
+<ul>
+<li><strong>PC/104 Generations:</strong> The original PC/104 standard
+adapted the desktop ISA bus into a 104-pin rugged header. Subsequent
+revisions introduced PCI (PC/104-Plus), PCI-X (PCI-104), and high-speed
+serial lanes like PCIe (PCIe/104 and OneBank). However, routing
+high-speed differential signals through stack-through pin headers poses
+signal integrity challenges at modern multi-gigahertz speeds.</li>
+<li><strong>Modern SBCs:</strong> Modern SBCs utilize advanced
+high-density interconnects, edge connectors, and onboard traces to route
+multi-lane PCIe Gen 3/4/5, USB 3.x/USB4, MIPI, and high-speed Ethernet
+directly between the processor, SoC, and peripheral controllers. This
+direct-routing approach minimizes impedance mismatches and latency.</li>
+</ul>
+<h3 id="ruggedness-and-environmental-tolerance">Ruggedness and
+Environmental Tolerance</h3>
+<p>PC/104 was engineered specifically for extreme shock, vibration, and
+harsh industrial or military operating conditions. The physical stack
+forms a rigid, multi-point fastened cube that withstands intense
+mechanical stresses without card dislocation.</p>
+<p>Modern SBCs achieve high reliability through component integration
+and surface-mount technology rather than mechanical stacking. By
+eliminating stack-through connectors and reducing the overall number of
+mechanical interconnects, modern SBCs minimize potential failure points.
+Ruggedness is typically addressed through conduction cooling plates,
+conformal coatings, and rugged enclosures rather than heavy mechanical
+standoff structures.</p>
+<h3 id="size-weight-power-and-cost-swap-c">Size, Weight, Power, and Cost
+(SWaP-C)</h3>
+<p>Modern SBCs provide superior compute density compared to PC/104
+systems:</p>
+<ul>
+<li><strong>Integration Density:</strong> Highly integrated
+System-on-Chips (SoCs) allow modern SBCs to fit complete compute
+platforms—including multi-core x86 or ARM processors, GPUs, memory, and
+networking—onto a board smaller than a single PC/104 module.</li>
+<li><strong>Vertical Profile:</strong> A fully functional PC/104 system
+often requires 3 to 6 stacked layers, resulting in significant vertical
+bulk and weight. An equivalent modern SBC accomplishes the same
+functionality within a low-profile, single-board envelope.</li>
+<li><strong>Power and Thermal Management:</strong> PC/104 stacks create
+trapped thermal zones between layers, making heat dissipation difficult
+without complex conduction frames. Modern SBCs generally feature open
+layouts that allow direct mounting of single heat sinks, cold plates, or
+heat pipes.</li>
+</ul>
+<h3 id="modularity-and-upgradeability">Modularity and
+Upgradeability</h3>
+<p>PC/104 offers true physical modularity: developers can swap a CPU
+module while retaining all specialized I/O modules in the stack, or add
+new I/O boards as requirements change.</p>
+<p>Modern SBCs sacrifice some layer-by-layer modularity for integration,
+cost efficiency, and speed. However, they compensate through standard
+miniature expansion slots (such as M.2 for storage, AI acceleration, or
+wireless modems) or by using COM Express / SMARC modules on custom
+carrier boards, decoupling the processing unit from the
+application-specific I/O.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio DSP on Multimedia Single Board Computers - sbc</title>
+    <meta name="description" content="Audio Digital Signal Processing (DSP) on a dedicated multimedia single board computer (SBC) is handled through a combination of specialized coprocessors, optimized CPU instruction sets, dedicated audio buses, and low-latency software frameworks. These sy">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/audio-dsp-on-multimedia-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Audio DSP on Multimedia Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/audio-dsp-on-multimedia-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Audio Digital Signal Processing (DSP) on a dedicated multimedia single board computer (SBC) is handled through a combination of specialized coprocessors, optimized CPU instruction sets, dedicated audio buses, and low-latency software frameworks. These sy" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="audio-dsp-on-multimedia-single-board-computers">Audio DSP on
+Multimedia Single Board Computers</h1>
+<p>Audio Digital Signal Processing (DSP) on a dedicated multimedia
+single board computer (SBC) is handled through a combination of
+specialized coprocessors, optimized CPU instruction sets, dedicated
+audio buses, and low-latency software frameworks. These systems offload
+computationally heavy mathematical operations—such as filtering, mixing,
+equalizing, and spatialization—from standard general-purpose computing
+tasks to specialized hardware pipelines. By combining dedicated audio
+hardware with real-time operating environments, multimedia SBCs process
+multi-channel, high-resolution audio streams with minimal latency and
+jitter.</p>
+<h3 id="hardware-acceleration-and-coprocessors">Hardware Acceleration
+and Coprocessors</h3>
+<p>Multimedia SBCs typically use System-on-Chips (SoCs) equipped with
+specialized processing units designed specifically for digital signal
+mathematics:</p>
+<ul>
+<li><strong>Dedicated DSP Cores:</strong> Many multimedia SoCs integrate
+dedicated DSPs (such as Cadence Tensilica HiFi or Hexagon DSPs) directly
+on the silicon. These cores feature architectures tailored for
+multiply-accumulate (MAC) operations, which are the foundation of audio
+filtering, Fast Fourier Transforms (FFT), and dynamic range
+compression.</li>
+<li><strong>SIMD/Vector Extensions:</strong> When a standalone DSP core
+is absent or used for other tasks, the main CPU relies on SIMD (Single
+Instruction, Multiple Data) execution units, such as ARM NEON. These
+units allow single vector instructions to process multiple audio samples
+simultaneously across 64-bit or 128-bit registers.</li>
+<li><strong>Hardware Codecs and DAC/ADC Interfaces:</strong> The SBC
+incorporates specialized silicon to convert between analog signals and
+digital streams via high-precision inter-chip communication
+standards.</li>
+</ul>
+<h3 id="audio-data-transport-and-io-buses">Audio Data Transport and I/O
+Buses</h3>
+<p>Moving audio data without burdening the central processing pipeline
+is critical for maintaining real-time performance:</p>
+<ul>
+<li><strong>I2S and TDM Protocols:</strong> Inter-IC Sound (I2S) and
+Time Division Multiplexing (TDM) are standard serial buses used to
+transmit multi-channel digital audio between the SoC, DSPs, and external
+codecs.</li>
+<li><strong>PDM for Digital Microphones:</strong> Pulse Density
+Modulation (PDM) interfaces connect directly to MEMS microphone arrays,
+offloading hardware-level decimation and filtering for beamforming and
+voice recognition tasks.</li>
+<li><strong>Direct Memory Access (DMA):</strong> Dedicated audio DMA
+controllers transfer incoming and outgoing audio buffers directly
+between the peripheral interfaces (I2S/TDM) and system memory without
+interrupting the CPU for every sample.</li>
+</ul>
+<h3 id="software-architecture-and-latency-optimization">Software
+Architecture and Latency Optimization</h3>
+<p>The software stack coordinates real-time audio streams through
+optimized kernel pipelines and processing engines:</p>
+<ul>
+<li><strong>Real-Time Kernels:</strong> Standard Linux distributions
+introduce scheduling latencies unsuitable for live DSP. Multimedia SBCs
+frequently deploy real-time kernel patches (such as
+<code>PREEMPT_RT</code>) or dedicated Real-Time Operating Systems (RTOS)
+like FreeRTOS or Zephyr on secondary cores to guarantee deterministic
+execution times.</li>
+<li><strong>Audio Drivers and Sound Servers:</strong> Advanced Linux
+Sound Architecture (ALSA) drivers manage hardware access, while
+low-latency audio servers like JACK or PipeWire manage synchronous
+routing between inputs, DSP algorithms, and outputs.</li>
+<li><strong>Ring Buffering and Memory Management:</strong> Audio
+pipelines utilize circular ring buffers in shared memory. By setting
+small buffer sizes (periods) and matching sampling rates, the system
+prevents buffer underruns (xruns) while keeping input-to-output latency
+within single-digit milliseconds.</li>
+<li><strong>DSP Frameworks and Compilers:</strong> Developers deploy
+optimized signal processing algorithms using domain-specific languages
+and libraries, such as Faust, JUCE, or CMSIS-DSP, which compile directly
+into vector-optimized machine code tailored for the SBC's exact hardware
+capabilities.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

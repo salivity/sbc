@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Copy Networking for Single Board Computers - sbc</title>
+    <meta name="description" content="Zero-copy networking removes CPU-intensive memory duplications between the operating system kernel and user space, allowing resource-constrained single board computers (SBCs) to maximize throughput and minimize latency. This article covers the primary me">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/zero-copy-networking-for-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Zero-Copy Networking for Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/zero-copy-networking-for-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Zero-copy networking removes CPU-intensive memory duplications between the operating system kernel and user space, allowing resource-constrained single board computers (SBCs) to maximize throughput and minimize latency. This article covers the primary me" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="zero-copy-networking-for-single-board-computers">Zero-Copy
+Networking for Single Board Computers</h1>
+<p>Zero-copy networking removes CPU-intensive memory duplications
+between the operating system kernel and user space, allowing
+resource-constrained single board computers (SBCs) to maximize
+throughput and minimize latency. This article covers the primary
+mechanisms used to bypass traditional network stack bottlenecks,
+detailing the application programming interfaces (APIs), driver
+configurations, and system-level tuning required to implement zero-copy
+networking on modern SBC architectures.</p>
+<h2 id="the-memory-bottleneck-on-single-board-computers">The Memory
+Bottleneck on Single Board Computers</h2>
+<p>Standard Linux network processing copies incoming packets from the
+Network Interface Card (NIC) driver rings into kernel-allocated socket
+buffers (<code>sk_buff</code>), followed by a second copy into
+user-space application memory via the <code>read()</code> or
+<code>recv()</code> system calls.</p>
+<p>On SBCs with shared system-on-chip (SoC) memory architecture, limited
+L2/L3 cache sizes, and constrained memory bus bandwidth, these repeated
+memory operations quickly saturate the CPU and bus before the physical
+network link is fully utilized. Zero-copy techniques solve this by
+allowing Direct Memory Access (DMA) engines on the NIC to transfer
+packet data directly to a memory region accessible by the user
+application.</p>
+<h2 id="key-apis-and-techniques-for-implementation">Key APIs and
+Techniques for Implementation</h2>
+<h3 id="1-af_xdp-xdp-sockets">1. AF_XDP (XDP Sockets)</h3>
+<p>AF_XDP is the standard high-performance mechanism for zero-copy
+packet processing in modern Linux environments. It leverages the eXpress
+Data Path (XDP) framework to redirect packets into a user-space memory
+pool (UMEM) via direct descriptor rings.</p>
+<ul>
+<li><strong>UMEM Allocation:</strong> The application allocates a
+contiguous block of memory using <code>posix_memalign()</code> or
+<code>mmap()</code> (preferably backed by HugePages) and registers it
+with the kernel using the <code>XDP_UMEM_REG</code> socket option.</li>
+<li><strong>Ring Buffers:</strong> Communication relies on four lockless
+ring queues: Fill and Completion rings for user-space buffer management,
+and Transmit (Tx) and Receive (Rx) rings for packet handling.</li>
+<li><strong>Zero-Copy Mode:</strong> When the SBC's Ethernet driver
+supports native XDP (<code>XDP_FLAGS_DRV_MODE</code>), packets are
+placed directly into UMEM frames via DMA, entirely bypassing the Linux
+<code>sk_buff</code> allocation layer.</li>
+</ul>
+<h3 id="2-io_uring-with-zero-copy-transmission">2. io_uring with
+Zero-Copy Transmission</h3>
+<p>For general socket programming where full protocol bypass is not
+practical, the modern Linux <code>io_uring</code> subsystem supports
+zero-copy network transmissions (<code>IORING_OP_SEND_ZC</code>).</p>
+<ul>
+<li><strong>Buffer Registration:</strong> Developers register fixed
+application buffers using <code>io_uring_register()</code>, pinning
+physical memory pages to avoid kernel-space page-table lookups.</li>
+<li><strong>Notification Rings:</strong> The kernel signals when the NIC
+hardware has completed transmission via a completion queue entry (CQE),
+notifying the application that the buffer can be safely reused without
+intermediate kernel buffering.</li>
+</ul>
+<h3 id="3-in-kernel-data-pipelining-splice-and-sendfile">3. In-Kernel
+Data Pipelining: <code>splice()</code> and <code>sendfile()</code></h3>
+<p>When an SBC serves as a gateway, proxy, or file streamer, moving data
+between file descriptors without copying it through user space prevents
+memory bottlenecks:</p>
+<ul>
+<li><strong><code>splice()</code>:</strong> Moves data between an
+arbitrary file descriptor and a pipe without transferring data across
+the user/kernel boundary.</li>
+<li><strong><code>sendfile()</code>:</strong> Directly streams data from
+a file descriptor to a network socket, relying on DMA gather lists
+supported by the network interface.</li>
+</ul>
+<h2 id="hardware-and-driver-optimization">Hardware and Driver
+Optimization</h2>
+<p>Implementing zero-copy pipelines on an SBC requires alignment with
+the hardware capabilities of the target SoC:</p>
+<ol type="1">
+<li><strong>Driver Support:</strong> Verify that the Ethernet controller
+driver (such as <code>stmmac</code> or <code>r8169</code> variants
+common on SBCs) implements the native XDP hook (<code>ndo_bpf</code>).
+If native mode is unavailable, generic mode
+(<code>XDP_FLAGS_SKB_MODE</code>) can be used for testing, though it
+reintroduces a copy operation.</li>
+<li><strong>Jumbo Frames (MTU Tuning):</strong> Increase the Maximum
+Transmission Unit (MTU) to 9000 bytes. Larger MTU sizes drastically
+reduce per-packet descriptor overhead, allowing the SBC to achieve
+higher throughput at lower packet rates.</li>
+<li><strong>Interrupt Affinity and NAPI:</strong> Pin the hardware
+interrupt requests (IRQs) of the network adapter to dedicated CPU cores
+using <code>/proc/irq/[number]/smp_affinity</code>. This isolates packet
+processing from user application logic and prevents CPU context
+switching.</li>
+<li><strong>HugePages:</strong> Enable 2MB or 1GB HugePages in the Linux
+kernel configuration to minimize Translation Lookaside Buffer (TLB)
+misses during high-frequency DMA accesses to the UMEM pool.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

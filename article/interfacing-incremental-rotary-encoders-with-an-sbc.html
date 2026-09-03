@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfacing Incremental Rotary Encoders with an SBC - sbc</title>
+    <meta name="description" content="Interfacing high-resolution incremental rotary encoders with a single-board computer (SBC) requires a robust integration of signal conditioning, hardware decoding, and precise software handling to prevent missed counts and ensure real-time accuracy. Beca">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/interfacing-incremental-rotary-encoders-with-an-sbc">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Interfacing Incremental Rotary Encoders with an SBC - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/interfacing-incremental-rotary-encoders-with-an-sbc" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interfacing high-resolution incremental rotary encoders with a single-board computer (SBC) requires a robust integration of signal conditioning, hardware decoding, and precise software handling to prevent missed counts and ensure real-time accuracy. Beca" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="interfacing-incremental-rotary-encoders-with-an-sbc">Interfacing
+Incremental Rotary Encoders with an SBC</h1>
+<p>Interfacing high-resolution incremental rotary encoders with a
+single-board computer (SBC) requires a robust integration of signal
+conditioning, hardware decoding, and precise software handling to
+prevent missed counts and ensure real-time accuracy. Because standard
+SBC general-purpose input/output (GPIO) pins running non-real-time
+operating systems struggle to process high-frequency pulse trains,
+dedicated hardware decoders or co-processors are commonly employed. This
+guide outlines the essential steps required to successfully connect,
+condition, and read high-resolution incremental encoders using an
+SBC.</p>
+<h3 id="1-identify-encoder-output-and-signal-specifications">1. Identify
+Encoder Output and Signal Specifications</h3>
+<p>Before making any physical connections, determine the electrical and
+functional characteristics of the rotary encoder:</p>
+<ul>
+<li><strong>Signal Channels:</strong> Standard incremental encoders
+provide Channel A and Channel B (shifted by 90° for quadrature decoding)
+and often an optional Index/Z channel (one pulse per revolution).</li>
+<li><strong>Output Type:</strong> Common types include push-pull (totem
+pole), open-collector (requiring pull-up resistors), and differential
+line drivers (RS-422 standard).</li>
+<li><strong>Voltage Levels:</strong> Many industrial encoders operate at
+5V, 12V, or 24V, whereas most SBCs (such as Raspberry Pi or BeagleBone)
+operate on 3.3V logic.</li>
+</ul>
+<h3 id="2-implement-signal-conditioning-and-level-shifting">2. Implement
+Signal Conditioning and Level Shifting</h3>
+<p>Directly connecting high-voltage encoder outputs to an SBC will
+damage the processor. Signal conditioning ensures safe, clean
+inputs:</p>
+<ul>
+<li><strong>Voltage Translation:</strong> Use bidirectional logic level
+converters or fast optocouplers to shift 5V/24V signals down to
+3.3V.</li>
+<li><strong>Differential Receivers:</strong> If using an encoder with
+differential outputs (A, /A, B, /B, Z, /Z), route the signals through a
+differential line receiver (e.g., AM26C32) to convert the differential
+pairs into single-ended logic while canceling common-mode
+electromagnetic interference.</li>
+<li><strong>Noise Filtering:</strong> Add RC low-pass filters or Schmitt
+triggers to eliminate high-frequency noise and contact bounce, which can
+generate false pulse counts.</li>
+</ul>
+<h3 id="3-select-a-decoding-architecture">3. Select a Decoding
+Architecture</h3>
+<p>High-resolution encoders generate tens of thousands of pulses per
+second at normal operating speeds, which can overwhelm standard OS
+interrupt routines. Choose an appropriate decoding strategy:</p>
+<ul>
+<li><strong>Dedicated Hardware Decoder ICs:</strong> Use a dedicated
+quadrature decoder chip (such as the LS7366R or dual-channel counter
+ICs) that tracks counts internally and communicates the aggregate count
+to the SBC via SPI or I2C.</li>
+<li><strong>Microcontroller / FPGA Co-Processors:</strong> Offload the
+counting to a real-time micro-controller (e.g., STM32, RP2040, or
+Arduino) or an FPGA, which transfers the processed position and speed
+data to the SBC over UART, USB, or SPI.</li>
+<li><strong>Dedicated On-Chip Hardware Timers (eQEP):</strong> If using
+an SBC with built-in hardware quadrature decoders (such as the
+BeagleBone's enhanced Quadrature Encoder Pulse modules or PRUs), route
+signals directly to those dedicated pins to handle counts at the silicon
+level without CPU overhead.</li>
+</ul>
+<h3 id="4-wire-the-hardware-connections">4. Wire the Hardware
+Connections</h3>
+<p>Ensure physical wiring minimizes interference and maintains signal
+integrity:</p>
+<ul>
+<li>Connect the encoder’s power lines to an appropriate, stable power
+supply sharing a common ground with the SBC.</li>
+<li>Use shielded, twisted-pair cabling for signal lines (pairing A with
+/A, B with /B, and Z with /Z).</li>
+<li>Ground the cable shield at only one end (typically the controller
+side) to avoid creating ground loops.</li>
+</ul>
+<h3 id="5-configure-drivers-and-read-encoder-data">5. Configure Drivers
+and Read Encoder Data</h3>
+<p>Once the hardware decoding pathway is established, configure the
+SBC's software stack:</p>
+<ul>
+<li><strong>Kernel Modules:</strong> If utilizing integrated hardware
+decoders, enable the relevant Linux Industrial I/O (IIO) or Device Tree
+overlay drivers.</li>
+<li><strong>Bus Communication:</strong> If using an external decoder IC
+(e.g., via SPI), write or install a driver to periodically query the
+current 32-bit or 16-bit register values.</li>
+<li><strong>State Decoding (4X Encoding):</strong> Ensure the decoding
+logic tracks both the rising and falling edges of both Channel A and
+Channel B to achieve maximum resolution (4x pulse count per cycle).</li>
+</ul>
+<h3 id="6-calculate-kinematics-in-software">6. Calculate Kinematics in
+Software</h3>
+<p>Convert the raw tick data into meaningful engineering units within
+your application:</p>
+<ul>
+<li><strong>Position:</strong> Multiply the accumulated pulse count by
+the mechanical resolution (360 degrees divided by total pulses per
+revolution).</li>
+<li><strong>Direction:</strong> Evaluate the phase relationship (whether
+A leads B or B leads A) or read the sign/direction bit provided by the
+hardware counter.</li>
+<li><strong>Velocity:</strong> Calculate the change in pulse counts over
+a deterministic, fixed sampling interval (<span
+class="math inline">\(\Delta \text{counts} / \Delta t\)</span>) to
+derive rotational speed (RPM or rad/s).</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

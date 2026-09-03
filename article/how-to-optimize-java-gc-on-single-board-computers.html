@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Optimize Java GC on Single Board Computers - sbc</title>
+    <meta name="description" content="Running managed runtimes like Java on Single Board Computers (SBCs) introduces unique performance challenges due to constrained CPU, RAM, and thermal limitations. Default Garbage Collection (GC) settings are typically tuned for multi-core server environm">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-optimize-java-gc-on-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Optimize Java GC on Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-optimize-java-gc-on-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running managed runtimes like Java on Single Board Computers (SBCs) introduces unique performance challenges due to constrained CPU, RAM, and thermal limitations. Default Garbage Collection (GC) settings are typically tuned for multi-core server environm" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-optimize-java-gc-on-single-board-computers">How to
+Optimize Java GC on Single Board Computers</h1>
+<p>Running managed runtimes like Java on Single Board Computers (SBCs)
+introduces unique performance challenges due to constrained CPU, RAM,
+and thermal limitations. Default Garbage Collection (GC) settings are
+typically tuned for multi-core server environments, often causing high
+CPU utilization and out-of-memory errors on embedded boards like the
+Raspberry Pi. This guide outlines how developers can optimize garbage
+collection on SBCs through proper collector selection, explicit memory
+sizing, JVM tuning, and application-level practices.</p>
+<h3 id="1-select-the-appropriate-garbage-collector">1. Select the
+Appropriate Garbage Collector</h3>
+<p>Default collectors like G1GC can introduce excessive CPU overhead and
+memory footprint on low-resource hardware. Matching the collector to the
+SBC's hardware profile is critical:</p>
+<ul>
+<li><strong>Serial Collector (<code>-XX:+UseSerialGC</code>):</strong>
+Best for single-core or resource-constrained boards (under 1 GB RAM). It
+runs single-threaded, avoiding the synchronization and thread-switching
+overhead of parallel collectors.</li>
+<li><strong>Parallel Collector
+(<code>-XX:+UseParallelGC</code>):</strong> Ideal for multi-core SBCs
+where high throughput is prioritized over pause-time consistency, and
+background thread count can be bounded via
+<code>-XX:ParallelGCThreads=N</code>.</li>
+<li><strong>G1 Collector (<code>-XX:+UseG1GC</code>):</strong> Suitable
+only for higher-end SBCs (4 GB+ RAM, quad-core or higher) with strict
+low-latency requirements.</li>
+</ul>
+<h3 id="2-lock-heap-sizes-to-eliminate-resizing-overhead">2. Lock Heap
+Sizes to Eliminate Resizing Overhead</h3>
+<p>Dynamic heap expansion and contraction consume precious CPU cycles on
+low-power chips.</p>
+<ul>
+<li>Set the initial (<code>-Xms</code>) and maximum (<code>-Xmx</code>)
+heap allocations to the same value to eliminate runtime heap
+resizing.</li>
+<li>Allocate only what the application needs, ensuring at least 25% to
+30% of total system RAM remains free for OS operations, I/O caching, and
+native memory.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">java</span> <span class="at">-Xms256m</span> <span class="at">-Xmx256m</span> <span class="at">-XX:+UseSerialGC</span> <span class="at">-jar</span> application.jar</span></code></pre></div>
+<h3 id="3-minimize-metadata-and-footprint-overhead">3. Minimize Metadata
+and Footprint Overhead</h3>
+<p>The JVM allocates memory for internal structures, class metadata, and
+thread stacks. You can minimize these auxiliary overheads using specific
+flags:</p>
+<ul>
+<li><strong>Reduce Thread Stack Size (<code>-Xss</code>):</strong>
+Lowering default thread stack sizes (e.g., <code>-Xss256k</code>)
+reduces native memory consumption for multithreaded applications.</li>
+<li><strong>Control Metaspace
+(<code>-XX:MaxMetaspaceSize</code>):</strong> Set an upper limit on
+Metaspace to avoid unbounded native memory growth.</li>
+<li><strong>Disable Unneeded Diagnostics:</strong> Disable features like
+JMX agents and JVM performance counters
+(<code>-XX:+PerfDisableSharedMem</code>) to eliminate disk and memory
+overhead.</li>
+</ul>
+<h3 id="4-optimize-memory-at-the-application-level">4. Optimize Memory
+at the Application Level</h3>
+<p>Tuning the JVM cannot compensate for inefficient memory usage in
+code. Implement these design patterns to minimize GC pressure:</p>
+<ul>
+<li><strong>Avoid Unnecessary Object Allocations:</strong> Reuse objects
+via lightweight pooling for high-frequency tasks instead of creating
+temporary instances inside tight loops.</li>
+<li><strong>Use Primitive Types:</strong> Prefer primitive arrays over
+collections of boxed types (e.g., <code>int[]</code> instead of
+<code>List&lt;Integer&gt;</code>) to avoid object header overhead.</li>
+<li><strong>Use Off-Heap Memory for Large Buffers:</strong> Use
+<code>ByteBuffer.allocateDirect()</code> for large, long-lived data
+transfers (such as camera feeds or sensor logs) to keep them out of the
+GC-managed heap.</li>
+</ul>
+<h3 id="5-consider-alternative-runtimes-and-packaging">5. Consider
+Alternative Runtimes and Packaging</h3>
+<p>Standard OpenJDK HotSpot builds may not always be optimal for SBC
+deployments:</p>
+<ul>
+<li><strong>Eclipse OpenJ9:</strong> Consider using Eclipse OpenJ9
+instead of HotSpot. OpenJ9 provides an out-of-the-box smaller memory
+footprint and uses aggressive memory-saving features like
+<code>-Xquickstart</code> and <code>-Xtune:virtualized</code>.</li>
+<li><strong>Modular Runtime with <code>jlink</code>:</strong> Build a
+custom, stripped-down Java runtime image containing only the platform
+modules your application requires, reducing initial memory overhead
+before garbage collection even starts.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

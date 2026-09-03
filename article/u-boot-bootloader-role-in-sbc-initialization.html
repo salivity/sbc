@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-Boot Bootloader Role in SBC Initialization - sbc</title>
+    <meta name="description" content="Das U-Boot (Universal Boot Loader) acts as the critical intermediary between raw hardware and the operating system during the startup sequence of a single board computer (SBC). Upon power-on, an SBC lacks the operational context required to run a full op">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/u-boot-bootloader-role-in-sbc-initialization">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="U-Boot Bootloader Role in SBC Initialization - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/u-boot-bootloader-role-in-sbc-initialization" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Das U-Boot (Universal Boot Loader) acts as the critical intermediary between raw hardware and the operating system during the startup sequence of a single board computer (SBC). Upon power-on, an SBC lacks the operational context required to run a full op" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="u-boot-bootloader-role-in-sbc-initialization">U-Boot Bootloader
+Role in SBC Initialization</h1>
+<p>Das U-Boot (Universal Boot Loader) acts as the critical intermediary
+between raw hardware and the operating system during the startup
+sequence of a single board computer (SBC). Upon power-on, an SBC lacks
+the operational context required to run a full operating system like
+Linux; U-Boot bridges this gap by initializing essential hardware
+components, managing boot configurations, loading the operating system
+kernel into memory, and transferring execution control to that
+kernel.</p>
+<h3 id="1-secondary-program-loading-spl">1. Secondary Program Loading
+(SPL)</h3>
+<p>Modern SBC System-on-Chips (SoCs) start execution from an internal,
+immutable Read-Only Memory (ROM) known as the Primary Bootloader.
+Because on-chip SRAM is extremely limited, the ROM code cannot load the
+entire U-Boot image directly into memory. Instead, it loads a
+stripped-down version of U-Boot called the Secondary Program Loader
+(SPL).</p>
+<p>The SPL performs the bare minimum hardware initialization necessary
+to enable main system memory:</p>
+<ul>
+<li>Initializes the system clock tree and power management integrated
+circuits (PMIC).</li>
+<li>Configures and calibrates the external DDR SDRAM controller.</li>
+<li>Identifies the boot media (such as an SD card, eMMC, or SPI
+flash).</li>
+<li>Loads the full U-Boot binary into the newly initialized DDR RAM and
+executes it.</li>
+</ul>
+<h3 id="2-full-hardware-subsystem-initialization">2. Full Hardware
+Subsystem Initialization</h3>
+<p>Once loaded into main RAM, the full U-Boot binary initializes a
+broader set of peripherals needed for boot operations. This phase
+establishes:</p>
+<ul>
+<li><strong>Storage Interfaces:</strong> Enables drivers for SD/eMMC,
+USB mass storage, SATA, or NVMe.</li>
+<li><strong>Communication Buses:</strong> Sets up I2C, SPI, and GPIO
+buses.</li>
+<li><strong>User Interactivity:</strong> Configures the serial UART
+console and display outputs (HDMI or LCD) to display boot logs and
+accept interactive user commands via the U-Boot shell.</li>
+<li><strong>Network Stack:</strong> Initializes Ethernet and PHY
+controllers to allow remote booting via protocols like TFTP, DHCP, or
+NFS.</li>
+</ul>
+<h3 id="3-environment-variable-and-script-processing">3. Environment
+Variable and Script Processing</h3>
+<p>U-Boot relies on an internal environment storage block containing
+configurable key-value pairs. The most critical variables include:</p>
+<ul>
+<li><code>bootcmd</code>: The default command sequence executed after a
+countdown timer expires.</li>
+<li><code>bootargs</code>: The command-line parameters passed directly
+to the operating system kernel (e.g., root filesystem location, console
+baud rate, memory limits).</li>
+</ul>
+<p>U-Boot checks whether user input interrupts the boot countdown. If
+unprompted, it executes <code>bootcmd</code>, dynamically scanning
+designated storage partitions or network endpoints for kernel images and
+boot scripts.</p>
+<h3 id="4-device-tree-and-kernel-preparation">4. Device Tree and Kernel
+Preparation</h3>
+<p>Modern embedded Linux architectures decouple hardware topology from
+the kernel using Device Tree Blobs (DTBs). U-Boot reads both the
+compiled Linux kernel image (such as <code>zImage</code> or
+<code>Image</code>) and the corresponding <code>.dtb</code> file from
+the boot storage into specific addresses in RAM.</p>
+<p>Before executing the kernel, U-Boot can dynamically modify the Device
+Tree in memory. It applies Device Tree overlays (DTOs), injects MAC
+addresses, passes memory bank allocations, and updates hardware status
+nodes based on runtime hardware detection.</p>
+<h3 id="5-execution-handoff">5. Execution Handoff</h3>
+<p>In the final step, U-Boot disables interrupts, flushes processor
+caches, places the memory address of the Device Tree into a predefined
+CPU register, and executes a jump instruction (such as
+<code>bootm</code> or <code>booti</code>) directly to the entry point of
+the OS kernel. At this moment, U-Boot terminates its own execution,
+leaving the operating system in full control of the single board
+computer.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

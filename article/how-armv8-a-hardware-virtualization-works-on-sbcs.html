@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How ARMv8-A Hardware Virtualization Works on SBCs - sbc</title>
+    <meta name="description" content="Hardware-level virtualization on an ARMv8-A architecture Single Board Computer (SBC) enables multiple operating systems to run concurrently on a single physical board with near-native performance. This is achieved through dedicated silicon-level extensio">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-armv8-a-hardware-virtualization-works-on-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How ARMv8-A Hardware Virtualization Works on SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-armv8-a-hardware-virtualization-works-on-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Hardware-level virtualization on an ARMv8-A architecture Single Board Computer (SBC) enables multiple operating systems to run concurrently on a single physical board with near-native performance. This is achieved through dedicated silicon-level extensio" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-armv8-a-hardware-virtualization-works-on-sbcs">How ARMv8-A
+Hardware Virtualization Works on SBCs</h1>
+<p>Hardware-level virtualization on an ARMv8-A architecture Single Board
+Computer (SBC) enables multiple operating systems to run concurrently on
+a single physical board with near-native performance. This is achieved
+through dedicated silicon-level extensions that provide
+hardware-enforced CPU privilege separation, two-stage memory
+translation, and direct virtualization of system interrupts and timers.
+By offloading resource isolation and context switching from software to
+the ARM core itself, the system minimizes virtualization overhead on
+resource-constrained SBC platforms.</p>
+<h3 id="exception-levels-and-cpu-privilege-separation">Exception Levels
+and CPU Privilege Separation</h3>
+<p>The foundation of ARMv8-A virtualization is its privilege hierarchy,
+known as Exception Levels (EL):</p>
+<ul>
+<li><strong>EL0:</strong> Unprivileged application execution.</li>
+<li><strong>EL1:</strong> Operating system kernel mode (Guest OS).</li>
+<li><strong>EL2:</strong> Hypervisor mode.</li>
+<li><strong>EL3:</strong> Secure Monitor and firmware (TrustZone).</li>
+</ul>
+<p>In standard execution, an OS kernel runs in EL1. In a virtualized
+setup, the hypervisor operates in EL2. EL2 provides dedicated control
+registers that allow the hypervisor to configure, isolate, and intercept
+operations from multiple EL1 guest instances without modifying the guest
+kernels.</p>
+<h3 id="two-stage-memory-translation-stage-2-mmu">Two-Stage Memory
+Translation (Stage-2 MMU)</h3>
+<p>ARMv8-A uses a two-stage Memory Management Unit (MMU) to isolate
+memory spaces among guest systems:</p>
+<ol type="1">
+<li><strong>Stage-1 Translation (Guest Control):</strong> The guest
+operating system at EL1 translates its own Virtual Addresses (VA) to
+what it assumes are Physical Addresses, referred to as Intermediate
+Physical Addresses (IPA).</li>
+<li><strong>Stage-2 Translation (Hypervisor Control):</strong> The
+hardware MMU takes the IPA and translates it to the actual Physical
+Address (PA) on the SBC’s RAM using translation tables configured by the
+hypervisor at EL2.</li>
+</ol>
+<p>This two-stage process happens entirely in hardware, ensuring memory
+isolation between different virtual machines without requiring the
+hypervisor to intercept every memory access.</p>
+<h3 id="hardware-interrupt-virtualization-via-arm-gic">Hardware
+Interrupt Virtualization via ARM GIC</h3>
+<p>Interrupt handling is handled by the ARM Generic Interrupt Controller
+(typically GICv2, GICv3, or GICv4 on ARMv8-A SBCs). The GIC features
+hardware virtualization extensions:</p>
+<ul>
+<li><strong>Virtual CPU Interface:</strong> The hypervisor configures
+the physical interrupt controller and routes specific interrupts to
+virtual machines.</li>
+<li><strong>List Registers:</strong> The hypervisor writes pending
+virtual interrupts into dedicated hardware List Registers.</li>
+<li><strong>Direct Guest Acknowledgment:</strong> The guest OS at EL1
+can signal and clear interrupts directly through its virtual CPU
+interface without trapping back into EL2, significantly reducing CPU
+cycles and latency.</li>
+</ul>
+<h3 id="instruction-trapping-and-emulation">Instruction Trapping and
+Emulation</h3>
+<p>When a guest OS in EL1 attempts to perform sensitive actions—such as
+modifying system control registers, configuring hardware clocks, or
+accessing restricted peripheral memory—the ARMv8-A core triggers a trap
+exception to EL2.</p>
+<p>The hypervisor intercepts the trapped instruction, emulates the
+expected hardware behavior or translates the access to an assigned
+virtual device, and resumes execution of the guest OS.</p>
+<h3 id="system-timers-and-io-virtualization">System Timers and I/O
+Virtualization</h3>
+<p>ARMv8-A includes dedicated hardware timers for virtualization:</p>
+<ul>
+<li><strong>Virtual Timers:</strong> Dedicated per-core registers allow
+the guest OS to read time and configure timer interrupts without EL2
+intervention.</li>
+<li><strong>Hypervisor Timers:</strong> Separate timers exist solely for
+the hypervisor to enforce CPU time-slicing and scheduling between guest
+instances.</li>
+</ul>
+<p>For peripheral I/O, SBCs rely on software emulation (like VirtIO via
+KVM) or hardware-assisted direct assignment through an optional System
+MMU (SMMU), allowing high-throughput devices such as PCIe controllers or
+Ethernet interfaces to be safely passed directly to a guest machine.</p>
+<h3 id="boot-sequence-on-sbc-hardware">Boot Sequence on SBC
+Hardware</h3>
+<p>For virtualization to function on an ARMv8-A SBC:</p>
+<ol type="1">
+<li>Low-level firmware (such as ARM Trusted Firmware) initializes the
+board and executes in EL3.</li>
+<li>The bootloader (such as U-Boot or EDK2) drops execution to
+non-secure EL2 before loading the Linux kernel.</li>
+<li>If booted in EL2, the host OS kernel initializes the KVM
+(Kernel-based Virtual Machine) subsystem, granting it full control over
+the ARMv8-A hardware virtualization features.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Speed ADC Signal Acquisition on SBCs - sbc</title>
+    <meta name="description" content="Acquiring high-speed analog signals on a single board computer (SBC) requires augmenting the host system with dedicated Analog-to-Digital Converter (ADC) expansion boards. Because standard SBCs lack the native processing bandwidth and low-latency input p">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/high-speed-adc-signal-acquisition-on-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="High-Speed ADC Signal Acquisition on SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/high-speed-adc-signal-acquisition-on-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Acquiring high-speed analog signals on a single board computer (SBC) requires augmenting the host system with dedicated Analog-to-Digital Converter (ADC) expansion boards. Because standard SBCs lack the native processing bandwidth and low-latency input p" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="high-speed-adc-signal-acquisition-on-sbcs">High-Speed ADC Signal
+Acquisition on SBCs</h1>
+<p>Acquiring high-speed analog signals on a single board computer (SBC)
+requires augmenting the host system with dedicated Analog-to-Digital
+Converter (ADC) expansion boards. Because standard SBCs lack the native
+processing bandwidth and low-latency input pins needed for
+megasample-per-second (MSPS) or gigasample-per-second (GSPS) sampling,
+these specialized add-on boards handle signal conditioning, precision
+sampling, and high-throughput data buffering. The digitized data is then
+routed to the SBC using high-bandwidth communication interfaces like
+PCIe, high-speed SPI, or FPGA-assisted bridging, allowing the SBC to
+perform real-time digital signal processing, visualization, or storage
+without losing critical data points.</p>
+<h2 id="the-architecture-of-dedicated-adc-expansion-boards">The
+Architecture of Dedicated ADC Expansion Boards</h2>
+<p>A dedicated high-speed ADC expansion board functions as a standalone
+data acquisition front-end. Its architecture is engineered to isolate
+the sensitive analog domain from the high-frequency electrical noise
+generated by the SBC's processor and power supply.</p>
+<ul>
+<li><strong>Analog Front-End (AFE):</strong> Before conversion, incoming
+analog signals pass through conditioning circuits. These include
+low-noise operational amplifiers (op-amps) for gain scaling, impedance
+matching networks, and passive or active anti-aliasing low-pass filters
+to prevent frequency folding.</li>
+<li><strong>ADC Core:</strong> The converter itself—often utilizing
+Successive Approximation Register (SAR), Flash, or Pipelined
+architectures—samples the conditioned signal at rates ranging from
+several MSPS to several GSPS with resolutions typically between 8 and 16
+bits.</li>
+<li><strong>Onboard Buffering (FIFO / FPGA):</strong> High-speed ADCs
+generate data streams faster than standard SBC GPIO pins can process.
+Dedicated expansion boards integrate Field Programmable Gate Arrays
+(FPGAs), CPLDs, or dedicated FIFO (First-In, First-Out) memory to
+temporarily queue raw sample blocks, manage sample clocking, and reduce
+jitter.</li>
+</ul>
+<h2 id="high-throughput-interconnects">High-Throughput
+Interconnects</h2>
+<p>Transferring digitized data from the expansion board to the SBC
+processor requires high-bandwidth, low-latency communication buses:</p>
+<ol type="1">
+<li><strong>High-Speed SPI / QSPI:</strong> Suitable for moderate speeds
+(up to several MSPS). Quad-SPI increases throughput by utilizing four
+data lines simultaneously.</li>
+<li><strong>PCI Express (PCIe):</strong> Used for extremely high data
+rates (tens of MSPS to GSPS). PCIe lanes provide direct, low-latency
+access to the SBC’s memory bus.</li>
+<li><strong>Parallel / LVDS (Low-Voltage Differential
+Signaling):</strong> Often routed into an FPGA mezzanine card (FMC) or
+high-density expansion header before being serialized for the host
+processor.</li>
+<li><strong>USB 3.0 / USB-C:</strong> High-speed external conversion
+boards leverage USB 3.0 SuperSpeed endpoints (up to 5 Gbps) to stream
+bulk ADC data directly to the SBC.</li>
+</ol>
+<h2 id="mitigating-cpu-bottlenecks-with-dma">Mitigating CPU Bottlenecks
+with DMA</h2>
+<p>If an SBC’s Central Processing Unit (CPU) had to handle every
+incoming sample via standard software interrupts, the system would
+immediately suffer from buffer overruns and dropped samples.</p>
+<p>To overcome this, high-speed ADC expansion systems rely on
+<strong>Direct Memory Access (DMA)</strong>:</p>
+<ul>
+<li>The ADC or its onboard controller writes digitized samples directly
+into the SBC’s system RAM without continuous CPU intervention.</li>
+<li>Circular buffers (ring buffers) are allocated in the host memory. As
+the ADC fills one segment of the buffer, a single interrupt notifies the
+operating system, allowing the application to process the block of
+samples in bulk using SIMD (Single Instruction, Multiple Data) or GPU
+acceleration.</li>
+</ul>
+<h2 id="software-drivers-and-real-time-acquisition">Software Drivers and
+Real-Time Acquisition</h2>
+<p>Capturing high-speed signals reliably requires low-latency software
+integration:</p>
+<ul>
+<li><strong>Kernel Drivers and the IIO Subsystem:</strong> Under
+Linux-based SBCs, high-speed ADCs typically integrate with the
+Industrial I/O (IIO) subsystem. The IIO framework offers standardized
+user-space interfaces, hardware trigger support, and buffered read
+mechanisms optimized for high throughput.</li>
+<li><strong>Real-Time Kernels:</strong> Standard OS scheduling jitter
+can cause processing delays. Applying a real-time kernel patch (such as
+PREEMPT_RT for Linux) ensures deterministic processing of incoming ADC
+buffers, preventing buffer overflow during continuous data
+streaming.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

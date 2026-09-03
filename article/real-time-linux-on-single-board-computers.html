@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Linux on Single Board Computers - sbc</title>
+    <meta name="description" content="Deploying a real-time Linux kernel—typically patched with PREEMPTRT—on a Single Board Computer (SBC) enables deterministic, low-latency task execution for robotics, industrial control, and data acquisition. However, transforming a low-cost, general-p">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/real-time-linux-on-single-board-computers">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Real-Time Linux on Single Board Computers - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/real-time-linux-on-single-board-computers" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Deploying a real-time Linux kernel—typically patched with PREEMPTRT—on a Single Board Computer (SBC) enables deterministic, low-latency task execution for robotics, industrial control, and data acquisition. However, transforming a low-cost, general-p" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="real-time-linux-on-single-board-computers">Real-Time Linux on
+Single Board Computers</h1>
+<p>Deploying a real-time Linux kernel—typically patched with
+PREEMPT_RT—on a Single Board Computer (SBC) enables deterministic,
+low-latency task execution for robotics, industrial control, and data
+acquisition. However, transforming a low-cost, general-purpose SBC into
+a reliable real-time system requires managing hardware constraints,
+power configurations, memory bottlenecks, and kernel settings to prevent
+unexpected latency spikes.</p>
+<h3 id="hardware-constraints-and-driver-compatibility">Hardware
+Constraints and Driver Compatibility</h3>
+<p>Most SBCs are designed for multimedia and general-purpose computing
+rather than strict determinism. Many peripheral drivers (such as Wi-Fi,
+GPU, or proprietary camera interfaces) rely on closed-source binary
+blobs or poorly optimized Interrupt Service Routines (ISRs). In a
+real-time kernel, non-deterministic drivers can block preemption,
+creating massive latency spikes. It is essential to use open-source
+drivers where code execution paths are clear, or disable non-essential
+peripheral drivers entirely.</p>
+<h3 id="cpu-frequency-scaling-and-power-management">CPU Frequency
+Scaling and Power Management</h3>
+<p>Power-saving mechanisms are major sources of jitter in embedded Linux
+systems.</p>
+<ul>
+<li><strong>Dynamic Voltage and Frequency Scaling (DVFS):</strong> When
+the CPU transitions between frequency states, execution halts
+momentarily. Setting the CPU governor to <code>performance</code>
+ensures consistent clock frequencies.</li>
+<li><strong>CPU Idle States (C-States):</strong> Deep sleep states
+introduce wake-up latency when an interrupt occurs. Disabling deep
+C-states via kernel command-line parameters (such as
+<code>idle=poll</code> or <code>processor.max_cstate=1</code>) preserves
+fast interrupt response times.</li>
+<li><strong>Thermal Throttling:</strong> SBCs without active cooling can
+overheat quickly under sustained loads. When the thermal limit is
+reached, hardware-level throttling reduces CPU frequency independently
+of the operating system, degrading real-time performance.</li>
+</ul>
+<h3 id="memory-latency-and-cache-contention">Memory Latency and Cache
+Contention</h3>
+<p>Standard dynamic memory allocation and memory swapping introduce
+unpredictable delays.</p>
+<ul>
+<li><strong>Memory Locking:</strong> Real-time applications must lock
+their memory space into physical RAM using system calls like
+<code>mlockall()</code> to prevent page faults during critical execution
+phases.</li>
+<li><strong>Cache Sharing:</strong> Multi-core SBC processors generally
+share L2 or L3 caches. Non-real-time processes can evict critical
+real-time data from the cache. Employing Cache Allocation Technology
+(CAT) where supported, or minimizing background memory traffic,
+mitigates this issue.</li>
+<li><strong>Storage I/O:</strong> Standard SD card and eMMC write cycles
+have unpredictable latency profiles. Logging directly to flash storage
+during real-time loops must be avoided by buffering logs in RAM or
+utilizing network-based logging.</li>
+</ul>
+<h3 id="core-isolation-and-interrupt-balancing">Core Isolation and
+Interrupt Balancing</h3>
+<p>To ensure deterministic execution, real-time tasks should not compete
+with standard operating system services.</p>
+<ul>
+<li><strong>Core Isolation:</strong> Use the <code>isolcpus</code>
+kernel parameter to reserve dedicated CPU cores exclusively for
+real-time threads.</li>
+<li><strong>IRQ Affinity:</strong> By default, hardware interrupts are
+distributed across all cores. Route standard hardware interrupts away
+from dedicated real-time cores using <code>smp_affinity</code> settings
+or the <code>irqbalance</code> daemon.</li>
+<li><strong>Threaded Interrupts:</strong> Under PREEMPT_RT, interrupt
+handlers run as schedulable kernel threads, allowing developers to
+prioritize critical hardware interrupts above standard kernel
+tasks.</li>
+</ul>
+<h3 id="latency-benchmarking">Latency Benchmarking</h3>
+<p>Average throughput is irrelevant in real-time computing; worst-case
+execution time (WCET) is the critical metric. Systems must be tested
+using tools like <code>cyclictest</code> under simulated maximum load
+(using utilities like <code>stress-ng</code> or heavy I/O transfers). A
+system is only validated once the worst-case latency stays strictly
+within the application's defined deadline across prolonged testing
+cycles.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

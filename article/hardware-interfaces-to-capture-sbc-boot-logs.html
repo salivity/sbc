@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Interfaces to Capture SBC Boot Logs - sbc</title>
+    <meta name="description" content="Capturing low-level boot logs from a single board computer (SBC) is essential for diagnosing hardware initialization, bootloader failures, and early kernel panics before the network stack or primary display drivers become active. Because standard operati">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/hardware-interfaces-to-capture-sbc-boot-logs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hardware Interfaces to Capture SBC Boot Logs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/hardware-interfaces-to-capture-sbc-boot-logs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Capturing low-level boot logs from a single board computer (SBC) is essential for diagnosing hardware initialization, bootloader failures, and early kernel panics before the network stack or primary display drivers become active. Because standard operati" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="hardware-interfaces-to-capture-sbc-boot-logs">Hardware
+Interfaces to Capture SBC Boot Logs</h1>
+<p>Capturing low-level boot logs from a single board computer (SBC) is
+essential for diagnosing hardware initialization, bootloader failures,
+and early kernel panics before the network stack or primary display
+drivers become active. Because standard operating system diagnostic
+tools are unavailable during the earliest execution stages, embedded
+engineers rely on specific physical hardware interfaces to extract
+real-time telemetry. This article outlines the primary hardware
+interfaces used to access and capture these low-level logs from an
+SBC.</p>
+<h2 id="1-uart-universal-asynchronous-receiver-transmitter">1. UART
+(Universal Asynchronous Receiver-Transmitter)</h2>
+<p>UART is the standard and most widely used interface for capturing
+low-level boot logs. Most SBC System-on-Chips (SoCs) output early boot
+messages—from Stage 1 Bootloaders (ROM), Secondary Program Loaders
+(SPL/U-Boot), and early kernel outputs (<code>earlyprintk</code> /
+<code>earlycon</code>)—over serial pins.</p>
+<ul>
+<li><strong>Connection Method:</strong> Engineers connect a USB-to-UART
+bridge (such as an FTDI, CP2102, or CH340 chip) to the SBC's dedicated
+TX (Transmit), RX (Receive), and GND (Ground) pins.</li>
+<li><strong>Key Considerations:</strong> Voltage logic levels must match
+(typically 3.3V or 1.8V TTL). Connecting a 5V interface to a 1.8V/3.3V
+SoC can damage the board. Common default baud rates include 115200 or
+1500000.</li>
+</ul>
+<h2 id="2-jtag-joint-test-action-group-and-swd-serial-wire-debug">2.
+JTAG (Joint Test Action Group) and SWD (Serial Wire Debug)</h2>
+<p>When serial output is disabled, unconfigured, or failing before the
+UART peripheral initializes, JTAG and SWD interfaces provide direct
+access to the processor's core registers and memory.</p>
+<ul>
+<li><strong>Log Extraction Technique:</strong> Rather than streaming
+text directly, engineers use debug probes (such as J-Link,
+OpenOCD-compatible adapters, or DSTREAM) to halt execution and read
+circular log buffers stored directly in internal SRAM or DRAM.</li>
+<li><strong>Trace Capabilities:</strong> Advanced architectures (such as
+ARM CoreSight) utilize JTAG pins to output trace data via the
+Instrumentation Trace Macrocell (ITM) or Embedded Trace Macrocell (ETM),
+allowing real-time logging without stalling CPU execution.</li>
+</ul>
+<h2 id="3-direct-spi-and-i2c-bus-sniffing">3. Direct SPI and I2C Bus
+Sniffing</h2>
+<p>Many SBCs store initial bootloader binaries and configuration data in
+external SPI NOR Flash or EEPROM chips.</p>
+<ul>
+<li><strong>Application:</strong> When bootloader execution fails before
+serial output begins, a hardware logic analyzer or dedicated bus sniffer
+(such as a Saleae or Beagle analyzer) can be attached to the SPI or I2C
+clock and data lines.</li>
+<li><strong>Function:</strong> While not outputting human-readable log
+strings directly, this method allows engineers to observe whether the
+SoC is successfully loading boot code, identify transaction errors, and
+monitor power management IC (PMIC) voltage sequencing over I2C.</li>
+</ul>
+<h2 id="4-usb-debug-and-type-c-dci-direct-connect-interface">4. USB
+Debug and Type-C DCI (Direct Connect Interface)</h2>
+<p>Modern SBC architectures increasingly incorporate dedicated USB debug
+features:</p>
+<ul>
+<li><strong>Integrated USB-to-UART Bridges:</strong> Some boards route
+the SoC's hardware UART directly through an onboard bridge to a
+micro-USB or USB Type-C connector, eliminating the need for external
+breakout adapters.</li>
+<li><strong>USB DCI / Intel DCI:</strong> On x86-based SBCs, Direct
+Connect Interface technology allows engineers to capture debugging and
+boot trace data directly over a standard USB 3.0 or Type-C port using
+specialized debug cables and host software.</li>
+</ul>
+<h2 id="5-post-code-displays-and-diagnostic-leds-via-gpio">5. Post Code
+Displays and Diagnostic LEDs via GPIO</h2>
+<p>For bare-metal and early BIOS/UEFI environments, low-level status is
+often transmitted via designated GPIO lines:</p>
+<ul>
+<li><strong>Port 80h / Diagnostic Cards:</strong> On x86 SBCs with
+low-pin-count (LPC) or PCIe headers, hardware diagnostic cards read
+standard hexadecimal POST codes that indicate precisely which subsystem
+initialization step failed.</li>
+<li><strong>Bit-Banged Status:</strong> Custom bootloaders can be
+configured to pulse GPIO pins or blink onboard LEDs to transmit error
+codes if complex communication buses fail to initialize.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

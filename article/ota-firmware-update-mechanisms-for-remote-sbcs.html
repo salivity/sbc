@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTA Firmware Update Mechanisms for Remote SBCs - sbc</title>
+    <meta name="description" content="Over-the-air (OTA) firmware updates are critical for maintaining security, fixing bugs, and deploying new features to remotely deployed Single Board Computers (SBCs) without requiring physical intervention. This article examines the core mechanisms that">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/ota-firmware-update-mechanisms-for-remote-sbcs">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="OTA Firmware Update Mechanisms for Remote SBCs - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/ota-firmware-update-mechanisms-for-remote-sbcs" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Over-the-air (OTA) firmware updates are critical for maintaining security, fixing bugs, and deploying new features to remotely deployed Single Board Computers (SBCs) without requiring physical intervention. This article examines the core mechanisms that" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="ota-firmware-update-mechanisms-for-remote-sbcs">OTA Firmware
+Update Mechanisms for Remote SBCs</h1>
+<p>Over-the-air (OTA) firmware updates are critical for maintaining
+security, fixing bugs, and deploying new features to remotely deployed
+Single Board Computers (SBCs) without requiring physical intervention.
+This article examines the core mechanisms that make remote firmware
+deployments reliable and robust, focusing on dual-partition layouts,
+bootloader orchestration, atomic update engines, cryptographic
+verification, and fallback recovery strategies.</p>
+<h3 id="dual-partition-ab-architecture">Dual-Partition (A/B)
+Architecture</h3>
+<p>The most common and robust mechanism for updating an SBC's operating
+system or base firmware is the dual-partition (A/B) scheme. In this
+layout, the SBC’s storage (such as eMMC, NVMe, or SD card) is divided
+into two identical system partitions alongside a persistent data
+partition:</p>
+<ul>
+<li><strong>Active Partition (Slot A):</strong> Runs the current,
+functioning operating system.</li>
+<li><strong>Passive Partition (Slot B):</strong> Remains dormant during
+normal operation.</li>
+</ul>
+<p>When an update is initiated, the new system image is written entirely
+to the passive partition while the device continues its standard
+operations from the active partition. Once the write is complete and
+verified, the system modifies the bootloader configuration to point to
+Slot B on the next reboot. If the update fails at any point during
+downloading or writing, Slot A remains untouched, preventing the device
+from being bricked.</p>
+<h3 id="bootloader-integration-and-watchdog-timers">Bootloader
+Integration and Watchdog Timers</h3>
+<p>For an A/B update to succeed, the bootloader (commonly U-Boot or
+Barebox on ARM-based SBCs) must actively participate in the update
+cycle.</p>
+<ol type="1">
+<li><strong>Boot Counters:</strong> The bootloader maintains a counter
+that tracks boot attempts for a newly applied image.</li>
+<li><strong>Health Checks:</strong> Upon booting the new partition, a
+user-space validation service runs a series of system health checks
+(e.g., verifying network interfaces, critical processes, and hardware
+access).</li>
+<li><strong>Commitment:</strong> If the health checks pass, the service
+marks the partition as "good" and resets the boot counter.</li>
+<li><strong>Hardware Watchdogs:</strong> If the new kernel panics or
+hangs during boot, a hardware watchdog timer resets the board. The
+bootloader detects the failed attempt, increments the boot counter, and
+if the maximum attempts are exceeded, automatically falls back to the
+previous known-good partition.</li>
+</ol>
+<h3 id="atomic-update-clients">Atomic Update Clients</h3>
+<p>Specialized update frameworks automate the retrieval, verification,
+and installation of system updates. The primary open-source frameworks
+used for Linux-based SBCs include:</p>
+<ul>
+<li><strong>Mender:</strong> Handles full root filesystem image updates,
+delta updates, and application-level updates with built-in rollback
+support.</li>
+<li><strong>RAUC (Robust Auto-Update Controller):</strong> A
+lightweight, modular update client tightly integrated with systemd and
+U-Boot, designed for embedded Linux environments built with Yocto or
+Buildroot.</li>
+<li><strong>SWUpdate:</strong> A versatile framework that supports
+multiple update strategies, including streaming updates directly to
+disk, partial updates, and handling external microcontrollers attached
+to the SBC.</li>
+</ul>
+<h3 id="delta-and-container-based-updates">Delta and Container-Based
+Updates</h3>
+<p>Transmitting complete root filesystem images over
+bandwidth-constrained or cellular networks (such as LTE-M or NB-IoT) is
+costly and slow. Two alternative mechanisms mitigate this:</p>
+<ul>
+<li><strong>Binary Delta Updates:</strong> Mechanisms using binary diff
+algorithms (like <code>librsync</code> or <code>bsdiff</code>) calculate
+only the byte-level differences between the current and target root
+filesystems. The client applies the patch to reconstruct the new image
+locally.</li>
+<li><strong>Containerization:</strong> Architectures like BalenaOS
+decouple the host operating system from application logic using
+lightweight container runtimes (such as Docker or containerd). Base OS
+updates occur infrequently, while application-level firmware is updated
+by downloading only modified container layers.</li>
+</ul>
+<h3 id="cryptographic-verification-and-secure-transport">Cryptographic
+Verification and Secure Transport</h3>
+<p>Remote SBCs operating in untrusted network environments rely on
+strict cryptographic guarantees to prevent unauthorized or corrupted
+code execution:</p>
+<ul>
+<li><strong>Transport Layer Security (TLS):</strong> Update payloads are
+pulled or pushed over secure HTTPS or MQTT channels to prevent
+eavesdropping and man-in-the-middle attacks.</li>
+<li><strong>Digital Signatures:</strong> Update packages are
+cryptographically signed at build time using private keys. The on-device
+update client uses a pre-installed public certificate to verify the
+image's integrity and authenticity before writing it to storage.</li>
+<li><strong>Hardware Root of Trust:</strong> Advanced SBCs leverage
+hardware security modules (like TPM 2.0 or secure enclaves) to securely
+store signing keys and verify the boot chain from the first-stage
+bootloader up to the application layer.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

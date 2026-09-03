@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connecting a Character LCD to a Raspberry Pi - sbc</title>
+    <meta name="description" content="Connecting a standard character LCD (like the popular HD44780 16x2 screen) to a Raspberry Pi allows your projects to display real-time data, system status, or custom text without needing a full monitor. This article provides a straightforward guide to wi">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/connecting-a-character-lcd-to-a-raspberry-pi">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Connecting a Character LCD to a Raspberry Pi - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/connecting-a-character-lcd-to-a-raspberry-pi" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Connecting a standard character LCD (like the popular HD44780 16x2 screen) to a Raspberry Pi allows your projects to display real-time data, system status, or custom text without needing a full monitor. This article provides a straightforward guide to wi" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="connecting-a-character-lcd-to-a-raspberry-pi">Connecting a
+Character LCD to a Raspberry Pi</h1>
+<p>Connecting a standard character LCD (like the popular HD44780 16x2
+screen) to a Raspberry Pi allows your projects to display real-time
+data, system status, or custom text without needing a full monitor. This
+article provides a straightforward guide to wiring the LCD directly to
+the Pi's GPIO pins, configuring the necessary Python libraries, and
+running a basic script to text on the screen. Whether you are building
+an alarm clock or a network monitor, this step-by-step walkthrough will
+get your display up and running.</p>
+<h3 id="required-components-and-tools">Required Components and
+Tools</h3>
+<p>Before starting, gather the following hardware components:</p>
+<ul>
+<li><strong>Raspberry Pi</strong> (Any model with GPIO pins, along with
+an SD card and power supply)</li>
+<li><strong>HD44780-compatible Character LCD</strong> (16x2 or 20x4 are
+most common)</li>
+<li><strong>10k Ohm Potentiometer</strong> (Crucial for adjusting the
+display contrast)</li>
+<li><strong>Breadboard and Jumper Wires</strong> (Male-to-female and
+male-to-male)</li>
+<li><strong>Soldering Iron and Header Pins</strong> (If your LCD did not
+come with pins pre-soldered)</li>
+</ul>
+<h3 id="wiring-the-lcd-to-the-raspberry-pi">Wiring the LCD to the
+Raspberry Pi</h3>
+<p>Character LCDs can operate in 8-bit mode or 4-bit mode. To save
+valuable GPIO pins on the Raspberry Pi, this guide uses the 4-bit mode,
+which requires only six GPIO pins for data and control, plus power and
+contrast connections.</p>
+<p>Carefully connect the pins according to the following mapping
+guide:</p>
+<ul>
+<li><strong>LCD Pin 1 (VSS/GND)</strong> to Raspberry Pi GND</li>
+<li><strong>LCD Pin 2 (VDD/5V)</strong> to Raspberry Pi 5V</li>
+<li><strong>LCD Pin 3 (V0/Contrast)</strong> to the center pin (wiper)
+of the 10k potentiometer</li>
+<li><strong>LCD Pin 4 (RS)</strong> to Raspberry Pi GPIO 25</li>
+<li><strong>LCD Pin 5 (RW)</strong> to Raspberry Pi GND (puts the screen
+in write mode)</li>
+<li><strong>LCD Pin 6 (E/Enable)</strong> to Raspberry Pi GPIO 24</li>
+<li><strong>LCD Pin 11 (D4)</strong> to Raspberry Pi GPIO 23</li>
+<li><strong>LCD Pin 12 (D5)</strong> to Raspberry Pi GPIO 17</li>
+<li><strong>LCD Pin 13 (D6)</strong> to Raspberry Pi GPIO 18</li>
+<li><strong>LCD Pin 14 (D7)</strong> to Raspberry Pi GPIO 22</li>
+<li><strong>LCD Pin 15 (A/Backlight Anode)</strong> to Raspberry Pi 5V
+(or 3.3V for a dimmer backlight)</li>
+<li><strong>LCD Pin 16 (K/Backlight Cathode)</strong> to Raspberry Pi
+GND</li>
+</ul>
+<p>Connect the remaining two outer pins of the 10k potentiometer to
+Raspberry Pi 5V and GND. Turning the knob will alter the voltage on LCD
+Pin 3, allowing you to make the text visible against the backlight.</p>
+<h3 id="setting-up-the-software-environment">Setting Up the Software
+Environment</h3>
+<p>With the wiring complete, power on your Raspberry Pi and open a
+terminal window. You need to install the CircuitPython library ecosystem
+provided by Adafruit, which simplifies controlling character
+displays.</p>
+<p>First, update your package list and install the Python package
+manager if it isn't already present:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install python3-pip</span></code></pre></div>
+<p>Next, install the specific library for character LCDs:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip3</span> install adafruit-circuitpython-charlcd</span></code></pre></div>
+<h3 id="writing-the-python-control-script">Writing the Python Control
+Script</h3>
+<p>Create a new Python file using your preferred text editor, such as
+Nano:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> lcd_test.py</span></code></pre></div>
+<p>Paste the following Python code into the file. This script
+initializes the library with the exact GPIO pins used in the wiring
+step, sets the dimensions of a 16x2 screen, and prints a two-line
+message.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> board</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> digitalio</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> adafruit_character_lcd.character_lcd <span class="im">as</span> character_lcd</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Modify these pin definitions if you used different GPIO pins</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>lcd_rs <span class="op">=</span> digitalio.DigitalInOut(board.D25)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>lcd_en <span class="op">=</span> digitalio.DigitalInOut(board.D24)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>lcd_d4 <span class="op">=</span> digitalio.DigitalInOut(board.D23)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>lcd_d5 <span class="op">=</span> digitalio.DigitalInOut(board.D17)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>lcd_d6 <span class="op">=</span> digitalio.DigitalInOut(board.D18)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>lcd_d7 <span class="op">=</span> digitalio.DigitalInOut(board.D22)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Define LCD column and row size</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>lcd_columns <span class="op">=</span> <span class="dv">16</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>lcd_rows <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize the LCD class</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>lcd <span class="op">=</span> character_lcd.Character_LCD_Mono(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Clear the screen and display the message</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>lcd.clear()</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>lcd.message <span class="op">=</span> <span class="st">&quot;Raspberry Pi</span><span class="ch">\n</span><span class="st">LCD Project&quot;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Leave the message on screen for 5 seconds, then clear it</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>time.sleep(<span class="fl">5.0</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>lcd.clear()</span></code></pre></div>
+<p>Save and exit the editor by pressing <code>CTRL+O</code>,
+<code>Enter</code>, and then <code>CTRL+X</code>.</p>
+<h3 id="running-the-project-and-troubleshooting">Running the Project and
+Troubleshooting</h3>
+<p>Execute the script from your terminal:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> lcd_test.py</span></code></pre></div>
+<p>If the script runs without errors but nothing appears on the screen,
+slowly turn the knob on your 10k potentiometer. The contrast setting is
+highly sensitive, and the text may be completely invisible or hidden
+behind solid blocks if the contrast voltage is incorrect.</p>
+<p>If you still see no output, double-check that your data pins (D4
+through D7) are connected to the correct physical layout on the Pi, and
+verify that the backlight pins (15 and 16) are correctly oriented to
+power the display's LEDs.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

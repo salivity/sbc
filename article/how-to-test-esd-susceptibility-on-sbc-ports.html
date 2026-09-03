@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Test ESD Susceptibility on SBC Ports - sbc</title>
+    <meta name="description" content="Testing the electrostatic discharge (ESD) susceptibility of exposed ports on a commercial single-board computer (SBC) requires standard-compliant simulation tools, structured discharge procedures, and real-time functional monitoring. Engineers subject I/">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/how-to-test-esd-susceptibility-on-sbc-ports">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Test ESD Susceptibility on SBC Ports - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/how-to-test-esd-susceptibility-on-sbc-ports" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Testing the electrostatic discharge (ESD) susceptibility of exposed ports on a commercial single-board computer (SBC) requires standard-compliant simulation tools, structured discharge procedures, and real-time functional monitoring. Engineers subject I/" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-test-esd-susceptibility-on-sbc-ports">How to Test ESD
+Susceptibility on SBC Ports</h1>
+<p>Testing the electrostatic discharge (ESD) susceptibility of exposed
+ports on a commercial single-board computer (SBC) requires
+standard-compliant simulation tools, structured discharge procedures,
+and real-time functional monitoring. Engineers subject I/O ports—such as
+USB, Ethernet, HDMI, and GPIO headers—to high-voltage pulses to evaluate
+the hardware's resilience against user-induced static events. This
+process follows international standards like IEC 61000-4-2, ensuring
+that the SBC can withstand realistic discharge levels without
+experiencing permanent damage, data corruption, or latch-up
+conditions.</p>
+<h3 id="applicable-standards-and-test-levels">Applicable Standards and
+Test Levels</h3>
+<p>ESD testing on commercial electronics primarily adheres to
+<strong>IEC 61000-4-2</strong>, which defines system-level immunity
+requirements. The standard classifies discharges into four severity
+levels, categorized by the method of application:</p>
+<ul>
+<li><strong>Contact Discharge:</strong> Applied directly to conductive
+surfaces, such as metal connector shields. Test levels range from Level
+1 (±2 kV) to Level 4 (±8 kV).</li>
+<li><strong>Air Discharge:</strong> Applied to non-conductive surfaces
+or recessed pins where physical contact is impossible. Test levels range
+from Level 1 (±2 kV) to Level 4 (±15 kV).</li>
+</ul>
+<h3 id="equipment-and-test-setup">Equipment and Test Setup</h3>
+<p>To achieve repeatable results, engineers set up an ESD-controlled
+test bench consisting of:</p>
+<ul>
+<li><strong>ESD Simulator (ESD Gun):</strong> Generates calibrated
+discharge waveforms with specific rise times (0.7 to 1.0 ns) using a
+standardized RC network (typically 150 pF capacitor and 330 Ω
+resistor).</li>
+<li><strong>Ground Reference Plane (GRP):</strong> A metallic sheet
+connected to the protective earth.</li>
+<li><strong>Horizontal and Vertical Coupling Planes (HCP/VCP):</strong>
+Metal planes used to simulate indirect ESD events occurring nearby.</li>
+<li><strong>Insulation Sheet:</strong> A thin non-conductive layer (0.5
+mm) separating the SBC and its peripherals from the ground plane.</li>
+<li><strong>Monitoring Equipment:</strong> Diagnostic consoles, network
+analyzers, or looped test software running on the SBC to log crashes,
+resets, or packet losses.</li>
+</ul>
+<h3 id="step-by-step-port-testing-procedure">Step-by-Step Port Testing
+Procedure</h3>
+<ol type="1">
+<li><strong>Baseline Verification:</strong> The SBC is powered on and
+runs automated test routines (e.g., continuous USB read/write, Ethernet
+pinging, video output streaming, and GPIO toggling) to confirm nominal
+performance before testing.</li>
+<li><strong>Contact Discharge on Connector Shells:</strong>
+<ul>
+<li>The ESD gun tip is placed directly against the metallic housing of
+ports (e.g., USB, HDMI, RJ45 shields).</li>
+<li>Engineers deliver a series of pulses (typically 10 positive and 10
+negative pulses at 1-second intervals) per test point, gradually
+increasing voltage from the lowest to the target test level.</li>
+</ul></li>
+<li><strong>Air Discharge on Exposed Pins and Openings:</strong>
+<ul>
+<li>For unshielded ports (e.g., GPIO pin headers, audio jacks, microSD
+slots), the round air-discharge tip is moved rapidly toward the target
+until a spark occurs.</li>
+<li>Engineers discharge around the connector openings and insulating
+plastics to identify paths where high-voltage arcing might bypass
+onboard TVS (Transient Voltage Suppression) diodes.</li>
+</ul></li>
+<li><strong>Indirect Discharge Testing:</strong>
+<ul>
+<li>Pulses are applied to the HCP and VCP positioned near the board to
+evaluate the SBC's immunity to radiated electromagnetic fields generated
+by nearby static discharges.</li>
+</ul></li>
+</ol>
+<h3 id="failure-classification-and-analysis">Failure Classification and
+Analysis</h3>
+<p>During and after each discharge sequence, the device's behavior is
+categorized based on standard performance criteria:</p>
+<ul>
+<li><strong>Class A (Pass):</strong> Normal performance within
+specification limits throughout and after the test. No reboots, data
+corruption, or signal dropouts.</li>
+<li><strong>Class B (Acceptable for some commercial uses):</strong>
+Temporary degradation or loss of function that self-recovers without
+operator intervention (e.g., a momentary video flicker or dropped
+Ethernet packet that automatically re-transmits).</li>
+<li><strong>Class C (Failure):</strong> Temporary loss of function
+requiring user intervention or a system reboot.</li>
+<li><strong>Class D (Critical Failure):</strong> Unrecoverable hardware
+damage caused by dielectric breakdown, burnt traces, or destroyed
+semiconductor junctions.</li>
+</ul>
+<p>If an SBC fails to meet the target class, engineers modify the
+protection scheme by placing bidirectional TVS diode arrays closer to
+connector entry points, improving PCB chassis grounding, or inserting
+series resistors and ferrite beads to clamp transient voltage spikes
+before they reach the main system-on-chip (SoC).</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

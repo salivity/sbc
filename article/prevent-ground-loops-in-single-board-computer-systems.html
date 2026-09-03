@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prevent Ground Loops in Single Board Computer Systems - sbc</title>
+    <meta name="description" content="Ground loop interference occurs when multiple interconnected devices share different reference potential paths to ground, leading to unwanted noise, measurement inaccuracies, and potential hardware damage in single board computer (SBC) setups. Interfacin">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/prevent-ground-loops-in-single-board-computer-systems">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Prevent Ground Loops in Single Board Computer Systems - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/prevent-ground-loops-in-single-board-computer-systems" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Ground loop interference occurs when multiple interconnected devices share different reference potential paths to ground, leading to unwanted noise, measurement inaccuracies, and potential hardware damage in single board computer (SBC) setups. Interfacin" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="prevent-ground-loops-in-single-board-computer-systems">Prevent
+Ground Loops in Single Board Computer Systems</h1>
+<p>Ground loop interference occurs when multiple interconnected devices
+share different reference potential paths to ground, leading to unwanted
+noise, measurement inaccuracies, and potential hardware damage in single
+board computer (SBC) setups. Interfacing sensitive measurement
+instruments with SBCs like a Raspberry Pi or BeagleBone frequently
+exposes systems to this issue due to shared USB power, mains ground
+connections, and low-voltage digital signal returns. This article
+outlines the core methods engineers use to mitigate and eliminate ground
+loop interference, including galvanic isolation, differential signaling,
+star grounding, and common-mode filtering.</p>
+<h3 id="1-galvanic-isolation">1. Galvanic Isolation</h3>
+<p>Galvanic isolation physically separates the electrical circuits while
+still allowing data and power to transfer. This breaks the ground loop
+by eliminating the conductive path between the SBC and the external
+measurement equipment.</p>
+<ul>
+<li><strong>Digital Isolators:</strong> Use capacitive, magnetic, or
+optical isolators (such as optocouplers or chips from the ADuM/ISO
+families) on communication buses like I2C, SPI, UART, or USB.</li>
+<li><strong>Isolated Power Supplies:</strong> Power the measurement
+front-end using isolated DC-DC converters. If both the SBC and the
+measurement tool derive power from the same mains source without
+isolation, a loop is formed through the power grounds.</li>
+<li><strong>Isolated ADCs:</strong> Place analog-to-digital converters
+on the isolated side of the circuit, transmitting digitized data across
+an isolation barrier to the SBC.</li>
+</ul>
+<h3 id="2-differential-signaling">2. Differential Signaling</h3>
+<p>Single-ended signals reference a common ground, making them highly
+vulnerable to ground potential differences. Differential signaling
+measures the voltage difference between two complementary signal lines
+rather than referencing ground.</p>
+<ul>
+<li><strong>Instrumentation Amplifiers:</strong> Route analog inputs
+through differential or instrumentation amplifiers with high Common-Mode
+Rejection Ratios (CMRR). Any noise introduced by ground potential shifts
+affects both lines equally and is cancelled out.</li>
+<li><strong>Differential Protocols:</strong> For long cable runs between
+external hardware and the SBC, convert single-ended digital outputs to
+differential standards such as RS-485 or CAN bus.</li>
+</ul>
+<h3 id="3-star-single-point-grounding">3. Star (Single-Point)
+Grounding</h3>
+<p>Ground loops often form when multiple return paths exist between
+connected devices. A star grounding topology prevents circular currents
+by routing all ground connections to a single, central reference
+point.</p>
+<ul>
+<li>Connect the analog ground, digital ground, power ground, and chassis
+ground to one central node.</li>
+<li>Avoid connecting ground wires at multiple ends of a shielded cable.
+Ground the shield at only one end (typically the receiver or the SBC
+end) to prevent the shield itself from carrying ground loop
+currents.</li>
+</ul>
+<h3 id="4-common-mode-chokes-and-filtering">4. Common-Mode Chokes and
+Filtering</h3>
+<p>When galvanic isolation is not feasible, passive filtering can
+suppress unwanted high-frequency noise induced by ground loops.</p>
+<ul>
+<li><strong>Common-Mode Chokes:</strong> Place chokes on data and power
+lines entering the SBC. These components present high impedance to
+common-mode currents (noise flowing in the same direction on both lines)
+while allowing differential signal currents to pass unimpeded.</li>
+<li><strong>Ferrite Beads:</strong> Snap-on or surface-mount ferrite
+beads on USB and sensor cables help attenuate high-frequency RF noise
+riding on ground paths.</li>
+</ul>
+<h3 id="5-battery-operation-and-floating-references">5. Battery
+Operation and Floating References</h3>
+<p>Operating the external measurement circuit or the SBC on an isolated
+battery creates a floating ground reference. Because a battery has no
+return path to the electrical grid's earth ground, the loop is broken.
+This technique is particularly effective for portable data-logging
+systems or field diagnostics where establishing a clean mains earth is
+impossible.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuning Linux Scheduler for Real-Time SBC Performance - sbc</title>
+    <meta name="description" content="This article provides a practical guide on tuning the Linux scheduler and associated kernel parameters to achieve deterministic, low-latency performance on Single Board Computers (SBCs). You will learn how to configure real-time scheduling policies, adju">
+    <link rel="canonical" href="https://salivity.github.io/sbc/article/tuning-linux-scheduler-for-real-time-sbc-performance">
+    <link rel="icon" href="/sbc/favicon.ico">
+    <link rel="stylesheet" href="/sbc/css/style.css">
+    <link media="print" rel="stylesheet" href="/sbc/css/print.css">
+    <script src="/sbc/js/fuse.min.js"></script>
+    <script src="/sbc/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tuning Linux Scheduler for Real-Time SBC Performance - sbc" />
+    <meta property="og:url" content="https://salivity.github.io/sbc/article/tuning-linux-scheduler-for-real-time-sbc-performance" />
+    <meta property="og:image:url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/sbc/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a practical guide on tuning the Linux scheduler and associated kernel parameters to achieve deterministic, low-latency performance on Single Board Computers (SBCs). You will learn how to configure real-time scheduling policies, adju" />
+    <link rel="manifest" href="/sbc/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/sbc/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>sbc</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/sbc/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="tuning-linux-scheduler-for-real-time-sbc-performance">Tuning
+Linux Scheduler for Real-Time SBC Performance</h1>
+<p>This article provides a practical guide on tuning the Linux scheduler
+and associated kernel parameters to achieve deterministic, low-latency
+performance on Single Board Computers (SBCs). You will learn how to
+configure real-time scheduling policies, adjust kernel runtime
+throttles, isolate CPU cores, balance interrupt handling, and optimize
+thread priorities to prevent latency spikes in embedded
+environments.</p>
+<hr />
+<h3 id="1-implement-real-time-scheduling-policies">1. Implement
+Real-Time Scheduling Policies</h3>
+<p>Standard Linux utilizes the Completely Fair Scheduler (CFS/EEVDF),
+which prioritizes throughput and fairness over determinism. For
+deterministic behavior, assign real-time scheduling policies to critical
+tasks:</p>
+<ul>
+<li><strong><code>SCHED_FIFO</code> (First-In, First-Out):</strong> Runs
+a thread until it yields, blocks on I/O, or is preempted by a
+higher-priority real-time thread.</li>
+<li><strong><code>SCHED_RR</code> (Round Robin):</strong> Similar to
+<code>SCHED_FIFO</code>, but assigns time slices to threads of the same
+priority to share CPU time.</li>
+<li><strong><code>SCHED_DEADLINE</code>:</strong> Allocates CPU capacity
+using an Earliest Deadline First (EDF) algorithm based on runtime,
+period, and deadline parameters.</li>
+</ul>
+<p>To set a real-time policy via the command line, use the
+<code>chrt</code> utility:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a process with SCHED_FIFO and a priority of 80</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">chrt</span> <span class="at">-f</span> 80 /path/to/application</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modify an existing process by PID</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">chrt</span> <span class="at">-f</span> <span class="at">-p</span> 80 <span class="op">&lt;</span>PID<span class="op">&gt;</span></span></code></pre></div>
+<p>In C/C++ source code, apply policies using the POSIX thread
+library:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> sched_param param<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>param<span class="op">.</span>sched_priority <span class="op">=</span> <span class="dv">80</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pthread_setschedparam<span class="op">(</span>pthread_self<span class="op">(),</span> SCHED_FIFO<span class="op">,</span> <span class="op">&amp;</span>param<span class="op">);</span></span></code></pre></div>
+<hr />
+<h3 id="2-configure-real-time-throttling-parameters">2. Configure
+Real-Time Throttling Parameters</h3>
+<p>By default, the Linux kernel reserves 5% of CPU time for
+non-real-time tasks to prevent runaway real-time threads from locking
+the system. In dedicated SBC systems, this throttling can introduce
+unexpected jitter.</p>
+<p>Scheduler runtime behavior is controlled through
+<code>sysctl</code>:</p>
+<ul>
+<li><strong><code>kernel.sched_rt_period_us</code>:</strong> The
+scheduling period (default is <code>1000000</code> µs or 1 second).</li>
+<li><strong><code>kernel.sched_rt_runtime_us</code>:</strong> The amount
+of time real-time tasks are allowed to run within that period (default
+is <code>950000</code> µs).</li>
+</ul>
+<p>To allow real-time tasks 100% of the CPU runtime without
+throttling:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Temporarily disable RT throttling</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> sysctl <span class="at">-w</span> kernel.sched_rt_runtime_us=-1</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Persist across reboots in /etc/sysctl.conf</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;kernel.sched_rt_runtime_us = -1&quot;</span> <span class="kw">|</span> <span class="fu">sudo</span> tee <span class="at">-a</span> /etc/sysctl.conf</span></code></pre></div>
+<p><em>Note: Ensure real-time tasks properly sleep or yield, as a busy
+loop with throttling disabled will freeze the board.</em></p>
+<hr />
+<h3 id="3-cpu-core-isolation-and-affinity">3. CPU Core Isolation and
+Affinity</h3>
+<p>SBCs often have limited CPU cores (typically 4 to 8). Isolating
+dedicated cores for critical tasks prevents the kernel scheduler from
+placing background processes or worker threads on those cores.</p>
+<p>Add the following boot parameters to the bootloader configuration
+(e.g., <code>cmdline.txt</code> on Raspberry Pi or
+<code>extlinux.conf</code>/U-Boot environment):</p>
+<ul>
+<li><code>isolcpus=2,3</code>: Removes cores 2 and 3 from the general
+scheduler domain.</li>
+<li><code>nohz_full=2,3</code>: Reduces scheduler tick interrupts on
+isolated cores when a single task runs.</li>
+<li><code>rcu_nocbs=2,3</code>: Offloads Read-Copy-Update (RCU)
+callbacks from isolated cores to housekeeping cores.</li>
+</ul>
+<p>Example boot entry:</p>
+<pre class="text"><code>isolcpus=2,3 nohz_full=2,3 rcu_nocbs=2,3</code></pre>
+<p>Bind real-time applications directly to isolated cores using
+<code>taskset</code>:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pin process to CPU Core 2</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">taskset</span> <span class="at">-c</span> 2 chrt <span class="at">-f</span> 80 /path/to/application</span></code></pre></div>
+<hr />
+<h3 id="4-interrupt-irq-affinity-and-threading">4. Interrupt (IRQ)
+Affinity and Threading</h3>
+<p>Hardware interrupts can disrupt real-time task execution. Route
+interrupts to non-isolated cores to maintain low latency on real-time
+cores.</p>
+<ol type="1">
+<li><p><strong>Disable automatic IRQ balancing:</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop irqbalance</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl disable irqbalance</span></code></pre></div></li>
+<li><p><strong>Manually assign IRQ affinity:</strong> Redirect
+interrupts to non-isolated cores (e.g., Core 0 and Core 1) by writing a
+bitmask to <code>/proc/irq/&lt;IRQ_NUMBER&gt;/smp_affinity</code>.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct IRQ 45 to CPU 0 (bitmask 0x1)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> 1 <span class="kw">|</span> <span class="fu">sudo</span> tee /proc/irq/45/smp_affinity</span></code></pre></div></li>
+<li><p><strong>Adjust Threaded IRQ Priorities:</strong> Under a
+<code>PREEMPT_RT</code> kernel, hardware interrupts are managed as
+kernel threads (<code>irq/XX-name</code>). Adjust their priority
+relative to your application using <code>chrt</code> to prevent less
+critical hardware events from preempting time-sensitive loops.</p></li>
+</ol>
+<hr />
+<h3 id="5-memory-locking-to-prevent-paging-latency">5. Memory Locking to
+Prevent Paging Latency</h3>
+<p>Scheduler determinism is compromised if a thread is delayed by a page
+fault. Real-time applications must lock their address space into RAM to
+prevent memory pages from being paged out or dynamically allocated
+during execution.</p>
+<p>Implement memory locking within the application initialization:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sys/mman.h&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> lock_memory<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>mlockall<span class="op">(</span>MCL_CURRENT <span class="op">|</span> MCL_FUTURE<span class="op">)</span> <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        perror<span class="op">(</span><span class="st">&quot;mlockall failed&quot;</span><span class="op">);</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Set system resource limits in <code>/etc/security/limits.conf</code>
+to allow non-root users to lock memory and raise real-time
+priorities:</p>
+<pre class="text"><code>* soft rtprio 99
+* hard rtprio 99
+* soft memlock unlimited
+* hard memlock unlimited</code></pre></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/sbc'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/sbc/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/sbc/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
